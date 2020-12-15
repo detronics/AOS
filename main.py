@@ -42,8 +42,10 @@ class Main(tk.Frame):
         self.display_label = tk.Label(bg="darkgreen", font=('times', 20), justify=tk.LEFT, anchor='nw', )
         self.display_label.place(x=40, y=76)
 
-        b_left = tk.Button(bg='#e6e7e4', bd=0, image=self.b_left, activebackground='#636362', )
-        b_right = tk.Button(bg='#e6e7e4', bd=0, image=self.b_right, activebackground='#636362')
+        b_left = tk.Button(bg='#e6e7e4', bd=0, image=self.b_left, activebackground='#636362',
+                           command=lambda but_num='left': self.click(but_num))
+        b_right = tk.Button(bg='#e6e7e4', bd=0, image=self.b_right, activebackground='#636362',
+                            command=lambda but_num='right': self.click(but_num))
         b_menu = tk.Button(bg='#e6e7e4', bd=0, image=self.b_menu, activebackground='#636362')
         b_1 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_1, activebackground='#636362',
                         command=lambda but_num='1': self.click(but_num), )
@@ -124,8 +126,6 @@ class Main(tk.Frame):
             self.start_time()
 
     def main_menu(self, but_num):
-        self.user_input += but_num
-        print(self.user_input)
         menu = {1: '1ВЗЯТИЕ', 2: '2СНЯТИЕ', 3: '3СБРОС ТРЕВОГ', 4: '4СБРОС ТРЕВОГ', 5: '5ЗАПРОС', 6: '6УПРАВЛЕНИЕ',
                 11: 'ВЗЯТИЕ ИНД',
                 12: 'ВЗЯТИЕ ГРУППОВОЕ', 13: 'ВЗЯТИЕ ОБЩЕЕ', 111: 'НОМЕР ПРИБОРА', 121: 'НОМЕР ПРИБОРА',
@@ -133,8 +133,17 @@ class Main(tk.Frame):
                 1111: 'НОМЕР ШЛЕЙФА', 21: 'ВЗЯТИЕ ИНД', 22: 'ВЗЯТИЕ ГРУППОВОЕ', 23: 'ВЗЯТИЕ ОБЩЕЕ',
                 211: 'НОМЕР ПРИБОРА',
                 221: 'НОМЕР ПРИБОРА', 231: 'НОМЕР ПРИБОРА', 2111: 'НОМЕР ШЛЕЙФА'}
+        if but_num >= '0' and but_num <= '9':
+            self.user_input += but_num
+            print(self.user_input)
+            self.display_label.config(text=menu[int(self.user_input)])
+        elif but_num == 'right':
+            self.user_input = str(int(self.user_input) + 1)
+            self.display_label.config(text=menu[int(self.user_input)])
+        elif but_num == 'left':
+            self.user_input = int(self.user_input) - 1
 
-        self.display_label.config(text=menu[int(self.user_input)])
+        # self.display_label.config(text=menu[int(self.user_input)])
 
     def buffer(self):
         pass
