@@ -15,6 +15,7 @@ class Main(tk.Frame):
         self.password_main = '1234'
         self.user_input = ''
         self.password_prog = '123456'
+        self.pos = 0
 
     def init_main(self):
         self.background = tk.PhotoImage(file="images/b_background.png")
@@ -61,8 +62,8 @@ class Main(tk.Frame):
         b_8 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_8, activebackground='#636362', )
         b_9 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_9, activebackground='#636362', )
         b_0 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_0, activebackground='#636362', )
-        b_x = tk.Button(bg='#e6e7e4', bd=0, image=self.b_x, activebackground='#636362', )
-        b_entr = tk.Button(bg='#e6e7e4', bd=0, image=self.b_entr, activebackground='#636362', )
+        b_x = tk.Button(bg='#e6e7e4', bd=0, image=self.b_x, activebackground='#636362', command=lambda but_num='left': self.click(but_num))
+        b_entr = tk.Button(bg='#e6e7e4', bd=0, image=self.b_entr, activebackground='#636362',command=lambda but_num='left': self.click(but_num))
         b_home = tk.Button(bg='#e6e7e4', bd=0, image=self.b_home, activebackground='#636362')
         b_mute = tk.Button(bg='#e6e7e4', bd=0, image=self.b_mute, activebackground='#636362')
 
@@ -118,7 +119,7 @@ class Main(tk.Frame):
             self.passw_stat = True
             self.main_menu_stat = True
             self.user_input = ''
-            self.main_menu(but_num='1')
+            self.display_label.config(text='1ВЗЯТИЕ')
         else:
             self.user_input = ''
             wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
@@ -126,24 +127,29 @@ class Main(tk.Frame):
             self.start_time()
 
     def main_menu(self, but_num):
-        menu = {1: '1ВЗЯТИЕ', 2: '2СНЯТИЕ', 3: '3СБРОС ТРЕВОГ', 4: '4СБРОС ТРЕВОГ', 5: '5ЗАПРОС', 6: '6УПРАВЛЕНИЕ',
-                11: 'ВЗЯТИЕ ИНД',
-                12: 'ВЗЯТИЕ ГРУППОВОЕ', 13: 'ВЗЯТИЕ ОБЩЕЕ', 111: 'НОМЕР ПРИБОРА', 121: 'НОМЕР ПРИБОРА',
-                131: 'НОМЕР ПРИБОРА',
-                1111: 'НОМЕР ШЛЕЙФА', 21: 'ВЗЯТИЕ ИНД', 22: 'ВЗЯТИЕ ГРУППОВОЕ', 23: 'ВЗЯТИЕ ОБЩЕЕ',
-                211: 'НОМЕР ПРИБОРА',
-                221: 'НОМЕР ПРИБОРА', 231: 'НОМЕР ПРИБОРА', 2111: 'НОМЕР ШЛЕЙФА'}
+        menu = {'Главный цикл': ['1 ВЗЯТИЕ', '2 СНЯТИЕ', '3 СБРОС ТРЕВОГ', '4 УПРАВЛЕНИЕ', '5 ЗАПРОС', '6 НАСТРОЙКИ'],
+                "Подменю": [['11 ВЗЯТИЕ ИНД', '12 ВЗЯТИЕ ГРУППОВОЕ', '13 ВЗЯТИЕ ОБЩЕЕ'],
+                            ['21 СНЯТИЕ ИНД', '22 СНЯТИЕ ГРУППОВОЕ', '23 СНЯТИЕ ОБЩЕЕ'],
+                            ['НОМЕР ПРИБОРА'],
+                            ['41 УПРАВЛЕНИЕ АСПТ', '42 УПРАВЛЕНИЕ РЕЛЕ'],
+                            ['51 ЗАПРОС ШС' '52 ЗАПРОС АЦП'],
+                            ['61 ДАТА' '62 ВРЕМЯ' '63 ПАРОЛИ']],
+                "Подменю подменю": ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА']}
         if but_num >= '0' and but_num <= '9':
             self.user_input += but_num
             print(self.user_input)
             self.display_label.config(text=menu[int(self.user_input)])
         elif but_num == 'right':
-            self.user_input = str(int(self.user_input) + 1)
-            self.display_label.config(text=menu[int(self.user_input)])
+            if self.pos == 5:
+                self.pos = -1
+            self.pos += 1
+            # self.user_input = str(int(self.user_input) + 1)
+            self.display_label.config(text=list(menu.keys())[self.pos])
         elif but_num == 'left':
-            self.user_input = int(self.user_input) - 1
-
-        # self.display_label.config(text=menu[int(self.user_input)])
+            if self.pos == 0:
+                self.pos = 6
+            self.pos -= 1
+            self.display_label.config(text=menu[self.pos])
 
     def buffer(self):
         pass
