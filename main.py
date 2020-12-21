@@ -15,7 +15,21 @@ class Main(tk.Frame):
         self.password_main = '1234'
         self.user_input = ''
         self.password_prog = '123456'
-        self.pos = 0
+        self.global_pos = 0
+        self.local_pos = 0
+        self.menu0 = ['1 ВЗЯТИЕ', '2 СНЯТИЕ', '3 СБРОС ТРЕВОГ', '4 УПРАВЛЕНИЕ', '5 ЗАПРОС', '6 СЕРВИС']
+        self.menu1 = {"1": ['11 ВЗЯТИЕ ИНД', '12 ВЗЯТИЕ ГРУППОВОЕ', '13 ВЗЯТИЕ ОБЩЕЕ'],
+                      "2": ['21 СНЯТИЕ ИНД', '22 СНЯТИЕ ГРУППОВОЕ', '23 СНЯТИЕ ОБЩЕЕ'], "3": ['НОМЕР ПРИБОРА'],
+                      "4": ['41 УПРАВЛЕНИЕ РЕЛЕ', '42 УПРАВЛЕНИЕ АСПТ', 'УПРАВЛЕНИЕ ПУСКОМ'],
+                      "5": ['51 ЗАПРОС ШС', '52 ЗАПРОС АЦП'],
+                      "6": ['61 ВРЕМЯ', '62 ДАТА', '63 ТЕСТ ИЗВЕЩ.', '64 ТЕСТ ИНДИКАЦ.', '65 ПЕЧАТЬ БУФЕР',
+                            '66 СБРОС БУФ.ИТ']}
+        self.menu2 = {'11': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '12': ['НОМЕР ПРИБОРА'], '13': ['НОМЕР ПРИБОРА'],
+                      '21': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '22': ['НОМЕР ПРИБОРА'], '23': ['НОМЕР ПРИБОРА'],
+                      '31': ['НОМЕР ПРИБОРА'],
+                      '41': ['НОМЕР ПРИБОРА'], '42': ['УПРАВЛЕНИЕ АВТОМАТИКОЙ', 'УПРАВЛЕНИЕ ПУСКОМ'],
+                      '51': ['НОМЕР ПРИБОРА'], '52': ['НОМЕР ПРИБОРА'],
+                      '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
 
     def init_main(self):
         self.background = tk.PhotoImage(file="images/b_background.png")
@@ -56,16 +70,26 @@ class Main(tk.Frame):
                         command=lambda but_num='3': self.click(but_num))
         b_4 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_4, activebackground='#636362',
                         command=lambda but_num='4': self.click(but_num))
-        b_5 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_5, activebackground='#636362', )
-        b_6 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_6, activebackground='#636362', )
-        b_7 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_7, activebackground='#636362', )
-        b_8 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_8, activebackground='#636362', )
-        b_9 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_9, activebackground='#636362', )
-        b_0 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_0, activebackground='#636362', )
-        b_x = tk.Button(bg='#e6e7e4', bd=0, image=self.b_x, activebackground='#636362', command=lambda but_num='left': self.click(but_num))
-        b_entr = tk.Button(bg='#e6e7e4', bd=0, image=self.b_entr, activebackground='#636362',command=lambda but_num='left': self.click(but_num))
-        b_home = tk.Button(bg='#e6e7e4', bd=0, image=self.b_home, activebackground='#636362')
-        b_mute = tk.Button(bg='#e6e7e4', bd=0, image=self.b_mute, activebackground='#636362')
+        b_5 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_5, activebackground='#636362',
+                        command=lambda but_num='5': self.click(but_num))
+        b_6 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_6, activebackground='#636362',
+                        command=lambda but_num='6': self.click(but_num))
+        b_7 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_7, activebackground='#636362',
+                        command=lambda but_num='7': self.click(but_num))
+        b_8 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_8, activebackground='#636362',
+                        command=lambda but_num='8': self.click(but_num))
+        b_9 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_9, activebackground='#636362',
+                        command=lambda but_num='9': self.click(but_num))
+        b_0 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_0, activebackground='#636362',
+                        command=lambda but_num='0': self.click(but_num))
+        b_x = tk.Button(bg='#e6e7e4', bd=0, image=self.b_x, activebackground='#636362',
+                        command=lambda but_num='x': self.click(but_num))
+        b_entr = tk.Button(bg='#e6e7e4', bd=0, image=self.b_entr, activebackground='#636362',
+                           command=lambda but_num='entr': self.click(but_num))
+        b_home = tk.Button(bg='#e6e7e4', bd=0, image=self.b_home, activebackground='#636362',
+                           command=lambda but_num='home': self.click(but_num))
+        b_mute = tk.Button(bg='#e6e7e4', bd=0, image=self.b_mute, activebackground='#636362',
+                           command=lambda but_num='mute': self.click(but_num))
 
         b_left.place(x=249, y=293)
         b_right.place(x=354, y=293)
@@ -119,7 +143,7 @@ class Main(tk.Frame):
             self.passw_stat = True
             self.main_menu_stat = True
             self.user_input = ''
-            self.display_label.config(text='1ВЗЯТИЕ')
+            self.display_label.config(text='1 ВЗЯТИЕ')
         else:
             self.user_input = ''
             wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
@@ -127,29 +151,70 @@ class Main(tk.Frame):
             self.start_time()
 
     def main_menu(self, but_num):
-        menu = {'Главный цикл': ['1 ВЗЯТИЕ', '2 СНЯТИЕ', '3 СБРОС ТРЕВОГ', '4 УПРАВЛЕНИЕ', '5 ЗАПРОС', '6 НАСТРОЙКИ'],
-                "Подменю": [['11 ВЗЯТИЕ ИНД', '12 ВЗЯТИЕ ГРУППОВОЕ', '13 ВЗЯТИЕ ОБЩЕЕ'],
-                            ['21 СНЯТИЕ ИНД', '22 СНЯТИЕ ГРУППОВОЕ', '23 СНЯТИЕ ОБЩЕЕ'],
-                            ['НОМЕР ПРИБОРА'],
-                            ['41 УПРАВЛЕНИЕ АСПТ', '42 УПРАВЛЕНИЕ РЕЛЕ'],
-                            ['51 ЗАПРОС ШС' '52 ЗАПРОС АЦП'],
-                            ['61 ДАТА' '62 ВРЕМЯ' '63 ПАРОЛИ']],
-                "Подменю подменю": ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА']}
-        if but_num >= '0' and but_num <= '9':
-            self.user_input += but_num
-            print(self.user_input)
-            self.display_label.config(text=menu[int(self.user_input)])
+        if self.global_pos == 0:
+            self.main_0(but_num)
+        elif self.global_pos == 1:
+            self.main_1(but_num)
+
+    def main_0(self,but_num):
+        if but_num >= '1' and but_num <= '6':
+            self.local_pos = 0
+            self.global_pos += 1
+            self.display_label.config(text=self.menu1[but_num][self.local_pos])
+
         elif but_num == 'right':
-            if self.pos == 5:
-                self.pos = -1
-            self.pos += 1
-            # self.user_input = str(int(self.user_input) + 1)
-            self.display_label.config(text=list(menu.keys())[self.pos])
+            if self.local_pos == 5:
+                self.local_pos = -1
+            self.local_pos += 1
+            self.display_label.config(text=self.menu0[self.local_pos])
+
         elif but_num == 'left':
-            if self.pos == 0:
-                self.pos = 6
-            self.pos -= 1
-            self.display_label.config(text=menu[self.pos])
+            if self.local_pos == 0:
+                self.local_pos = 6
+            self.local_pos -= 1
+            self.display_label.config(text=self.menu0[self.local_pos])
+
+        elif but_num == 'x':
+            self.local_pos = 0
+            self.global_pos = 0
+            self.passw_stat = False
+            self.main_menu_stat = False
+            self.start_time()
+
+        elif but_num == 'entr':
+            self.global_pos += 1
+            self.display_label.config(text=self.menu1[str(self.local_pos+1)][0])
+            self.local_pos = 0
+
+    def main_1(self, but_num):
+        if but_num >= '1' and but_num <= '6':
+            self.local_pos = 0
+            self.global_pos += 1
+            self.display_label.config(text=self.menu1[but_num][self.local_pos])
+
+        elif but_num == 'right':
+            if self.local_pos == 5:
+                self.local_pos = -1
+            self.local_pos += 1
+            self.display_label.config(text=self.menu0[self.local_pos])
+
+        elif but_num == 'left':
+            if self.local_pos == 0:
+                self.local_pos = 6
+            self.local_pos -= 1
+            self.display_label.config(text=self.menu0[self.local_pos])
+
+        elif but_num == 'x':
+            self.local_pos = 0
+            self.global_pos = 0
+            self.passw_stat = False
+            self.main_menu_stat = False
+            self.start_time()
+
+        elif but_num == 'entr':
+            self.global_pos += 1
+            self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
+            self.local_pos = 0
 
     def buffer(self):
         pass
