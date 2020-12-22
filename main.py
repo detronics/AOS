@@ -20,7 +20,7 @@ class Main(tk.Frame):
         self.menu0 = ['1 ВЗЯТИЕ', '2 СНЯТИЕ', '3 СБРОС ТРЕВОГ', '4 УПРАВЛЕНИЕ', '5 ЗАПРОС', '6 СЕРВИС']
         self.menu1 = {"1": ['11 ВЗЯТИЕ ИНД', '12 ВЗЯТИЕ ГРУППОВОЕ', '13 ВЗЯТИЕ ОБЩЕЕ'],
                       "2": ['21 СНЯТИЕ ИНД', '22 СНЯТИЕ ГРУППОВОЕ', '23 СНЯТИЕ ОБЩЕЕ'], "3": ['НОМЕР ПРИБОРА'],
-                      "4": ['41 УПРАВЛЕНИЕ РЕЛЕ', '42 УПРАВЛЕНИЕ АСПТ', 'УПРАВЛЕНИЕ ПУСКОМ'],
+                      "4": ['41 УПРАВЛЕНИЕ РЕЛЕ', '42 УПРАВЛЕНИЕ АСПТ', ],
                       "5": ['51 ЗАПРОС ШС', '52 ЗАПРОС АЦП'],
                       "6": ['61 ВРЕМЯ', '62 ДАТА', '63 ТЕСТ ИЗВЕЩ.', '64 ТЕСТ ИНДИКАЦ.', '65 ПЕЧАТЬ БУФЕР',
                             '66 СБРОС БУФ.ИТ']}
@@ -158,6 +158,7 @@ class Main(tk.Frame):
 
     def main_0(self,but_num):
         if but_num >= '1' and but_num <= '6':
+            self.user_input += but_num
             self.local_pos = 0
             self.global_pos += 1
             self.display_label.config(text=self.menu1[but_num][self.local_pos])
@@ -179,37 +180,43 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.passw_stat = False
             self.main_menu_stat = False
+            self.user_input = ''
             self.start_time()
 
         elif but_num == 'entr':
             self.global_pos += 1
+            self.user_input += str(self.local_pos+1)
             self.display_label.config(text=self.menu1[str(self.local_pos+1)][0])
             self.local_pos = 0
 
     def main_1(self, but_num):
-        if but_num >= '1' and but_num <= '6':
+        if but_num>= '1' and   but_num<= '6':
+            self.user_input += str(but_num)
+
+
+        if but_num >= '1' and but_num <= str(len(self.menu1[self.user_input[:1]])):
             self.local_pos = 0
             self.global_pos += 1
-            self.display_label.config(text=self.menu1[but_num][self.local_pos])
+            self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
 
         elif but_num == 'right':
-            if self.local_pos == 5:
+            if self.local_pos == len(self.menu1[self.user_input])-1:
                 self.local_pos = -1
             self.local_pos += 1
-            self.display_label.config(text=self.menu0[self.local_pos])
+            self.display_label.config(text=self.menu1[self.user_input][self.local_pos])
 
         elif but_num == 'left':
             if self.local_pos == 0:
-                self.local_pos = 6
+                self.local_pos = len(self.menu1[self.user_input])
             self.local_pos -= 1
-            self.display_label.config(text=self.menu0[self.local_pos])
+            self.display_label.config(text=self.menu1[self.user_input][self.local_pos])
 
         elif but_num == 'x':
-            self.local_pos = 0
+            self.local_pos = int(self.user_input)-1
+            self.user_input = ''
             self.global_pos = 0
-            self.passw_stat = False
-            self.main_menu_stat = False
-            self.start_time()
+            self.display_label.config(text=self.menu0[self.local_pos])
+
 
         elif but_num == 'entr':
             self.global_pos += 1
