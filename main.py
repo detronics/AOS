@@ -125,7 +125,12 @@ class Main(tk.Frame):
         self.timer()
 
     def click(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        if but_num == 'home':
+            self.buffer()
+        elif but_num == 'mute':
+            self.sound = False
+        elif but_num == 'menu':
+            pass
         if self.times:
             self.brakepas()
         if not self.passw_stat:
@@ -136,6 +141,7 @@ class Main(tk.Frame):
             self.prog_menu()
 
     def check_password(self, but_num):
+        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
         if but_num >= '0' and but_num <= '9':
             self.user_input += but_num
             if len(self.user_input) <= 3:
@@ -151,12 +157,6 @@ class Main(tk.Frame):
                 wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
                 self.start_time()
-        elif but_num == 'home':
-            self.buffer()
-        elif but_num == 'mute':
-            self.sound = False
-        elif but_num == 'menu':
-            pass
         elif len(self.user_input) >= 1 and but_num == 'x':
             self.user_input = ''
             self.display_label.config(text=f'ПАРОЛЬ:')
@@ -164,6 +164,7 @@ class Main(tk.Frame):
             self.start_time()
 
     def main_menu(self, but_num):
+        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
         if self.global_pos == 0:
             self.main_0(but_num)
         elif self.global_pos == 1:
@@ -202,12 +203,6 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
             self.local_pos = 0
 
-        elif but_num == 'home':
-            self.buffer()
-
-        elif but_num == 'mute':
-            self.sound = False
-
     def main_1(self, but_num):
         if but_num >= '1' and but_num <= '6':
             self.user_input += str(but_num)
@@ -240,12 +235,6 @@ class Main(tk.Frame):
             self.global_pos += 1
             self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
             self.local_pos = 0
-
-        elif but_num == 'home':
-            self.buffer()
-
-        elif but_num == 'mute':
-            self.sound = False
 
     def buffer(self):
         pass
