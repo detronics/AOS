@@ -136,7 +136,7 @@ class Main(tk.Frame):
             self.prog_menu()
 
     def check_password(self, but_num):
-        if but_num >='0' and but_num <='9':
+        if but_num >= '0' and but_num <= '9':
             self.user_input += but_num
             if len(self.user_input) <= 3:
                 p = '*' * len(self.user_input)
@@ -157,9 +157,11 @@ class Main(tk.Frame):
             self.sound = False
         elif but_num == 'menu':
             pass
-        elif len(self.user_input) >=1 and but_num == 'x':
+        elif len(self.user_input) >= 1 and but_num == 'x':
             self.user_input = ''
             self.display_label.config(text=f'ПАРОЛЬ:')
+        else:
+            self.start_time()
 
     def main_menu(self, but_num):
         if self.global_pos == 0:
@@ -167,7 +169,7 @@ class Main(tk.Frame):
         elif self.global_pos == 1:
             self.main_1(but_num)
 
-    def main_0(self,but_num):
+    def main_0(self, but_num):
         if but_num >= '1' and but_num <= '6':
             self.user_input += but_num
             self.local_pos = 0
@@ -196,8 +198,8 @@ class Main(tk.Frame):
 
         elif but_num == 'entr':
             self.global_pos += 1
-            self.user_input += str(self.local_pos+1)
-            self.display_label.config(text=self.menu1[str(self.local_pos+1)][0])
+            self.user_input += str(self.local_pos + 1)
+            self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
             self.local_pos = 0
 
         elif but_num == 'home':
@@ -207,7 +209,7 @@ class Main(tk.Frame):
             self.sound = False
 
     def main_1(self, but_num):
-        if but_num>= '1' and   but_num<= '6':
+        if but_num >= '1' and but_num <= '6':
             self.user_input += str(but_num)
 
         if but_num >= '1' and but_num <= str(len(self.menu1[self.user_input[:1]])):
@@ -216,7 +218,7 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
 
         elif but_num == 'right':
-            if self.local_pos == len(self.menu1[self.user_input])-1:
+            if self.local_pos == len(self.menu1[self.user_input]) - 1:
                 self.local_pos = -1
             self.local_pos += 1
             self.display_label.config(text=self.menu1[self.user_input][self.local_pos])
@@ -228,7 +230,7 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu1[self.user_input][self.local_pos])
 
         elif but_num == 'x':
-            self.local_pos = int(self.user_input)-1
+            self.local_pos = int(self.user_input) - 1
             self.user_input = ''
             self.global_pos = 0
             self.display_label.config(text=self.menu0[self.local_pos])
