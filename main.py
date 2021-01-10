@@ -142,7 +142,7 @@ class Main(tk.Frame):
 
     def check_password(self, but_num):
         wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
-        if but_num >= '0' and but_num <= '9':
+        if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             self.user_input += but_num
             if len(self.user_input) <= 3:
                 p = '*' * len(self.user_input)
@@ -156,10 +156,20 @@ class Main(tk.Frame):
                 self.user_input = ''
                 wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
-                self.start_time()
+                self.times = True
+                self.display_label.after(1000, self.timer)
+        # 'TODO узнать реакцию прибора на клавиши влево, вправо при набираемом пароле"
+        elif but_num == 'left' or but_num == 'right':
+            self.start_time()
         elif len(self.user_input) >= 1 and but_num == 'x':
             self.user_input = ''
             self.display_label.config(text=f'ПАРОЛЬ:')
+        elif len(self.user_input) >= 1 and but_num == 'entr':
+            self.user_input = ''
+            wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
+            self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
+            self.times = True
+            self.display_label.after(1000, self.timer)
         else:
             self.start_time()
 
@@ -169,6 +179,8 @@ class Main(tk.Frame):
             self.main_0(but_num)
         elif self.global_pos == 1:
             self.main_1(but_num)
+        elif self.global_pos == 2:
+            print('2')
 
     def main_0(self, but_num):
         if but_num >= '1' and but_num <= '6':
@@ -230,11 +242,10 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.display_label.config(text=self.menu0[self.local_pos])
 
-
-        elif but_num == 'entr':
-            self.global_pos += 1
-            self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
-            self.local_pos = 0
+        # elif but_num == 'entr':
+        #     self.global_pos += 1
+        #     self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
+        #     self.local_pos = 0
 
     def buffer(self):
         pass
