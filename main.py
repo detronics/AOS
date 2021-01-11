@@ -146,9 +146,9 @@ class Main(tk.Frame):
         elif self.main_menu_stat:
             self.main_menu(but_num)
         elif self.prog_menu_stat:
-            self.prog_menu_func()
+            self.prog_menu_func(but_num)
         elif but_num == 'home':
-            self.menu_home_func()
+            self.menu_home_func(but_num)
         elif but_num == 'mute':
             # TODO допилить звук
             self.sound = False
