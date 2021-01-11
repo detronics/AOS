@@ -257,8 +257,13 @@ class Main(tk.Frame):
         #     self.local_pos = 0
 
     def menu_menu(self, but_num):
+        if self.global_pos == 1:
+            self.menu_menu_2(but_num)
+        else:
+            self.menu_menu_1(but_num)
+
+    def menu_menu_1(self, but_num):
         wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
-        print('llll')
         if but_num == 'left':
             if self.local_pos == 0:
                 self.local_pos = 1
@@ -276,15 +281,30 @@ class Main(tk.Frame):
             self.start_time()
         elif but_num == 'entr' and self.local_pos == 0:
             self.menu_menu_stat = False
-            self.passw_stat = True
-            self.main_menu_stat = True
-            self.user_input = ''
-            self.display_label.config(text='1 ВЗЯТИЕ')
-
+            self.display_label.config(text=f'ПАРОЛЬ:')
         elif but_num == 'entr' and self.local_pos == 1:
             self.local_pos = 0
             self.global_pos += 1
             self.display_label.config(text=self.menu_state[self.local_pos])
+
+    def menu_menu_2(self, but_num):
+        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        if but_num == 'left':
+            if self.local_pos == 0:
+                self.local_pos = len(self.menu_state) - 1
+            else:
+                self.local_pos -= 1
+            self.display_label.config(text=self.menu_state[self.local_pos])
+        elif but_num == 'right':
+            if self.local_pos == len(self.menu_state) - 1:
+                self.local_pos = 0
+            else:
+                self.local_pos += 1
+            self.display_label.config(text=self.menu_state[self.local_pos])
+        elif but_num == 'x':
+            self.local_pos = 0
+            self.global_pos = 0
+            self.display_label.config(text=self.menu_menu_list[self.local_pos])
 
     def buffer(self):
         pass
