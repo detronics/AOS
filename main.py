@@ -150,6 +150,7 @@ class Main(tk.Frame):
         elif but_num == 'home':
             self.menu_home_func()
         elif but_num == 'mute':
+            # TODO допилить звук
             self.sound = False
 
     def check_password(self, but_num):
@@ -185,6 +186,9 @@ class Main(tk.Frame):
         else:
             self.start_time()
 
+    def check_password_prog(self, but_num):
+        pass
+
     def main_menu(self, but_num):
         wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
         if self.global_pos == 0:
@@ -195,7 +199,7 @@ class Main(tk.Frame):
             print('2')
 
     def main_0(self, but_num):
-        if but_num >= '1' and but_num <= '6':
+        if '1' <= but_num <= '6':
             self.user_input += but_num
             self.local_pos = 0
             self.global_pos += 1
@@ -228,10 +232,10 @@ class Main(tk.Frame):
             self.local_pos = 0
 
     def main_1(self, but_num):
-        if but_num >= '1' and but_num <= '6':
+        if '1' <= but_num <= '6':
             self.user_input += str(but_num)
 
-        if but_num >= '1' and but_num <= str(len(self.menu1[self.user_input[:1]])):
+        if '1' <= but_num <= str(len(self.menu1[self.user_input[:1]])):
             self.local_pos = 0
             self.global_pos += 1
             self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
@@ -309,10 +313,44 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.display_label.config(text=self.menu_menu_list[self.local_pos])
 
-    def menu_home_func(self):
+    def menu_home_func(self, but_num):
+        if but_num >= '1' and but_num <= '6':
+            self.user_input += but_num
+            self.local_pos = 0
+            self.global_pos += 1
+            self.display_label.config(text=self.menu1[but_num][self.local_pos])
+
+        elif but_num == 'right':
+            if self.local_pos == 3:
+                self.local_pos = -1
+            self.local_pos += 1
+            self.display_label.config(text=self.menu_home[self.local_pos])
+
+        elif but_num == 'left':
+            if self.local_pos == 0:
+                self.local_pos = 4
+            self.local_pos -= 1
+            self.display_label.config(text=self.menu_home[self.local_pos])
+
+        elif but_num == 'x':
+            self.local_pos = 0
+            self.global_pos = 0
+            self.passw_stat = False
+            self.main_menu_stat = False
+            self.user_input = ''
+            self.start_time()
+
+        elif but_num == 'entr':
+            # TODO переделать
+            self.global_pos += 1
+            self.user_input += str(self.local_pos + 1)
+            self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
+            self.local_pos = 0
+
+    def prog_menu_func(self,but_name):
         pass
 
-    def prog_menu_func(self):
+    def buff_event_func(self,but_name):
         pass
 
 
