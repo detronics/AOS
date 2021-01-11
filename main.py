@@ -11,7 +11,7 @@ class Main(tk.Frame):
         self.passw_stat = False
         self.main_menu_stat = False
         self.prog_menu_stat = False
-        self.buff_stat = False
+        self.home_menu_stat = False
         self.menu_menu_stat = False
         self.sound = True
         self.password_main = '1234'
@@ -19,6 +19,9 @@ class Main(tk.Frame):
         self.password_prog = '123456'
         self.global_pos = 0
         self.local_pos = 0
+        self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
+        self.menu_settings = ['1 ВРЕМЯ И ДАТА', '2 НАСТРОЙКА УСТРОЙСТВ', '3 УСТАНОВКИ С2000М', '4 RS-485', '5 RS-232',
+                              '6 РЕЖИМ ПРОГРАММИРОВАНИЯ']
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР ПО СОСТОЯНИЯМ']
         self.menu_state = ['ТРЕВОГИ 0', 'НЕИСПРАВНОСТИ 0', 'ПОЖАРЫ 0', 'ЗАПУЩЕНО 0', 'ЕЩЕ', 'ЕЩЕ', 'ЕЩЕ']
         self.menu0 = ['1 ВЗЯТИЕ', '2 СНЯТИЕ', '3 СБРОС ТРЕВОГ', '4 УПРАВЛЕНИЕ', '5 ЗАПРОС', '6 СЕРВИС']
@@ -143,9 +146,9 @@ class Main(tk.Frame):
         elif self.main_menu_stat:
             self.main_menu(but_num)
         elif self.prog_menu_stat:
-            self.prog_menu()
+            self.prog_menu_func()
         elif but_num == 'home':
-            self.buffer()
+            self.menu_home_func()
         elif but_num == 'mute':
             self.sound = False
 
@@ -306,10 +309,10 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.display_label.config(text=self.menu_menu_list[self.local_pos])
 
-    def buffer(self):
+    def menu_home_func(self):
         pass
 
-    def prog_menu(self):
+    def prog_menu_func(self):
         pass
 
 
