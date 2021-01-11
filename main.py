@@ -12,12 +12,15 @@ class Main(tk.Frame):
         self.main_menu_stat = False
         self.prog_menu_stat = False
         self.buff_stat = False
+        self.menu_menu_stat = False
         self.sound = True
         self.password_main = '1234'
         self.user_input = ''
         self.password_prog = '123456'
         self.global_pos = 0
         self.local_pos = 0
+        self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР ПО СОСТОЯНИЯМ']
+        self.menu_state = ['ТРЕВОГИ 0', 'НЕИСПРАВНОСТИ 0', 'ПОЖАРЫ 0', 'ЗАПУЩЕНО 0', 'ЕЩЕ', 'ЕЩЕ', 'ЕЩЕ']
         self.menu0 = ['1 ВЗЯТИЕ', '2 СНЯТИЕ', '3 СБРОС ТРЕВОГ', '4 УПРАВЛЕНИЕ', '5 ЗАПРОС', '6 СЕРВИС']
         self.menu1 = {"1": ['11 ВЗЯТИЕ ИНД', '12 ВЗЯТИЕ ГРУППОВОЕ', '13 ВЗЯТИЕ ОБЩЕЕ'],
                       "2": ['21 СНЯТИЕ ИНД', '22 СНЯТИЕ ГРУППОВОЕ', '23 СНЯТИЕ ОБЩЕЕ'], "3": ['НОМЕР ПРИБОРА'],
@@ -62,7 +65,8 @@ class Main(tk.Frame):
                            command=lambda but_num='left': self.click(but_num))
         b_right = tk.Button(bg='#e6e7e4', bd=0, image=self.b_right, activebackground='#636362',
                             command=lambda but_num='right': self.click(but_num))
-        b_menu = tk.Button(bg='#e6e7e4', bd=0, image=self.b_menu, activebackground='#636362')
+        b_menu = tk.Button(bg='#e6e7e4', bd=0, image=self.b_menu, activebackground='#636362',
+                           command=lambda but_num='menu': self.click(but_num), )
         b_1 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_1, activebackground='#636362',
                         command=lambda but_num='1': self.click(but_num), )
         b_2 = tk.Button(bg='#e6e7e4', bd=0, image=self.b_2, activebackground='#636362',
@@ -125,20 +129,25 @@ class Main(tk.Frame):
         self.timer()
 
     def click(self, but_num):
-        if but_num == 'home':
-            self.buffer()
-        elif but_num == 'mute':
-            self.sound = False
-        elif but_num == 'menu':
-            pass
         if self.times:
             self.brakepas()
-        if not self.passw_stat:
+        # TODO узнать как реагирует прибор на кнопку меню в режиме меню
+        if self.menu_menu_stat:
+            self.menu_menu(but_num)
+        elif but_num == 'menu' and not self.menu_menu_stat:
+            wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+            self.display_label.config(text='УПРАВЛЕНИЕ')
+            self.menu_menu_stat = True
+        elif not self.passw_stat:
             self.check_password(but_num)
         elif self.main_menu_stat:
             self.main_menu(but_num)
         elif self.prog_menu_stat:
             self.prog_menu()
+        elif but_num == 'home':
+            self.buffer()
+        elif but_num == 'mute':
+            self.sound = False
 
     def check_password(self, but_num):
         wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
@@ -246,6 +255,36 @@ class Main(tk.Frame):
         #     self.global_pos += 1
         #     self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
         #     self.local_pos = 0
+
+    def menu_menu(self, but_num):
+        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        print('llll')
+        if but_num == 'left':
+            if self.local_pos == 0:
+                self.local_pos = 1
+            else:
+                self.local_pos -= 1
+            self.display_label.config(text=self.menu_menu_list[self.local_pos])
+        elif but_num == 'right':
+            if self.local_pos == 1:
+                self.local_pos = 0
+            else:
+                self.local_pos += 1
+            self.display_label.config(text=self.menu_menu_list[self.local_pos])
+        elif but_num == 'x':
+            self.menu_menu_stat = False
+            self.start_time()
+        elif but_num == 'entr' and self.local_pos == 0:
+            self.menu_menu_stat = False
+            self.passw_stat = True
+            self.main_menu_stat = True
+            self.user_input = ''
+            self.display_label.config(text='1 ВЗЯТИЕ')
+
+        elif but_num == 'entr' and self.local_pos == 1:
+            self.local_pos = 0
+            self.global_pos += 1
+            self.display_label.config(text=self.menu_state[self.local_pos])
 
     def buffer(self):
         pass
