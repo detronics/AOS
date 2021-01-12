@@ -19,7 +19,7 @@ class Main(tk.Frame):
         self.password_prog = '123456'
         self.global_pos = 0
         self.local_pos = 0
-        self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
+        self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ','ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['1 ВРЕМЯ И ДАТА', '2 НАСТРОЙКА УСТРОЙСТВ', '3 УСТАНОВКИ С2000М', '4 RS-485', '5 RS-232',
                               '6 РЕЖИМ ПРОГРАММИРОВАНИЯ']
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР ПО СОСТОЯНИЯМ']
@@ -134,7 +134,6 @@ class Main(tk.Frame):
     def click(self, but_num):
         if self.times:
             self.brakepas()
-        # TODO узнать как реагирует прибор на кнопку меню в режиме меню
         if self.menu_menu_stat:
             self.menu_menu(but_num)
         elif but_num == 'menu' and not self.menu_menu_stat:
@@ -171,9 +170,10 @@ class Main(tk.Frame):
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
                 self.times = True
                 self.display_label.after(1000, self.timer)
-        # 'TODO узнать реакцию прибора на клавиши влево, вправо при набираемом пароле"
-        elif but_num == 'left' or but_num == 'right':
-            self.start_time()
+        # 'TODO узнать реакцию прибора на клавиши влево, вправо при набираемом пароле  - никак не реагирует"
+        # elif but_num == 'left' or but_num == 'right':
+        #     pass
+            # self.start_time()
         elif len(self.user_input) >= 1 and but_num == 'x':
             self.user_input = ''
             self.display_label.config(text=f'ПАРОЛЬ:')
