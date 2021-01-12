@@ -19,7 +19,7 @@ class Main(tk.Frame):
         self.password_prog = '123456'
         self.global_pos = 0
         self.local_pos = 0
-        self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ','ПАРОЛИ', 'НАСТРОЙКИ', ]
+        self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['1 ВРЕМЯ И ДАТА', '2 НАСТРОЙКА УСТРОЙСТВ', '3 УСТАНОВКИ С2000М', '4 RS-485', '5 RS-232',
                               '6 РЕЖИМ ПРОГРАММИРОВАНИЯ']
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР ПО СОСТОЯНИЯМ']
@@ -170,21 +170,20 @@ class Main(tk.Frame):
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
                 self.times = True
                 self.display_label.after(1000, self.timer)
-        # 'TODO узнать реакцию прибора на клавиши влево, вправо при набираемом пароле  - никак не реагирует"
-        # elif but_num == 'left' or but_num == 'right':
-        #     pass
-            # self.start_time()
+        elif but_num == 'left' and len(self.user_input) == 0 or but_num == 'right' and len(self.user_input) == 0:
+            self.start_time()
         elif len(self.user_input) >= 1 and but_num == 'x':
             self.user_input = ''
             self.display_label.config(text=f'ПАРОЛЬ:')
+        elif len(self.user_input) == 0 and but_num == 'x':
+            self.start_time()
         elif len(self.user_input) >= 1 and but_num == 'entr':
             self.user_input = ''
             wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
             self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
             self.times = True
             self.display_label.after(1000, self.timer)
-        else:
-            self.start_time()
+
 
     def check_password_prog(self, but_num):
         pass
@@ -192,6 +191,7 @@ class Main(tk.Frame):
     def main_menu(self, but_num):
         wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
         if self.global_pos == 0:
+            print('2')
             self.main_0(but_num)
         elif self.global_pos == 1:
             self.main_1(but_num)
@@ -347,10 +347,10 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
             self.local_pos = 0
 
-    def prog_menu_func(self,but_name):
+    def prog_menu_func(self, but_name):
         pass
 
-    def buff_event_func(self,but_name):
+    def buff_event_func(self, but_name):
         pass
 
 
