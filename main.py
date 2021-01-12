@@ -11,7 +11,6 @@ class Main(tk.Frame):
         self.passw_stat = False
         self.main_menu_stat = False
         self.home_menu_stat = False
-        self.home_menu_stat = False
         self.menu_menu_stat = False
         self.sound = True
         self.password_main = '1234'
@@ -352,20 +351,12 @@ class Main(tk.Frame):
             self.check_password(but_num)
         elif self.global_pos == 1 and self.local_pos == 2:
             self.test_indik_func(but_num)
-        elif self.global_pos == 1 and self.local_pos == 3:
-            self.passwords_func(but_num)
         elif self.global_pos == 1 and self.local_pos == 4:
             self.prog_menu_func(but_num)
 
 
     def menu_home_func(self, but_num):
-        if but_num >= '1' and but_num <= '6':
-            self.user_input += but_num
-            self.local_pos = 0
-            self.global_pos += 1
-            self.display_label.config(text=self.menu1[but_num][self.local_pos])
-
-        elif but_num == 'right':
+        if but_num == 'right':
             if self.local_pos == 4:
                 self.local_pos = -1
             self.local_pos += 1
@@ -378,19 +369,28 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu_home[self.local_pos])
 
         elif but_num == 'x':
+            self.home_menu_stat = False
             self.local_pos = 0
             self.global_pos = 0
-            self.passw_stat = False
-            self.main_menu_stat = False
             self.user_input = ''
             self.start_time()
 
         elif but_num == 'entr':
-            # TODO переделать
             self.global_pos += 1
-            self.user_input += str(self.local_pos + 1)
-            self.display_label.config(text='')
-            self.local_pos = 0
+            if self.local_pos == 0:
+                self.display_label.config(text='1')
+            elif self.local_pos == 1:
+                self.local_pos = 0
+                self.global_pos = 0
+                self.home_menu_stat = False
+                self.display_label.config(text=f'ПАРОЛЬ:')
+            elif self.local_pos == 2:
+                self.display_label.config(text='3')
+            elif self.local_pos == 3:
+                self.display_label.config(text='4')
+            elif self.local_pos == 4:
+                self.display_label.config(text='5')
+
 
     def prog_menu_func(self, but_name):
         pass
@@ -401,8 +401,6 @@ class Main(tk.Frame):
     def test_indik_func(self, but_name):
         pass
 
-    def passwords_func(self, but_name):
-        pass
 
 
 
