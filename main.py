@@ -10,7 +10,7 @@ class Main(tk.Frame):
         self.times = True
         self.passw_stat = False
         self.main_menu_stat = False
-        self.prog_menu_stat = False
+        self.home_menu_stat = False
         self.home_menu_stat = False
         self.menu_menu_stat = False
         self.sound = True
@@ -140,17 +140,21 @@ class Main(tk.Frame):
             wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
             self.display_label.config(text='УПРАВЛЕНИЕ')
             self.menu_menu_stat = True
+        elif self.home_menu_stat:
+            self.menu_prog_0(but_num)
+        elif but_num == 'home':
+            wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+            self.home_menu_stat = True
+            self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
         elif not self.passw_stat:
             self.check_password(but_num)
         elif self.main_menu_stat:
             self.main_menu(but_num)
-        elif self.prog_menu_stat:
-            self.prog_menu_func(but_num)
-        elif but_num == 'home':
-            self.menu_home_func(but_num)
         elif but_num == 'mute':
             # TODO допилить звук
             self.sound = False
+        else:
+            self.start_time()
 
     def check_password(self, but_num):
         wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
@@ -184,14 +188,39 @@ class Main(tk.Frame):
             self.times = True
             self.display_label.after(1000, self.timer)
 
-
     def check_password_prog(self, but_num):
-        pass
+        if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            self.user_input += but_num
+            if len(self.user_input) <= 13:
+                p = '*' * len(self.user_input)
+                self.display_label.config(text=f'ПАРОЛЬ:{p}')
+            else:
+                self.user_input = ''
+                wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
+                self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
+                self.times = True
+                self.display_label.after(1000, self.timer)
+        elif len(self.user_input) >= 1 and but_num == 'x':
+            self.user_input = ''
+            self.display_label.config(text=f'ПАРОЛЬ:')
+        elif len(self.user_input) == 0 and but_num == 'x':
+            self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
+
+        elif but_num == 'entr':
+            if self.user_input == self.password_prog:
+                self.home_menu_stat = True
+                self.user_input = ''
+                self.display_label.config(text='1 ВРЕМЯ И ДАТА')
+            else:
+                self.user_input = ''
+                wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
+                self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
+                self.times = True
+                self.display_label.after(1000, self.timer)
 
     def main_menu(self, but_num):
         wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
         if self.global_pos == 0:
-            print('2')
             self.main_0(but_num)
         elif self.global_pos == 1:
             self.main_1(but_num)
@@ -313,6 +342,22 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.display_label.config(text=self.menu_menu_list[self.local_pos])
 
+    def menu_prog_0(self, but_num):
+        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        if self.global_pos == 0:
+            self.menu_home_func(but_num)
+        elif self.global_pos == 1 and self.local_pos == 0:
+            self.buff_event_func(but_num)
+        elif self.global_pos == 1 and self.local_pos == 1:
+            self.check_password(but_num)
+        elif self.global_pos == 1 and self.local_pos == 2:
+            self.test_indik_func(but_num)
+        elif self.global_pos == 1 and self.local_pos == 3:
+            self.passwords_func(but_num)
+        elif self.global_pos == 1 and self.local_pos == 4:
+            self.prog_menu_func(but_num)
+
+
     def menu_home_func(self, but_num):
         if but_num >= '1' and but_num <= '6':
             self.user_input += but_num
@@ -321,14 +366,14 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu1[but_num][self.local_pos])
 
         elif but_num == 'right':
-            if self.local_pos == 3:
+            if self.local_pos == 4:
                 self.local_pos = -1
             self.local_pos += 1
             self.display_label.config(text=self.menu_home[self.local_pos])
 
         elif but_num == 'left':
             if self.local_pos == 0:
-                self.local_pos = 4
+                self.local_pos = 5
             self.local_pos -= 1
             self.display_label.config(text=self.menu_home[self.local_pos])
 
@@ -344,7 +389,7 @@ class Main(tk.Frame):
             # TODO переделать
             self.global_pos += 1
             self.user_input += str(self.local_pos + 1)
-            self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
+            self.display_label.config(text='')
             self.local_pos = 0
 
     def prog_menu_func(self, but_name):
@@ -352,6 +397,13 @@ class Main(tk.Frame):
 
     def buff_event_func(self, but_name):
         pass
+
+    def test_indik_func(self, but_name):
+        pass
+
+    def passwords_func(self, but_name):
+        pass
+
 
 
 if __name__ == '__main__':
