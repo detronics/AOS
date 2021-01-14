@@ -12,6 +12,7 @@ class Main(tk.Frame):
         self.main_menu_stat = False
         self.home_menu_stat = False
         self.menu_menu_stat = False
+        self.entering_password = False
         self.sound = True
         self.password_main = '1234'
         self.user_input = ''
@@ -145,6 +146,8 @@ class Main(tk.Frame):
             wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
             self.home_menu_stat = True
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
+        elif self.entering_password:
+            self.check_password_prog(but_num)
         elif not self.passw_stat:
             self.check_password(but_num)
         elif self.main_menu_stat:
@@ -188,6 +191,7 @@ class Main(tk.Frame):
             self.display_label.after(1000, self.timer)
 
     def check_password_prog(self, but_num):
+        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             self.user_input += but_num
             if len(self.user_input) <= 13:
@@ -203,11 +207,10 @@ class Main(tk.Frame):
             self.user_input = ''
             self.display_label.config(text=f'ПАРОЛЬ:')
         elif len(self.user_input) == 0 and but_num == 'x':
+            self.home_menu_stat = True
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
-
         elif but_num == 'entr':
             if self.user_input == self.password_prog:
-                self.home_menu_stat = True
                 self.user_input = ''
                 self.display_label.config(text='1 ВРЕМЯ И ДАТА')
             else:
@@ -354,7 +357,6 @@ class Main(tk.Frame):
         elif self.global_pos == 1 and self.local_pos == 4:
             self.prog_menu_func(but_num)
 
-
     def menu_home_func(self, but_num):
         if but_num == 'right':
             if self.local_pos == 4:
@@ -389,11 +391,15 @@ class Main(tk.Frame):
             elif self.local_pos == 3:
                 self.display_label.config(text='4')
             elif self.local_pos == 4:
-                self.display_label.config(text='5')
+                self.local_pos = 0
+                self.global_pos = 0
+                self.home_menu_stat = False
+                self.entering_password = True
+                self.display_label.config(text='ПАРОЛЬ:')
 
 
     def prog_menu_func(self, but_name):
-        pass
+        self.display_label.config(text='menu prog')
 
     def buff_event_func(self, but_name):
         pass
