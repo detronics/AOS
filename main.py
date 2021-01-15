@@ -13,6 +13,7 @@ class Main(tk.Frame):
         self.home_menu_stat = False
         self.menu_menu_stat = False
         self.entering_password = False
+        self.passw_prog_stat = False
         self.sound = True
         self.password_main = '1234'
         self.user_input = ''
@@ -21,7 +22,7 @@ class Main(tk.Frame):
         self.local_pos = 0
         self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['1 ВРЕМЯ И ДАТА', '2 НАСТРОЙКА УСТРОЙСТВ', '3 УСТАНОВКИ С2000М', '4 RS-485', '5 RS-232',
-                              '6 РЕЖИМ ПРОГРАММИРОВАНИЯ']
+                              '6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР ПО СОСТОЯНИЯМ']
         self.menu_state = ['ТРЕВОГИ 0', 'НЕИСПРАВНОСТИ 0', 'ПОЖАРЫ 0', 'ЗАПУЩЕНО 0', 'ЕЩЕ', 'ЕЩЕ', 'ЕЩЕ']
         self.menu0 = ['1 ВЗЯТИЕ', '2 СНЯТИЕ', '3 СБРОС ТРЕВОГ', '4 УПРАВЛЕНИЕ', '5 ЗАПРОС', '6 СЕРВИС']
@@ -141,13 +142,15 @@ class Main(tk.Frame):
             self.display_label.config(text='УПРАВЛЕНИЕ')
             self.menu_menu_stat = True
         elif self.home_menu_stat:
-            self.menu_prog_0(but_num)
+            self.menu_home_func(but_num)
         elif but_num == 'home':
             wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
             self.home_menu_stat = True
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
         elif self.entering_password:
             self.check_password_prog(but_num)
+        elif self.passw_prog_stat:
+            self.prog_menu_func(but_num)
         elif not self.passw_stat:
             self.check_password(but_num)
         elif self.main_menu_stat:
@@ -169,7 +172,7 @@ class Main(tk.Frame):
                 self.passw_stat = True
                 self.main_menu_stat = True
                 self.user_input = ''
-                self.display_label.config(text='1 ВЗЯТИЕ')
+                self.display_label.config(text='⬍1 ВЗЯТИЕ')
             else:
                 self.user_input = ''
                 wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
@@ -201,6 +204,7 @@ class Main(tk.Frame):
                 self.user_input = ''
                 wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
+                self.entering_password = False
                 self.times = True
                 self.display_label.after(1000, self.timer)
         elif len(self.user_input) >= 1 and but_num == 'x':
@@ -212,11 +216,14 @@ class Main(tk.Frame):
         elif but_num == 'entr':
             if self.user_input == self.password_prog:
                 self.user_input = ''
+                self.passw_prog_stat = True
+                self.entering_password = False
                 self.display_label.config(text='1 ВРЕМЯ И ДАТА')
             else:
                 self.user_input = ''
                 wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
+                self.entering_password = False
                 self.times = True
                 self.display_label.after(1000, self.timer)
 
@@ -344,20 +351,8 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.display_label.config(text=self.menu_menu_list[self.local_pos])
 
-    def menu_prog_0(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
-        if self.global_pos == 0:
-            self.menu_home_func(but_num)
-        elif self.global_pos == 1 and self.local_pos == 0:
-            self.buff_event_func(but_num)
-        elif self.global_pos == 1 and self.local_pos == 1:
-            self.check_password(but_num)
-        elif self.global_pos == 1 and self.local_pos == 2:
-            self.test_indik_func(but_num)
-        elif self.global_pos == 1 and self.local_pos == 4:
-            self.prog_menu_func(but_num)
-
     def menu_home_func(self, but_num):
+        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
         if but_num == 'right':
             if self.local_pos == 4:
                 self.local_pos = -1
@@ -397,9 +392,40 @@ class Main(tk.Frame):
                 self.entering_password = True
                 self.display_label.config(text='ПАРОЛЬ:')
 
+    def prog_menu_func(self, but_num):
+        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        if but_num == 'right':
+            if self.local_pos == 5:
+                self.local_pos = -1
+            self.local_pos += 1
+            self.display_label.config(text=self.menu_settings[self.local_pos])
 
-    def prog_menu_func(self, but_name):
-        self.display_label.config(text='menu prog')
+        elif but_num == 'left':
+            if self.local_pos == 0:
+                self.local_pos = 6
+            self.local_pos -= 1
+            self.display_label.config(text=self.menu_settings[self.local_pos])
+
+        elif but_num == 'x':
+            self.passw_prog_stat = False
+            self.local_pos = 0
+            self.global_pos = 0
+            self.user_input = ''
+            self.start_time()
+
+        elif but_num == 'entr':
+            self.global_pos += 1
+            if self.local_pos == 0:
+                self.display_label.config(text='1')
+            elif self.local_pos == 1:
+                self.local_pos = 0
+            elif self.local_pos == 2:
+                self.display_label.config(text='3')
+            elif self.local_pos == 3:
+                self.display_label.config(text='4')
+            elif self.local_pos == 4:
+                self.local_pos = 0
+                self.global_pos = 0
 
     def buff_event_func(self, but_name):
         pass
