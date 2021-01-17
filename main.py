@@ -1,7 +1,6 @@
 import tkinter as tk
-import winsound as wn
 import time
-
+from playsound import playsound
 
 class Main(tk.Frame):
     def __init__(self, root):
@@ -144,13 +143,13 @@ class Main(tk.Frame):
         if self.menu_menu_stat:
             self.menu_menu(but_num)
         elif but_num == 'menu' and not self.menu_menu_stat:
-            wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+            playsound('sounds/pick.wav')
             self.display_label.config(text='УПРАВЛЕНИЕ')
             self.menu_menu_stat = True
         elif self.home_menu_stat:
             self.menu_home_func(but_num)
         elif but_num == 'home':
-            wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+            playsound('sounds/pick.wav')
             self.home_menu_stat = True
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
         elif self.entering_password:
@@ -168,7 +167,7 @@ class Main(tk.Frame):
             self.start_time()
 
     def check_password(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        playsound('sounds/pick.wav')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             self.user_input += but_num
             if len(self.user_input) <= 3:
@@ -181,7 +180,7 @@ class Main(tk.Frame):
                 self.display_label.config(text='⬍1 ВЗЯТИЕ')
             else:
                 self.user_input = ''
-                wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
+                playsound('sounds/deny.wav')
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
                 self.times = True
                 self.display_label.after(1000, self.timer)
@@ -194,13 +193,13 @@ class Main(tk.Frame):
             self.start_time()
         elif len(self.user_input) >= 1 and but_num == 'entr':
             self.user_input = ''
-            wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
+            playsound('sounds/pick.wav')
             self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
             self.times = True
             self.display_label.after(1000, self.timer)
 
     def check_password_prog(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        playsound('sounds/pick.wav')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             self.user_input += but_num
             if len(self.user_input) <= 13:
@@ -208,7 +207,7 @@ class Main(tk.Frame):
                 self.display_label.config(text=f'ПАРОЛЬ:{p}')
             else:
                 self.user_input = ''
-                wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
+                playsound('sounds/deny.wav')
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
                 self.entering_password = False
                 self.times = True
@@ -227,14 +226,14 @@ class Main(tk.Frame):
                 self.display_label.config(text='1 ВРЕМЯ И ДАТА')
             else:
                 self.user_input = ''
-                wn.PlaySound("sounds/deny.wav", wn.SND_FILENAME)
+                playsound('sounds/deny.wav')
                 self.display_label.config(text='НЕВЕРНЫЙ ПАРОЛЬ')
                 self.entering_password = False
                 self.times = True
                 self.display_label.after(1000, self.timer)
 
     def main_menu(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        playsound('sounds/pick.wav')
         if self.global_pos == 0:
             self.main_0(but_num)
         elif self.global_pos == 1:
@@ -314,7 +313,7 @@ class Main(tk.Frame):
             self.menu_menu_1(but_num)
 
     def menu_menu_1(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        playsound('sounds/pick.wav')
         if but_num == 'left':
             if self.local_pos == 0:
                 self.local_pos = 1
@@ -339,7 +338,7 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu_state[self.local_pos])
 
     def menu_menu_2(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        playsound('sounds/pick.wav')
         if but_num == 'left':
             if self.local_pos == 0:
                 self.local_pos = len(self.menu_state) - 1
@@ -358,7 +357,7 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu_menu_list[self.local_pos])
 
     def menu_home_func(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        playsound('sounds/pick.wav')
         if but_num == 'right':
             if self.local_pos == 4:
                 self.local_pos = -1
@@ -399,7 +398,7 @@ class Main(tk.Frame):
                 self.display_label.config(text='ПАРОЛЬ:')
 
     def prog_menu_func(self, but_num):
-        wn.PlaySound("sounds/pick.wav", wn.SND_FILENAME)
+        playsound('sounds/pick.wav')
         if but_num == 'right':
             if self.local_pos == 5:
                 self.local_pos = -1
