@@ -2,6 +2,7 @@ import tkinter as tk
 import time
 from playsound import playsound
 
+
 class Main(tk.Frame):
     def __init__(self, root):
         super().__init__(root)
@@ -13,22 +14,27 @@ class Main(tk.Frame):
         self.menu_menu_stat = False
         self.entering_password = False
         self.passw_prog_stat = False
+        self.buff_event_stat = False
         self.sound = True
         self.password_main = '1234'
         self.user_input = ''
         self.password_prog = '123456'
         self.global_pos = 0
         self.local_pos = 0
+        self.buff_events = ['-НАЧАЛО БУФЕРА-',
+                            {'name': 'ololo', '0': 'date', '1': 'number', '2': 'descript', '3': 'username',
+                             '5': 'zone number',
+                             '9': 'number_event'}, '-КОНЕЦ БУФЕРА-']
         self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['1 ВРЕМЯ И ДАТА', '2 НАСТРОЙКА УСТРОЙСТВ', '3 УСТАНОВКИ С2000М', '4 RS-485', '5 RS-232',
                               '6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
-        self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ','КОРРЕКЦИЯ ХОДА'],
-                      2: ['ПРИБОР:', ], 3: ['ЗВУКОВОЙ СИГНАЛИЗАТОР', 'ДОСТУП К ФУНКЦИЯМ','КОНТРОЛЬ ПИТАНИЯ',
-                                            'НАСТРОЙКА АЛГОРИТМА ПОЖАР2','СБРОС УСТАНОВОК НА ЗАВОДСКИЕ',],
-                      4: ['АДРЕС С2000=127', 'КОЛЬЦЕВОЙ', 'АДРЕС', 'ПЕРИОД 1','ПЕРИОД 2', ],
-                      5: ['РЕЖИМ:', 'ЦЕНТР.УПРАВЛ.:−', 'СКОРОСТЬ: 9600 бит/с', 'ACCOUNT: 1234','«СОБЫТИЯ LАRS', ],
-                      6: ['РЕЖИМ ПРОГРАММИРОВАНИЯ']}
-        self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР ПО СОСТОЯНИЯМ']
+        self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
+                            2: ['ПРИБОР:', ], 3: ['ЗВУКОВОЙ СИГНАЛИЗАТОР', 'ДОСТУП К ФУНКЦИЯМ', 'КОНТРОЛЬ ПИТАНИЯ',
+                                                  'НАСТРОЙКА АЛГОРИТМА ПОЖАР2', 'СБРОС УСТАНОВОК НА ЗАВОДСКИЕ', ],
+                            4: ['АДРЕС С2000=127', 'КОЛЬЦЕВОЙ', 'АДРЕС', 'ПЕРИОД 1', 'ПЕРИОД 2', ],
+                            5: ['РЕЖИМ:', 'ЦЕНТР.УПРАВЛ.:−', 'СКОРОСТЬ: 9600 бит/с', 'ACCOUNT: 1234', 'СОБЫТИЯ LАRS', ],
+                            6: ['РЕЖИМ ПРОГРАММИРОВАНИЯ']}
+        self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР \nПО СОСТОЯНИЯМ']
         self.menu_state = ['ТРЕВОГИ 0', 'НЕИСПРАВНОСТИ 0', 'ПОЖАРЫ 0', 'ЗАПУЩЕНО 0', 'ЕЩЕ', 'ЕЩЕ', 'ЕЩЕ']
         self.menu0 = ['1 ВЗЯТИЕ', '2 СНЯТИЕ', '3 СБРОС ТРЕВОГ', '4 УПРАВЛЕНИЕ', '5 ЗАПРОС', '6 СЕРВИС']
         self.menu1 = {"1": ['11 ВЗЯТИЕ ИНД', '12 ВЗЯТИЕ ГРУППОВОЕ', '13 ВЗЯТИЕ ОБЩЕЕ'],
@@ -378,9 +384,10 @@ class Main(tk.Frame):
             self.start_time()
 
         elif but_num == 'entr':
-            self.global_pos += 1
             if self.local_pos == 0:
-                self.display_label.config(text='1')
+                self.buff_event_stat = True
+                self.home_menu_stat = False
+                self.display_label.config(text=self.buff_events[-2]['name'])
             elif self.local_pos == 1:
                 self.local_pos = 0
                 self.global_pos = 0
@@ -432,13 +439,33 @@ class Main(tk.Frame):
                 self.local_pos = 0
                 self.global_pos = 0
 
-    def buff_event_func(self, but_name):
-        pass
+    def buff_event_func(self, but_num):
+        playsound('sounds/pick.wav')
+        if but_num == 'right':
+            if self.local_pos == len(self.buff_events) - 1:
+                self.display_label.config(text=self.buff_events[-1])
+            else:
+                self.local_pos += 1
+                self.display_label.config(text=self.buff_events[self.local_pos]['name'])
+        elif but_num == 'left':
+            if self.local_pos == 0:
+                self.display_label.config(text=self.buff_events[0])
+            else:
+                self.local_pos -= 1
+                self.display_label.config(text=self.buff_events[self.local_pos]['name'])
+
+        elif but_num == 'x':
+            self.passw_prog_stat = False
+            self.local_pos = 0
+            self.global_pos = 0
+            self.user_input = ''
+            self.start_time()
+
+        elif but_num in ['1', '2', '3', '5', '9', '0']:
+            self.display_label.config(text=self.buff_events[self.local_pos][but_num])
 
     def test_indik_func(self, but_name):
         pass
-
-
 
 
 if __name__ == '__main__':
