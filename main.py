@@ -1,7 +1,7 @@
 import tkinter as tk
 import time
 from playsound import playsound
-
+import datetime
 
 class Main(tk.Frame):
     def __init__(self, root):
@@ -22,9 +22,10 @@ class Main(tk.Frame):
         self.global_pos = 0
         self.local_pos = 0
         self.buff_events = ['-НАЧАЛО БУФЕРА-',
-                            {'name': 'ololo', '0': 'date', '1': 'number', '2': 'descript', '3': 'username',
-                             '5': 'zone number',
-                             '9': 'number_event'}, '-КОНЕЦ БУФЕРА-']
+                            {'name': 'ВКЛЮЧЕНИЕ ПУЛЬТА \nС2000М v3.02', '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
+                             '1': '\nПРИБОР 000', '2': 'НЕТ РАЗДЕЛА \nС2000М v3.02', '3': 'username',
+                             '5': 'С2000М v3.02 \n№ ЗОНЫ: НЕ ЗАДАН',
+                             '9': 'НОМЕР 1'},'-КОНЕЦ БУФЕРА-' ]
         self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['1 ВРЕМЯ И ДАТА', '2 НАСТРОЙКА УСТРОЙСТВ', '3 УСТАНОВКИ С2000М', '4 RS-485', '5 RS-232',
                               '6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
@@ -154,6 +155,8 @@ class Main(tk.Frame):
             self.menu_menu_stat = True
         elif self.home_menu_stat:
             self.menu_home_func(but_num)
+        elif self.buff_event_stat:
+            self.buff_event_func(but_num)
         elif but_num == 'home':
             playsound('sounds/pick.wav')
             self.home_menu_stat = True
@@ -387,7 +390,9 @@ class Main(tk.Frame):
             if self.local_pos == 0:
                 self.buff_event_stat = True
                 self.home_menu_stat = False
-                self.display_label.config(text=self.buff_events[-2]['name'])
+                self.local_pos = len(self.buff_events) - 2
+                self.display_label.config(text=self.buff_events[self.local_pos]['name'])
+
             elif self.local_pos == 1:
                 self.local_pos = 0
                 self.global_pos = 0
@@ -441,21 +446,25 @@ class Main(tk.Frame):
 
     def buff_event_func(self, but_num):
         playsound('sounds/pick.wav')
+        print(self.local_pos)
         if but_num == 'right':
-            if self.local_pos == len(self.buff_events) - 1:
-                self.display_label.config(text=self.buff_events[-1])
+            if self.local_pos >= len(self.buff_events)-2:
+                self.local_pos = len(self.buff_events)-1
+                self.display_label.config(text='-КОНЕЦ БУФЕРА-')
             else:
                 self.local_pos += 1
                 self.display_label.config(text=self.buff_events[self.local_pos]['name'])
         elif but_num == 'left':
-            if self.local_pos == 0:
-                self.display_label.config(text=self.buff_events[0])
+            if self.local_pos <= 1:
+                self.display_label.config(text='-НАЧАЛО БУФЕРА-')
+                self.local_pos = 0
             else:
                 self.local_pos -= 1
                 self.display_label.config(text=self.buff_events[self.local_pos]['name'])
 
         elif but_num == 'x':
             self.passw_prog_stat = False
+            self.buff_event_stat = False
             self.local_pos = 0
             self.global_pos = 0
             self.user_input = ''
