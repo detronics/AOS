@@ -1,7 +1,7 @@
 import tkinter as tk
 import time
 from playsound import playsound
-import datetime
+
 
 class Main(tk.Frame):
     def __init__(self, root):
@@ -187,6 +187,11 @@ class Main(tk.Frame):
                 self.main_menu_stat = True
                 self.user_input = ''
                 self.display_label.config(text='⬍1 ВЗЯТИЕ')
+                self.buff_events.insert(-1,{'name': 'ИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО                   2',
+                             '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
+                             '1': '\nПРИБОР 000', '2': 'НИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО      2', '3': '№ПАРОЛЯ: 2',
+                             '5': 'ИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО                   2',
+                             '9': 'НОМЕР 2'})
             else:
                 self.user_input = ''
                 playsound('sounds/deny.wav')
@@ -233,6 +238,11 @@ class Main(tk.Frame):
                 self.passw_prog_stat = True
                 self.entering_password = False
                 self.display_label.config(text='1 ВРЕМЯ И ДАТА')
+                self.buff_events.insert(-1,{'name': 'ПРОГРАММИРОВАНИЕ   \nС2000М v3.02',
+                             '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
+                             '1': 'ПРОГРАММИРОВАНИЕ \nП000 С1 ХО', '2': 'НЕТ РАЗДЕЛА \nС2000М v3.02', '3': '№ПАРОЛЯ: НЕТ',
+                             '5': 'С2000М v3.02  \n№ЗОНЫ:  НЕ ЗАДАН',
+                             '9': 'НОМЕР 1'})
             else:
                 self.user_input = ''
                 playsound('sounds/deny.wav')
@@ -446,7 +456,6 @@ class Main(tk.Frame):
 
     def buff_event_func(self, but_num):
         playsound('sounds/pick.wav')
-        print(self.local_pos)
         if but_num == 'right':
             if self.local_pos >= len(self.buff_events)-2:
                 self.local_pos = len(self.buff_events)-1
