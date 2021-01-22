@@ -21,6 +21,7 @@ class Main(tk.Frame):
         self.password_prog = '123456'
         self.global_pos = 0
         self.local_pos = 0
+        self.data_base = []
         self.buff_events = ['-НАЧАЛО БУФЕРА-',
                             {'name': 'ВКЛЮЧЕНИЕ ПУЛЬТА \nС2000М v3.02', '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
                              '1': '\nПРИБОР 000', '2': 'НЕТ РАЗДЕЛА \nС2000М v3.02', '3': 'username',
@@ -258,6 +259,7 @@ class Main(tk.Frame):
         elif self.global_pos == 1:
             self.main_1(but_num)
         elif self.global_pos == 2:
+            print('user_input=', self.user_input)
             print('2')
 
     def main_0(self, but_num):
@@ -320,10 +322,11 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.display_label.config(text=self.menu0[self.local_pos])
 
-        # elif but_num == 'entr':
-        #     self.global_pos += 1
-        #     self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
-        #     self.local_pos = 0
+        elif but_num == 'entr':
+            self.user_input +=str(self.local_pos+1)
+            self.global_pos += 1
+            self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
+            self.local_pos = 0
 
     def menu_menu(self, but_num):
         if self.global_pos == 1:
@@ -482,8 +485,14 @@ class Main(tk.Frame):
         elif but_num in ['1', '2', '3', '5', '9', '0']:
             self.display_label.config(text=self.buff_events[self.local_pos][but_num])
 
-    def test_indik_func(self, but_name):
+    def test_indik_func(self, but_num):
         pass
+
+    def change_password_func(self, but_num):
+        pass
+
+    def import_data(self, txt,state):
+        self.display_label.config(text=txt)
 
 
 if __name__ == '__main__':
