@@ -26,7 +26,7 @@ class Main(tk.Frame):
                             {'name': 'ВКЛЮЧЕНИЕ ПУЛЬТА \nС2000М v3.02', '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
                              '1': '\nПРИБОР 000', '2': 'НЕТ РАЗДЕЛА \nС2000М v3.02', '3': 'username',
                              '5': 'С2000М v3.02 \n№ ЗОНЫ: НЕ ЗАДАН',
-                             '9': 'НОМЕР 1'},'-КОНЕЦ БУФЕРА-' ]
+                             '9': 'НОМЕР 1'}, '-КОНЕЦ БУФЕРА-' ]
         self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['1 ВРЕМЯ И ДАТА', '2 НАСТРОЙКА УСТРОЙСТВ', '3 УСТАНОВКИ С2000М', '4 RS-485', '5 RS-232',
                               '6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
@@ -259,8 +259,8 @@ class Main(tk.Frame):
         elif self.global_pos == 1:
             self.main_1(but_num)
         elif self.global_pos == 2:
-            print('user_input=', self.user_input)
-            print('2')
+            print('menu 2')
+
 
     def main_0(self, but_num):
         if '1' <= but_num <= '6':
@@ -323,10 +323,15 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu0[self.local_pos])
 
         elif but_num == 'entr':
-            self.user_input +=str(self.local_pos+1)
-            self.global_pos += 1
-            self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
-            self.local_pos = 0
+            self.user_input += str(self.local_pos+1)
+            if self.user_input in ['42']:
+                self.global_pos += 1
+                self.display_label.config(text=self.menu2[self.user_input][0])
+                self.local_pos = 0
+            else:
+                self.local_pos = 0
+                self.import_data(txt=self.menu2[self.user_input][0])
+
 
     def menu_menu(self, but_num):
         if self.global_pos == 1:
@@ -491,7 +496,7 @@ class Main(tk.Frame):
     def change_password_func(self, but_num):
         pass
 
-    def import_data(self, txt,state):
+    def import_data(self, txt,state=True):
         self.display_label.config(text=txt)
 
 
