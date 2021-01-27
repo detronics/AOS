@@ -15,6 +15,7 @@ class Main(tk.Frame):
         self.entering_password = False
         self.passw_prog_stat = False
         self.buff_event_stat = False
+        self.import_data_stat = False
         self.sound = True
         self.password_main = '1234'
         self.user_input = ''
@@ -164,6 +165,8 @@ class Main(tk.Frame):
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
         elif self.entering_password:
             self.check_password_prog(but_num)
+        elif self.import_data_stat:
+            self.import_data(but_num)
         elif self.passw_prog_stat:
             self.prog_menu_func(but_num)
         elif not self.passw_stat:
@@ -329,8 +332,12 @@ class Main(tk.Frame):
                 self.display_label.config(text=self.menu2[self.user_input][0])
                 self.local_pos = 0
             else:
+                self.main_menu_stat = False
+                self.import_data_stat = True
                 self.local_pos = 0
-                self.import_data(txt=self.menu2[self.user_input][0])
+                self.display_label.config(text=self.menu2[self.user_input][0])
+
+
 
 
     def menu_menu(self, but_num):
@@ -496,8 +503,14 @@ class Main(tk.Frame):
     def change_password_func(self, but_num):
         pass
 
-    def import_data(self, txt,state=True):
-        self.display_label.config(text=txt)
+    def import_data(self, but_num, ):
+        playsound('sounds/pick.wav')
+        param = self.user_input
+        self.user_input = ''
+        if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            self.user_input += but_num
+            self.display_label.config(text=f'{param} {self.user_input}')
+
 
 
 if __name__ == '__main__':
