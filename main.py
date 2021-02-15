@@ -51,7 +51,7 @@ class Main(tk.Frame):
                             '⬍66 СБРОС БУФ.ИТ']}
         self.menu2 = {'11': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '12': ['НОМЕР ПРИБОРА'], '13': ['НОМЕР ПРИБОРА'],
                       '21': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '22': ['НОМЕР ПРИБОРА'], '23': ['НОМЕР ПРИБОРА'],
-                      '31': ['НОМЕР ПРИБОРА'],
+                      '3': ['НОМЕР ПРИБОРА'],
                       '41': ['НОМЕР ПРИБОРА'], '42': ['УПРАВЛЕНИЕ АВТОМАТИКОЙ', 'УПРАВЛЕНИЕ ПУСКОМ'],
                       '51': ['НОМЕР ПРИБОРА'], '52': ['НОМЕР ПРИБОРА'],
                       '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
@@ -168,8 +168,6 @@ class Main(tk.Frame):
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
         elif self.entering_password:
             self.check_password_prog(but_num)
-        # elif self.import_data_stat:
-        #     self.import_data(but_num)
         elif self.passw_prog_stat:
             self.prog_menu_func(but_num)
         elif not self.passw_stat:
@@ -270,11 +268,18 @@ class Main(tk.Frame):
             print('menu 2')
 
     def main_0(self, but_num):
-        if '1' <= but_num <= '6':
+        if but_num in ['1', '2',  '4', '5', '6']:
             self.user_input += but_num
             self.local_pos = 0
             self.global_pos += 1
             self.display_label.config(text=self.menu1[but_num][self.local_pos])
+
+        elif but_num == '3':
+            self.user_input += but_num
+            self.global_pos += 1
+            self.local_pos = 0
+            self.import_data_stat = True
+            self.display_label.config(text=self.menu2[self.user_input][0])
 
         elif but_num == 'right':
             if self.local_pos == 5:
@@ -296,6 +301,13 @@ class Main(tk.Frame):
             self.user_input = ''
             self.start_time()
 
+        elif but_num == 'entr' and self.local_pos ==2:
+            self.user_input += str(self.local_pos + 1)
+            self.global_pos += 1
+            self.local_pos = 0
+            self.import_data_stat = True
+            self.display_label.config(text=self.menu2[self.user_input][0])
+
         elif but_num == 'entr':
             self.global_pos += 1
             self.user_input += str(self.local_pos + 1)
@@ -304,14 +316,16 @@ class Main(tk.Frame):
 
     def main_1(self, but_num):
         if not self.import_data_stat:
-            if '1' <= but_num <= '6':
-                self.user_input += str(but_num)
+            # if '1' <= but_num <= '6':
+            #     self.user_input += str(but_num)
 
             if '1' <= but_num <= str(len(self.menu1[self.user_input[:1]])):
                 self.local_pos = 0
-                self.global_pos += 1
+                self.user_input += str(but_num)
+                # self.global_pos += 1
                 self.import_data_stat = True
-                self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
+                self.display_label.config(text=self.menu2[self.user_input][0])
+                # self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
 
             elif but_num == 'right':
                 if self.local_pos == len(self.menu1[self.user_input]) - 1:
@@ -338,12 +352,11 @@ class Main(tk.Frame):
                     self.display_label.config(text=self.menu2[self.user_input][0])
                     self.local_pos = 0
                 else:
-                    # self.main_menu_stat = False
                     self.import_data_stat = True
                     self.local_pos = 0
                     self.display_label.config(text=self.menu2[self.user_input][0])
         else:
-            self.import_data(but_num=but_num, level=self.level)
+            self.import_data(but_num=but_num, )
 
     def menu_menu(self, but_num):
         if self.global_pos == 1:
@@ -508,33 +521,66 @@ class Main(tk.Frame):
     def change_password_func(self, but_num):
         pass
 
-    def import_data(self, but_num=None, level=0):
-        param = self.menu2[self.user_input][level]
+    def import_data(self, but_num=None):
+        print('z tut1')
+        param = self.menu2[self.user_input][self.level]
         self.display_label.config(text=f'{param} {self.user_number}')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            print('z tut2')
             self.user_number += but_num
             self.display_label.config(text=f'{param} {self.user_number}')
         elif but_num == 'x' and len(self.user_number) != 0:
             self.user_number = ''
             self.display_label.config(text=f'{param} {self.user_number}')
-        elif but_num == 'x' and len(self.user_number) == 0:
-            self.main_menu_stat = True
+        elif but_num == 'x' and len(self.user_number) == 0 and self.level == 0:
             self.import_data_stat = False
             self.user_input = self.user_input[:1]
-            self.display_label.config(text=self.menu1[str(self.local_pos + 1)][0])
+            self.display_label.config(text=self.menu1[str(self.user_input)][0])
+        elif but_num == 'x' and self.level == 1 and len(self.user_number) == 0:
+            self.level = 0
+            param = self.menu2[self.user_input][self.level]
+            self.display_label.config(text=f'{param} {self.user_number}')
         elif but_num == 'entr' and len(self.user_number) == 0:
             playsound('sounds/deny.wav')
-            self.display_label.config(text='Неизвестная команда')
+            self.after(10, self.display_label.config(text='Неизвестная команда'))
             self.after(500, self.import_data)
         elif but_num == 'entr' and len(self.user_number) != 0:
             self.data_base.append(self.user_number)
             self.user_number = ''
-            if len(self.menu2[self.user_input]) >= 1 and self.level < 1:
+            if len(self.menu2[self.user_input]) > 1 and self.level < 1:
                 self.level += 1
                 param = self.menu2[self.user_input][self.level]
                 self.display_label.config(text=f'{param} {self.user_number}')
             else:
-                self.display_label.config(text=f'{param} {self.user_number}')
+                self.show()
+
+    def show(self):
+        keyword = [['ВЗЯТИЕ...', 'ВЗЯТ ШС\n   1                               002/001'], ['СНЯТИЕ...', 'СНЯТ']]
+        mode = int(self.user_input[:1])
+        if mode == 3:
+            self.import_data_stat = False
+            self.user_input = ''
+            self.local_pos = 0
+            self.global_pos = 0
+            self.after(250, self.display_label.config(text='⬍1 ВЗЯТИЕ'))
+        else:
+            if self.local_pos == 0:
+                self.display_label.config(text=keyword[mode-1][0])
+                self.local_pos += 1
+                self.after(500, self.show)
+            elif self.local_pos == 1:
+                self.display_label.config(text=keyword[mode-1][1])
+                self.buff_events.insert(-1, {'name': 'ВЗЯТ  ХО \nП000 С1 ХО                   2',
+                                             '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
+                                             '1': '\nПРИБОР 000', '2': 'ИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО      2',
+                                             '3': '№ПАРОЛЯ: 2',
+                                             '5': 'ИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО                   2',
+                                             '9': 'НОМЕР 2'})
+                self.local_pos += 1
+                self.after(500, self.show)
+            else:
+                self.local_pos = 0
+                self.after(1500, self.import_data)
 
 
 if __name__ == '__main__':
