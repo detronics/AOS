@@ -24,7 +24,7 @@ class Main(tk.Frame):
         self.level = 0
         self.global_pos = 0
         self.local_pos = 0
-        self.data_base = []
+        self.data_base = [1,]
         self.buff_events = ['-НАЧАЛО БУФЕРА-',
                             {'name': 'ВКЛЮЧЕНИЕ ПУЛЬТА \nС2000М v3.02',
                              '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
@@ -522,11 +522,9 @@ class Main(tk.Frame):
         pass
 
     def import_data(self, but_num=None):
-        print('z tut1')
         param = self.menu2[self.user_input][self.level]
         self.display_label.config(text=f'{param} {self.user_number}')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
-            print('z tut2')
             self.user_number += but_num
             self.display_label.config(text=f'{param} {self.user_number}')
         elif but_num == 'x' and len(self.user_number) != 0:
@@ -546,16 +544,19 @@ class Main(tk.Frame):
             self.after(500, self.import_data)
         elif but_num == 'entr' and len(self.user_number) != 0:
             self.data_base.append(self.user_number)
+            print('d1',self.data_base)
             self.user_number = ''
             if len(self.menu2[self.user_input]) > 1 and self.level < 1:
                 self.level += 1
+                print('d2',self.data_base)
                 param = self.menu2[self.user_input][self.level]
                 self.display_label.config(text=f'{param} {self.user_number}')
             else:
                 self.show()
 
     def show(self):
-        keyword = [['ВЗЯТИЕ...', 'ВЗЯТ ШС\n   1                               002/001'], ['СНЯТИЕ...', 'СНЯТ']]
+        keyword = [['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}'],
+                   ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}']]
         mode = int(self.user_input[:1])
         if mode == 3:
             self.import_data_stat = False
@@ -577,9 +578,11 @@ class Main(tk.Frame):
                                              '5': 'ИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО                   2',
                                              '9': 'НОМЕР 2'})
                 self.local_pos += 1
+
                 self.after(500, self.show)
             else:
                 self.local_pos = 0
+                self.data_base.pop(-1)
                 self.after(1500, self.import_data)
 
 
