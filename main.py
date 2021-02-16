@@ -24,7 +24,7 @@ class Main(tk.Frame):
         self.level = 0
         self.global_pos = 0
         self.local_pos = 0
-        self.data_base = [1,]
+        self.data_base = [1, ]
         self.buff_events = ['-НАЧАЛО БУФЕРА-',
                             {'name': 'ВКЛЮЧЕНИЕ ПУЛЬТА \nС2000М v3.02',
                              '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
@@ -268,7 +268,7 @@ class Main(tk.Frame):
             print('menu 2')
 
     def main_0(self, but_num):
-        if but_num in ['1', '2',  '4', '5', '6']:
+        if but_num in ['1', '2', '4', '5', '6']:
             self.user_input += but_num
             self.local_pos = 0
             self.global_pos += 1
@@ -301,7 +301,7 @@ class Main(tk.Frame):
             self.user_input = ''
             self.start_time()
 
-        elif but_num == 'entr' and self.local_pos ==2:
+        elif but_num == 'entr' and self.local_pos == 2:
             self.user_input += str(self.local_pos + 1)
             self.global_pos += 1
             self.local_pos = 0
@@ -543,20 +543,19 @@ class Main(tk.Frame):
             self.after(10, self.display_label.config(text='Неизвестная команда'))
             self.after(500, self.import_data)
         elif but_num == 'entr' and len(self.user_number) != 0:
-            self.data_base.append(self.user_number)
-            print('d1',self.data_base)
+            self.data_base.insert(self.level, self.user_number)
             self.user_number = ''
             if len(self.menu2[self.user_input]) > 1 and self.level < 1:
                 self.level += 1
-                print('d2',self.data_base)
                 param = self.menu2[self.user_input][self.level]
                 self.display_label.config(text=f'{param} {self.user_number}')
             else:
                 self.show()
 
     def show(self):
-        keyword = [['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}'],
-                   ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}']]
+        keyword = [
+            ['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1                               00{self.data_base[0]}/00{self.data_base[1]}'],
+            ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}']]
         mode = int(self.user_input[:1])
         if mode == 3:
             self.import_data_stat = False
@@ -566,11 +565,11 @@ class Main(tk.Frame):
             self.after(250, self.display_label.config(text='⬍1 ВЗЯТИЕ'))
         else:
             if self.local_pos == 0:
-                self.display_label.config(text=keyword[mode-1][0])
+                self.display_label.config(text=keyword[mode - 1][0])
                 self.local_pos += 1
                 self.after(500, self.show)
             elif self.local_pos == 1:
-                self.display_label.config(text=keyword[mode-1][1])
+                self.display_label.config(text=keyword[mode - 1][1])
                 self.buff_events.insert(-1, {'name': 'ВЗЯТ  ХО \nП000 С1 ХО                   2',
                                              '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
                                              '1': '\nПРИБОР 000', '2': 'ИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО      2',
@@ -582,7 +581,7 @@ class Main(tk.Frame):
                 self.after(500, self.show)
             else:
                 self.local_pos = 0
-                self.data_base.pop(-1)
+                self.data_base = [1]
                 self.after(1500, self.import_data)
 
 
