@@ -52,7 +52,7 @@ class Main(tk.Frame):
         self.menu2 = {'11': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '12': ['НОМЕР ПРИБОРА'], '13': ['НОМЕР ПРИБОРА'],
                       '21': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '22': ['НОМЕР ПРИБОРА'], '23': ['НОМЕР ПРИБОРА'],
                       '3': ['НОМЕР ПРИБОРА'],
-                      '41': ['НОМЕР ПРИБОРА'], '42': ['УПРАВЛЕНИЕ АВТОМАТИКОЙ', 'УПРАВЛЕНИЕ ПУСКОМ'],
+                      '41': ['АДРЕС:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['УПРАВЛЕНИЕ АВТОМАТИКОЙ', 'УПРАВЛЕНИЕ ПУСКОМ'],
                       '51': ['НОМЕР ПРИБОРА'], '52': ['НОМЕР ПРИБОРА'],
                       '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
 
@@ -538,6 +538,7 @@ class Main(tk.Frame):
             self.level = 0
             param = self.menu2[self.user_input][self.level]
             self.display_label.config(text=f'{param} {self.user_number}')
+        #     TODO добавить отмену для управелния реле
         elif but_num == 'entr' and len(self.user_number) == 0:
             playsound('sounds/deny.wav')
             self.after(10, self.display_label.config(text='Неизвестная команда'))
@@ -549,15 +550,22 @@ class Main(tk.Frame):
                 self.level += 1
                 param = self.menu2[self.user_input][self.level]
                 self.display_label.config(text=f'{param} {self.user_number}')
+            elif len(self.menu2[self.user_input]) == 3 and self.level == 1:
+                self.level += 1
+                param = self.menu2[self.user_input][self.level]
+                self.display_label.config(text=f'{param} {self.user_number}')
             else:
                 self.show()
 
     def show(self):
         keyword = [
             ['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1                               00{self.data_base[0]}/00{self.data_base[1]}'],
-            ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}']]
+            ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}'],
+             ]
         mode = int(self.user_input[:1])
-        if mode == 3:
+        if self.user_input == '41':
+            self.after(1500, self.import_data)
+        elif mode == 3:
             self.import_data_stat = False
             self.user_input = ''
             self.local_pos = 0
