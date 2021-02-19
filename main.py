@@ -55,8 +55,9 @@ class Main(tk.Frame):
                       '41': ['АДРЕС:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['⬍УПР. АВТОМАТИКОЙ', '⬍УПРАВЛЕНИЕ ПУСКОМ'],
                       '51': ['НОМЕР ПРИБОРА'], '52': ['НОМЕР ПРИБОРА'],
                       '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
-        self.menu3 = {'421':['АВТОМАТИКА: ВЫКЛ','АВТОМАТИКА: ВКЛ','ВКЛЮЧИТЬ','ВЫКЛЮЧИТЬ'], '422':['СОСТОЯНИЕ АСПТ:\n ВЗЯТ',
-                     '⬍ЗАПУСТИТЬ АУП','⬍ОТМЕНИТЬ ПУСК' ,f'СОСТОЯНИЕ АСПТ:\n {self.user_number}  З.ПУСК']}
+        self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', 'ВКЛЮЧИТЬ', 'ВЫКЛЮЧИТЬ'],
+                      '422': ['СОСТОЯНИЕ АСПТ:\n ВЗЯТ',
+                              '⬍ЗАПУСТИТЬ АУП', '⬍ОТМЕНИТЬ ПУСК', f'СОСТОЯНИЕ АСПТ:\n {self.user_number}  З.ПУСК']}
 
     def init_main(self):
         self.background = tk.PhotoImage(file="images/b_background.png")
@@ -267,7 +268,7 @@ class Main(tk.Frame):
         elif self.global_pos == 1:
             self.main_1(but_num)
         elif self.global_pos == 2:
-            print('menu 2')
+            self.main_2(but_num)
 
     def main_0(self, but_num):
         if but_num in ['1', '2', '4', '5', '6']:
@@ -359,6 +360,19 @@ class Main(tk.Frame):
                     self.display_label.config(text=self.menu2[self.user_input][0])
         else:
             self.import_data(but_num=but_num, )
+
+    def main_2(self, but_num):
+        if but_num == 'right':
+            if self.local_pos == len(self.menu2[self.user_input]) - 1:
+                self.local_pos = -1
+            self.local_pos += 1
+            self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
+
+        elif but_num == 'left':
+            if self.local_pos == 0:
+                self.local_pos = len(self.menu2[self.user_input])
+            self.local_pos -= 1
+            self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
 
     def menu_menu(self, but_num):
         if self.global_pos == 1:
@@ -562,7 +576,7 @@ class Main(tk.Frame):
         keyword = [
             ['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1                               00{self.data_base[0]}/00{self.data_base[1]}'],
             ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}'],
-             ]
+        ]
         mode = int(self.user_input[:1])
         if self.user_input == '41':
             self.after(1500, self.import_data)
