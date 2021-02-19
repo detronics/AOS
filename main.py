@@ -319,16 +319,14 @@ class Main(tk.Frame):
 
     def main_1(self, but_num):
         if not self.import_data_stat:
-            # if '1' <= but_num <= '6':
-            #     self.user_input += str(but_num)
-
             if '1' <= but_num <= str(len(self.menu1[self.user_input[:1]])):
                 self.local_pos = 0
                 self.user_input += str(but_num)
-                # self.global_pos += 1
-                self.import_data_stat = True
+                if self.user_input == '42':
+                    self.global_pos += 1
+                else:
+                    self.import_data_stat = True
                 self.display_label.config(text=self.menu2[self.user_input][0])
-                # self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
 
             elif but_num == 'right':
                 if self.local_pos == len(self.menu1[self.user_input]) - 1:
@@ -361,18 +359,64 @@ class Main(tk.Frame):
         else:
             self.import_data(but_num=but_num, )
 
-    def main_2(self, but_num):
+    def main_2(self, but_num=None):
+        if self.level ==0:
+            if not self.import_data_stat:
+                    if but_num == 'right':
+                        if self.local_pos == len(self.menu2[self.user_input]) - 1:
+                            self.local_pos = -1
+                        self.local_pos += 1
+                        self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
+
+                    elif but_num == 'left':
+                        if self.local_pos == 0:
+                            self.local_pos = len(self.menu2[self.user_input])
+                        self.local_pos -= 1
+                        self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
+
+                    elif but_num == 'x':
+                        self.local_pos = 0
+                        self.user_input = self.user_input[:1]
+                        self.global_pos = 1
+                        self.display_label.config(text=self.menu1[str(self.user_input)][0])
+
+                    elif but_num == 'entr':
+                        self.user_input += str(self.local_pos + 1)
+                        self.import_data_stat = True
+                        self.local_pos = 0
+                        self.display_label.config(text='ПРИБОР:')
+            else:
+                self.display_label.config(text=f'ПРИБОР: {self.user_number}')
+                if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                    self.user_number += but_num
+                    self.display_label.config(text=f'ПРИБОР: {self.user_number}')
+                elif but_num == 'x' and len(self.user_number) != 0:
+                    self.user_number = ''
+                    self.display_label.config(text=f'ПРИБОР: {self.user_number}')
+                elif but_num == 'entr' and len(self.user_number) == 0:
+                    playsound('sounds/deny.wav')
+                    self.after(1, self.display_label.config(text='Неизвестная команда'))
+                    self.after(500, self.main_2)
+                elif but_num == 'entr' and len(self.user_number) != 0:
+                    self.import_data_stat = False
+                    self.display_label.config(text=self.menu3[self.user_input][0])
+                    self.level = 1
+        else:
+            self.main_3(but_num)
+
+
+    def main_3(self, but_num):
         if but_num == 'right':
-            if self.local_pos == len(self.menu2[self.user_input]) - 1:
-                self.local_pos = -1
-            self.local_pos += 1
-            self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
+            if self.local_pos == 1:
+                self.local_pos = 0
+            self.local_pos = 1
+            self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
 
         elif but_num == 'left':
             if self.local_pos == 0:
-                self.local_pos = len(self.menu2[self.user_input])
-            self.local_pos -= 1
-            self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
+                self.local_pos = 1
+            self.local_pos = 0
+            self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
 
     def menu_menu(self, but_num):
         if self.global_pos == 1:
