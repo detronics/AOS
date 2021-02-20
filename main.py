@@ -21,6 +21,7 @@ class Main(tk.Frame):
         self.user_input = ''
         self.user_number = ''
         self.password_prog = '123456'
+        self.aspt_stat = 0
         self.level = 0
         self.global_pos = 0
         self.local_pos = 0
@@ -55,7 +56,7 @@ class Main(tk.Frame):
                       '41': ['АДРЕС:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['⬍УПР. АВТОМАТИКОЙ', '⬍УПРАВЛЕНИЕ ПУСКОМ'],
                       '51': ['НОМЕР ПРИБОРА'], '52': ['НОМЕР ПРИБОРА'],
                       '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
-        self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', 'ВКЛЮЧИТЬ', 'ВЫКЛЮЧИТЬ'],
+        self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', '⬍ВКЛЮЧИТЬ', '⬍ВЫКЛЮЧИТЬ'],
                       '422': ['СОСТОЯНИЕ АСПТ:\n ВЗЯТ',
                               '⬍ЗАПУСТИТЬ АУП', '⬍ОТМЕНИТЬ ПУСК', f'СОСТОЯНИЕ АСПТ:\n {self.user_number}  З.ПУСК']}
 
@@ -360,31 +361,31 @@ class Main(tk.Frame):
             self.import_data(but_num=but_num, )
 
     def main_2(self, but_num=None):
-        if self.level ==0:
+        if self.level == 0:
             if not self.import_data_stat:
-                    if but_num == 'right':
-                        if self.local_pos == len(self.menu2[self.user_input]) - 1:
-                            self.local_pos = -1
-                        self.local_pos += 1
-                        self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
+                if but_num == 'right':
+                    if self.local_pos == len(self.menu2[self.user_input]) - 1:
+                        self.local_pos = -1
+                    self.local_pos += 1
+                    self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
 
-                    elif but_num == 'left':
-                        if self.local_pos == 0:
-                            self.local_pos = len(self.menu2[self.user_input])
-                        self.local_pos -= 1
-                        self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
+                elif but_num == 'left':
+                    if self.local_pos == 0:
+                        self.local_pos = len(self.menu2[self.user_input])
+                    self.local_pos -= 1
+                    self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
 
-                    elif but_num == 'x':
-                        self.local_pos = 0
-                        self.user_input = self.user_input[:1]
-                        self.global_pos = 1
-                        self.display_label.config(text=self.menu1[str(self.user_input)][0])
+                elif but_num == 'x':
+                    self.local_pos = 0
+                    self.user_input = self.user_input[:1]
+                    self.global_pos = 1
+                    self.display_label.config(text=self.menu1[str(self.user_input)][0])
 
-                    elif but_num == 'entr':
-                        self.user_input += str(self.local_pos + 1)
-                        self.import_data_stat = True
-                        self.local_pos = 0
-                        self.display_label.config(text='ПРИБОР:')
+                elif but_num == 'entr':
+                    self.user_input += str(self.local_pos + 1)
+                    self.import_data_stat = True
+                    self.local_pos = 0
+                    self.display_label.config(text='ПРИБОР:')
             else:
                 self.display_label.config(text=f'ПРИБОР: {self.user_number}')
                 if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
@@ -399,24 +400,43 @@ class Main(tk.Frame):
                     self.after(500, self.main_2)
                 elif but_num == 'entr' and len(self.user_number) != 0:
                     self.import_data_stat = False
-                    self.display_label.config(text=self.menu3[self.user_input][0])
+                    self.display_label.config(text=self.menu3[self.user_input][self.aspt_stat])
                     self.level = 1
         else:
             self.main_3(but_num)
 
-
     def main_3(self, but_num):
-        if but_num == 'right':
-            if self.local_pos == 1:
-                self.local_pos = 0
-            self.local_pos = 1
-            self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
+        self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
+        if not self.import_data_stat:
+            if but_num == 'entr':
+                self.import_data_stat = True
+                self.display_label.config(text=self.menu3[self.user_input][2])
+                self.local_pos = 2
 
-        elif but_num == 'left':
-            if self.local_pos == 0:
-                self.local_pos = 1
-            self.local_pos = 0
-            self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
+            elif but_num == 'x':
+                self.user_input = self.user_input[:2]
+                self.level = 0
+                self.local_pos = 0
+                self.global_pos = 2
+                self.display_label.config(text=self.menu2[str(self.user_input)][0])
+        else:
+            if but_num == 'right':
+                if self.local_pos == 3:
+                    self.local_pos = 2
+                else:
+                    self.local_pos = 3
+                self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
+
+            elif but_num == 'left':
+                if self.local_pos == 2:
+                    self.local_pos = 3
+                self.local_pos = 2
+                self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
+                
+            elif but_num == 'entr':
+                self.import_data_stat = False
+                self.aspt_stat = -self.local_pos + 3
+                self.display_label.config(text=self.menu3[self.user_input][self.aspt_stat])
 
     def menu_menu(self, but_num):
         if self.global_pos == 1:
