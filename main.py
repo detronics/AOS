@@ -22,7 +22,6 @@ class Main(tk.Frame):
         self.user_number = ''
         self.password_prog = '123456'
         self.aspt_stat = 0
-
         self.level = 0
         self.global_pos = 0
         self.local_pos = 0
@@ -394,6 +393,7 @@ class Main(tk.Frame):
                     self.display_label.config(text=f'ПРИБОР: {self.user_number}')
                 elif but_num == 'x' and len(self.user_number) != 0:
                     self.user_number = ''
+                    print(self.user_input, self.level, self.local_pos, self.import_data_stat)
                     self.display_label.config(text=f'ПРИБОР: {self.user_number}')
                 elif but_num == 'x' and len(self.user_number) == 0:
                     self.user_input = self.user_input[:2]
@@ -414,16 +414,18 @@ class Main(tk.Frame):
         if self.aspt_stat == 2:
             if but_num == 'entr':
                 self.import_data_stat = True
-                self.display_label.config(text=self.menu3[self.user_input][2])
-                self.local_pos = 2
-
-            elif but_num == 'x':
-                self.user_input = self.user_input[:2]
-                self.level = 0
+                self.display_label.config(text=self.menu3[self.user_input][1])
                 self.local_pos = 0
-                self.global_pos = 2
-                self.user_number = ''
-                self.display_label.config(text=self.menu2[str(self.user_input)][0])
+                self.aspt_stat = 0
+                self.level = 0
+            elif but_num == 'x':
+                print('tut')
+                self.local_pos = 0
+                self.import_data_stat = False
+                self.aspt_stat = 0
+                self.level = 1
+                self.after(250, self.display_label.config(text=self.menu3[self.user_input][self.local_pos]))
+                # self.display_label.config(text=self.menu3[self.user_input][self.aspt_stat])
         else:
             self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
             if not self.import_data_stat:
@@ -453,15 +455,25 @@ class Main(tk.Frame):
                     self.local_pos = 2
                     self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
 
+                elif but_num == 'x':
+                    self.user_input = self.user_input[:2]
+                    self.level = 0
+                    self.local_pos = 0
+                    self.global_pos = 2
+                    self.display_label.config(text=self.menu2[str(self.user_input)][0])
+
                 elif but_num == 'entr':
+                    self.import_data_stat = False
                     if self.user_input == '421':
-                        self.import_data_stat = False
                         self.aspt_stat = -self.local_pos + 3
                         self.display_label.config(text=self.menu3[self.user_input][self.aspt_stat])
                     else:
-                        self.display_label.config(text=f'ПОДТВЕРДИТЕ ПУСК\n ПРИБОР: {self.user_number} ')
-                        self.import_data_stat = False
-                        self.aspt_stat = 2
+                        if self.local_pos == 2:
+                            self.local_pos = 0
+                            self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
+                        else:
+                            self.display_label.config(text=f'ПОДТВЕРДИТЕ ПУСК\n ПРИБОР: {self.user_number} ')
+                            self.aspt_stat = 2
 
     def menu_menu(self, but_num):
         if self.global_pos == 1:
