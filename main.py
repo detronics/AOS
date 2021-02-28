@@ -26,6 +26,7 @@ class Main(tk.Frame):
         self.global_pos = 0
         self.local_pos = 0
         self.data_base = [1, ]
+        self.data_base_aspt = {}
         self.buff_events = ['-НАЧАЛО БУФЕРА-',
                             {'name': 'ВКЛЮЧЕНИЕ ПУЛЬТА \nС2000М v3.02',
                              '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
@@ -58,7 +59,7 @@ class Main(tk.Frame):
                       '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
         self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', '⬍ВКЛЮЧИТЬ', '⬍ВЫКЛЮЧИТЬ'],
                       '422': ['СОСТОЯНИЕ АСПТ:\n ВЗЯТ', f'СОСТОЯНИЕ АСПТ:\n {self.user_number}  З.ПУСК',
-                               '⬍ОТМЕНИТЬ ПУСК','⬍ЗАПУСТИТЬ АУП' ]}
+                              '⬍ОТМЕНИТЬ ПУСК', '⬍ЗАПУСТИТЬ АУП']}
 
     def init_main(self):
         self.background = tk.PhotoImage(file="images/b_background.png")
@@ -393,7 +394,6 @@ class Main(tk.Frame):
                     self.display_label.config(text=f'ПРИБОР: {self.user_number}')
                 elif but_num == 'x' and len(self.user_number) != 0:
                     self.user_number = ''
-                    print(self.user_input, self.level, self.local_pos, self.import_data_stat)
                     self.display_label.config(text=f'ПРИБОР: {self.user_number}')
                 elif but_num == 'x' and len(self.user_number) == 0:
                     self.user_input = self.user_input[:2]
@@ -404,30 +404,34 @@ class Main(tk.Frame):
                     self.after(1, self.display_label.config(text='Неизвестная команда'))
                     self.after(500, self.main_2)
                 elif but_num == 'entr' and len(self.user_number) != 0:
+                    if self.user_number not in self.data_base_aspt.keys():
+                        self.data_base_aspt[self.user_number] = [0, 0]
+                    self.aspt_stat = 422 - int(self.user_input)
                     self.import_data_stat = False
-                    self.display_label.config(text=self.menu3[self.user_input][self.aspt_stat])
+                    self.display_label.config(
+                        text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
                     self.level = 1
+
         else:
             self.main_3(but_num)
 
     def main_3(self, but_num):
         if self.aspt_stat == 2:
             if but_num == 'entr':
-                self.import_data_stat = True
-                self.display_label.config(text=self.menu3[self.user_input][1])
-                self.local_pos = 0
-                self.aspt_stat = 0
-                self.level = 0
+                self.aspt_stat = 422 - int(self.user_input)
+                self.data_base_aspt[self.user_number][self.aspt_stat] = 1
+                self.import_data_stat = False
+                self.display_label.config(
+                    text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
+                self.local_pos = 2
             elif but_num == 'x':
-                print('tut')
                 self.local_pos = 0
                 self.import_data_stat = False
-                self.aspt_stat = 0
+                self.aspt_stat = 422 - int(self.user_input)
                 self.level = 1
-                self.after(250, self.display_label.config(text=self.menu3[self.user_input][self.local_pos]))
-                # self.display_label.config(text=self.menu3[self.user_input][self.aspt_stat])
+                self.display_label.config(
+                    text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
         else:
-            self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
             if not self.import_data_stat:
                 if but_num == 'entr':
                     self.import_data_stat = True
@@ -435,12 +439,11 @@ class Main(tk.Frame):
                     self.local_pos = 2
 
                 elif but_num == 'x':
-                    self.user_input = self.user_input[:2]
-                    self.level = 0
+                    self.import_data_stat = True
                     self.local_pos = 0
-                    self.global_pos = 2
+                    self.level = 0
                     self.user_number = ''
-                    self.display_label.config(text=self.menu2[str(self.user_input)][0])
+                    self.display_label.config(text=f'ПРИБОР: {self.user_number}')
             else:
                 if but_num == 'right':
                     if self.local_pos == 3:
@@ -456,21 +459,23 @@ class Main(tk.Frame):
                     self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
 
                 elif but_num == 'x':
-                    self.user_input = self.user_input[:2]
-                    self.level = 0
+                    self.import_data_stat = False
                     self.local_pos = 0
-                    self.global_pos = 2
-                    self.display_label.config(text=self.menu2[str(self.user_input)][0])
+                    self.display_label.config(
+                        text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
 
                 elif but_num == 'entr':
                     self.import_data_stat = False
                     if self.user_input == '421':
-                        self.aspt_stat = -self.local_pos + 3
-                        self.display_label.config(text=self.menu3[self.user_input][self.aspt_stat])
+                        self.data_base_aspt[self.user_number][self.aspt_stat] = -self.local_pos + 3
+                        self.display_label.config(
+                            text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
+
                     else:
                         if self.local_pos == 2:
                             self.local_pos = 0
-                            self.display_label.config(text=self.menu3[self.user_input][self.local_pos])
+                            self.data_base_aspt[self.user_number][self.aspt_stat] = 0
+                            self.display_label.config(text=self.menu3[self.user_input][0])
                         else:
                             self.display_label.config(text=f'ПОДТВЕРДИТЕ ПУСК\n ПРИБОР: {self.user_number} ')
                             self.aspt_stat = 2
