@@ -1,3 +1,4 @@
+import random
 import tkinter as tk
 import time
 from playsound import playsound
@@ -55,7 +56,7 @@ class Main(tk.Frame):
                       '21': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '22': ['НОМЕР ПРИБОРА'], '23': ['НОМЕР ПРИБОРА'],
                       '3': ['НОМЕР ПРИБОРА'],
                       '41': ['АДРЕС:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['⬍УПР. АВТОМАТИКОЙ', '⬍УПРАВЛЕНИЕ ПУСКОМ'],
-                      '51': ['НОМЕР ПРИБОРА'], '52': ['НОМЕР ПРИБОРА'],
+                      '51': ['ПРИБОР:','НОМЕР ШС'], '52': ['ПРИБОР:','НОМЕР ШС'],
                       '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
         self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', '⬍ВКЛЮЧИТЬ', '⬍ВЫКЛЮЧИТЬ'],
                       '422': ['СОСТОЯНИЕ АСПТ:\n ВЗЯТ', f'СОСТОЯНИЕ АСПТ:\n {self.user_number}  З.ПУСК',
@@ -644,6 +645,7 @@ class Main(tk.Frame):
         pass
 
     def import_data(self, but_num=None):
+        # print('import data',self.user_input, self.level)
         param = self.menu2[self.user_input][self.level]
         self.display_label.config(text=f'{param} {self.user_number}')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
@@ -653,6 +655,7 @@ class Main(tk.Frame):
             self.user_number = ''
             self.display_label.config(text=f'{param} {self.user_number}')
         elif but_num == 'x' and len(self.user_number) == 0 and self.level == 0:
+            self.data_base = [1]
             self.import_data_stat = False
             self.user_input = self.user_input[:1]
             self.display_label.config(text=self.menu1[str(self.user_input)][0])
@@ -684,8 +687,15 @@ class Main(tk.Frame):
             ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}'],
         ]
         mode = int(self.user_input[:1])
+        print('mode', mode)
         if self.user_input == '41':
             self.after(1500, self.import_data)
+        elif self.user_input == '51':
+            self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:\n {random.choice(["ВЗЯТ", "СНЯТ"])}')
+        #     TODO узнать куда возвращается пульт из запроса состояния
+        elif self.user_input == '52':
+            self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:                          '
+                                           f'47\n Rшс = 4,7 кОм')
         elif mode == 3:
             self.import_data_stat = False
             self.user_input = ''
@@ -706,11 +716,9 @@ class Main(tk.Frame):
                                              '5': 'ИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО                   2',
                                              '9': 'НОМЕР 2'})
                 self.local_pos += 1
-
                 self.after(500, self.show)
             else:
                 self.local_pos = 0
-                self.data_base = [1]
                 self.after(1500, self.import_data)
 
 
