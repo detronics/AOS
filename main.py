@@ -56,7 +56,7 @@ class Main(tk.Frame):
                       '21': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '22': ['НОМЕР ПРИБОРА'], '23': ['НОМЕР ПРИБОРА'],
                       '3': ['НОМЕР ПРИБОРА'],
                       '41': ['АДРЕС:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['⬍УПР. АВТОМАТИКОЙ', '⬍УПРАВЛЕНИЕ ПУСКОМ'],
-                      '51': ['ПРИБОР:','НОМЕР ШС'], '52': ['ПРИБОР:','НОМЕР ШС'],
+                      '51': ['ПРИБОР:', 'НОМЕР ШС'], '52': ['ПРИБОР:', 'НОМЕР ШС'],
                       '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
         self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', '⬍ВКЛЮЧИТЬ', '⬍ВЫКЛЮЧИТЬ'],
                       '422': ['СОСТОЯНИЕ АСПТ:\n ВЗЯТ', f'СОСТОЯНИЕ АСПТ:\n {self.user_number}  З.ПУСК',
@@ -172,7 +172,7 @@ class Main(tk.Frame):
             playsound('sounds/pick.wav')
             self.home_menu_stat = True
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
-        elif self.user_input =='61':
+        elif self.user_input == '61':
             self.change_time(but_num)
         elif self.entering_password:
             self.check_password_prog(but_num)
@@ -655,7 +655,7 @@ class Main(tk.Frame):
     def change_password_func(self, but_num):
         pass
 
-    def change_time(self, but_num=None,):
+    def change_time(self, but_num=None, ):
         if but_num == 'x':
             self.passw_stat = True
             self.main_menu_stat = True
@@ -663,16 +663,14 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu1[str(self.user_input)][0])
             self.level = 2
 
-
-
         elif self.level == 0:
-            self.display_label.config(text=time.strftime("%H:%M"))
+            self.display_label.config(text=f'ВРЕМЯ:{time.strftime("%H:%M:%S")}')
             self.level = 1
-            self.display_label.after(200, self.change_time)
+
         elif self.level == 1:
             self.level = 0
-            timer = time.strftime("%H:%M")
-            self.display_label.config(text=timer.replace(timer[:1], '_'))
+            timer = time.strftime("%H:%M:%S")
+            self.display_label.config(text=f'ВРЕМЯ:{timer.replace(timer[:1], "_")}')
             self.display_label.after(400, self.change_time)
 
     def change_data(self, but_num):
@@ -725,7 +723,8 @@ class Main(tk.Frame):
         if self.user_input == '41':
             self.after(1500, self.import_data)
         elif self.user_input == '51':
-            self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:\n {random.choice(["ВЗЯТ", "СНЯТ"])}')
+            self.display_label.config(
+                text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:\n {random.choice(["ВЗЯТ", "СНЯТ"])}')
         #     TODO узнать куда возвращается пульт из запроса состояния
         elif self.user_input == '52':
             self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:                          '
