@@ -172,6 +172,8 @@ class Main(tk.Frame):
             playsound('sounds/pick.wav')
             self.home_menu_stat = True
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
+        elif self.user_input =='61':
+            self.change_time(but_num)
         elif self.entering_password:
             self.check_password_prog(but_num)
         elif self.passw_prog_stat:
@@ -180,6 +182,7 @@ class Main(tk.Frame):
             self.check_password(but_num)
         elif self.main_menu_stat:
             self.main_menu(but_num)
+
         elif but_num == 'mute':
             # TODO допилить звук
             self.sound = False
@@ -187,6 +190,7 @@ class Main(tk.Frame):
             self.start_time()
 
     def check_password(self, but_num):
+        # print('check password')
         playsound('sounds/pick.wav')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             self.user_input += but_num
@@ -321,16 +325,21 @@ class Main(tk.Frame):
             self.local_pos = 0
 
     def main_1(self, but_num):
+        # print('main_1')
         if not self.import_data_stat:
+
             if '1' <= but_num <= str(len(self.menu1[self.user_input[:1]])):
                 self.local_pos = 0
                 self.user_input += str(but_num)
                 if self.user_input == '42':
                     self.global_pos += 1
+                elif self.user_input == '61':
+                    self.main_menu_stat = False
+                    self.passw_stat = False
+                    self.change_time(but_num)
                 else:
                     self.import_data_stat = True
-                self.display_label.config(text=self.menu2[self.user_input][0])
-
+                    self.display_label.config(text=self.menu2[self.user_input][0])
             elif but_num == 'right':
                 if self.local_pos == len(self.menu1[self.user_input]) - 1:
                     self.local_pos = -1
@@ -355,6 +364,8 @@ class Main(tk.Frame):
                     self.global_pos += 1
                     self.display_label.config(text=self.menu2[self.user_input][0])
                     self.local_pos = 0
+                elif self.user_input == '61':
+                    self.change_time(but_num)
                 else:
                     self.import_data_stat = True
                     self.local_pos = 0
@@ -642,6 +653,29 @@ class Main(tk.Frame):
         pass
 
     def change_password_func(self, but_num):
+        pass
+
+    def change_time(self, but_num=None,):
+        if but_num == 'x':
+            self.passw_stat = True
+            self.main_menu_stat = True
+            self.user_input = self.user_input[:1]
+            self.display_label.config(text=self.menu1[str(self.user_input)][0])
+            self.level = 2
+
+
+
+        elif self.level == 0:
+            self.display_label.config(text=time.strftime("%H:%M"))
+            self.level = 1
+            self.display_label.after(200, self.change_time)
+        elif self.level == 1:
+            self.level = 0
+            timer = time.strftime("%H:%M")
+            self.display_label.config(text=timer.replace(timer[:1], '_'))
+            self.display_label.after(400, self.change_time)
+
+    def change_data(self, but_num):
         pass
 
     def import_data(self, but_num=None):
