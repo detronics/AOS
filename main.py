@@ -23,6 +23,8 @@ class Main(tk.Frame):
         self.user_number = ''
         self.password_prog = '123456'
         self.aspt_stat = 0
+        self.tim = ''
+        self.time_date_stat = 2
         self.level = 0
         self.global_pos = 0
         self.local_pos = 0
@@ -325,9 +327,8 @@ class Main(tk.Frame):
             self.local_pos = 0
 
     def main_1(self, but_num):
-        # print('main_1')
+        print('main_1', self.user_input, self.level, self.local_pos, self.global_pos)
         if not self.import_data_stat:
-
             if '1' <= but_num <= str(len(self.menu1[self.user_input[:1]])):
                 self.local_pos = 0
                 self.user_input += str(but_num)
@@ -336,6 +337,7 @@ class Main(tk.Frame):
                 elif self.user_input == '61':
                     self.main_menu_stat = False
                     self.passw_stat = False
+                    self.time_date_stat = 0
                     self.change_time(but_num)
                 else:
                     self.import_data_stat = True
@@ -365,6 +367,9 @@ class Main(tk.Frame):
                     self.display_label.config(text=self.menu2[self.user_input][0])
                     self.local_pos = 0
                 elif self.user_input == '61':
+                    self.main_menu_stat = False
+                    self.passw_stat = False
+                    self.time_date_stat = 0
                     self.change_time(but_num)
                 else:
                     self.import_data_stat = True
@@ -656,21 +661,26 @@ class Main(tk.Frame):
         pass
 
     def change_time(self, but_num=None, ):
+        if  self.sound:
+            self.tim = time.strftime("%H:%M:%S")
+            self.sound = False
         if but_num == 'x':
             self.passw_stat = True
             self.main_menu_stat = True
             self.user_input = self.user_input[:1]
             self.display_label.config(text=self.menu1[str(self.user_input)][0])
-            self.level = 2
-
-        elif self.level == 0:
-            self.display_label.config(text=f'ВРЕМЯ:{time.strftime("%H:%M:%S")}')
-            self.level = 1
-
-        elif self.level == 1:
             self.level = 0
-            timer = time.strftime("%H:%M:%S")
-            self.display_label.config(text=f'ВРЕМЯ:{timer.replace(timer[:1], "_")}')
+            self.sound = True
+            self.time_date_stat =2
+
+        elif self.time_date_stat == 0:
+            self.display_label.config(text=f'ВРЕМЯ: {self.tim}')
+            self.time_date_stat = 1
+            self.display_label.after(400, self.change_time)
+
+        elif self.time_date_stat == 1:
+            self.time_date_stat = 0
+            self.display_label.config(text=f'ВРЕМЯ: {self.tim.replace(self.tim[:1], "_")}')
             self.display_label.after(400, self.change_time)
 
     def change_data(self, but_num):
