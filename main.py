@@ -661,7 +661,7 @@ class Main(tk.Frame):
         pass
 
     def change_time(self, but_num=None, ):
-        if  self.sound:
+        if self.sound:
             self.tim = time.strftime("%H:%M:%S")
             self.sound = False
         if but_num == 'x':
@@ -671,7 +671,7 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu1[str(self.user_input)][0])
             self.level = 0
             self.sound = True
-            self.time_date_stat =2
+            self.time_date_stat = 2
 
         elif self.time_date_stat == 0:
             self.display_label.config(text=f'ВРЕМЯ: {self.tim}')
