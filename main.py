@@ -177,6 +177,8 @@ class Main(tk.Frame):
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
         elif self.user_input == '61':
             self.change_time(but_num)
+        elif self.user_input == '62':
+            self.change_data(but_num)
         elif self.entering_password:
             self.check_password_prog(but_num)
         elif self.passw_prog_stat:
@@ -342,6 +344,11 @@ class Main(tk.Frame):
                     self.passw_stat = False
                     self.time_date_stat = 0
                     self.change_time()
+                elif self.user_input == '62':
+                    self.main_menu_stat = False
+                    self.passw_stat = False
+                    self.time_date_stat = 0
+                    self.change_data()
                 else:
                     self.import_data_stat = True
                     self.display_label.config(text=self.menu2[self.user_input][0])
@@ -375,6 +382,12 @@ class Main(tk.Frame):
                     self.passw_stat = False
                     self.time_date_stat = 0
                     self.change_time()
+                elif self.user_input == '62':
+                    self.local_pos = 0
+                    self.main_menu_stat = False
+                    self.passw_stat = False
+                    self.time_date_stat = 0
+                    self.change_data()
                 else:
                     self.import_data_stat = True
                     self.local_pos = 0
@@ -665,7 +678,7 @@ class Main(tk.Frame):
         pass
 
     def change_time(self, but_num=None, ):
-        position_list = [0,1,3,4,6,7,-8]
+        position_list = [0, 1, 3, 4, 6, 7, -8]
         if self.sound:
             self.tim = time.strftime("%H:%M:%S")
             self.sound = False
@@ -676,11 +689,11 @@ class Main(tk.Frame):
             self.main_menu_stat = True
             self.user_input = self.user_input[:1]
             self.display_label.config(text=self.menu1[str(self.user_input)][0])
-            self.time_date_stat =2
+            self.time_date_stat = 2
             self.sound = True
 
         elif but_num == 'entr':
-            if not  self.mistake:
+            if not self.mistake:
                 playsound('sounds/pick.wav')
                 self.passw_stat = True
                 self.main_menu_stat = True
@@ -703,7 +716,7 @@ class Main(tk.Frame):
             temp[position_list[self.local_pos]] = but_num
             self.tim = self.tim.join(temp)
             self.display_label.config(text=f'ВРЕМЯ: {self.tim}')
-            self.local_pos +=1
+            self.local_pos += 1
             if self.local_pos == 6 and not self.mistake:
                 self.passw_stat = True
                 self.main_menu_stat = True
@@ -712,7 +725,7 @@ class Main(tk.Frame):
                 self.time_date_stat = 2
                 self.local_pos = 0
                 self.sound = True
-            elif self.mistake and self.local_pos ==6:
+            elif self.mistake and self.local_pos == 6:
                 # TODO поменять звук отказа
                 playsound('sounds/deny.wav')
                 self.sound = True
@@ -726,11 +739,75 @@ class Main(tk.Frame):
 
         elif self.time_date_stat == 1:
             self.time_date_stat = 0
-            self.display_label.config(text=f'ВРЕМЯ: {self.tim[:position_list[self.local_pos]]}_{self.tim[position_list[self.local_pos]+1:]}')
+            self.display_label.config(
+                text=f'ВРЕМЯ: {self.tim[:position_list[self.local_pos]]}_{self.tim[position_list[self.local_pos] + 1:]}')
             self.display_label.after(400, self.change_time)
 
-    def change_data(self, but_num):
-        pass
+    def change_data(self, but_num=None):
+        position_list = [0, 1, 3, 4, 6, 7, -8]
+        if self.sound:
+            self.tim = time.strftime("%d:%m:%y")
+            self.sound = False
+
+        if but_num == 'x':
+            playsound('sounds/pick.wav')
+            self.passw_stat = True
+            self.main_menu_stat = True
+            self.user_input = self.user_input[:1]
+            self.display_label.config(text=self.menu1[str(self.user_input)][0])
+            self.time_date_stat = 2
+            self.sound = True
+
+        elif but_num == 'entr':
+            if not self.mistake:
+                playsound('sounds/pick.wav')
+                self.passw_stat = True
+                self.main_menu_stat = True
+                self.user_input = self.user_input[:1]
+                self.display_label.config(text=self.menu1[str(self.user_input)][0])
+                self.time_date_stat = 2
+                self.sound = True
+            else:
+                playsound('sounds/deny.wav')
+                self.sound = True
+                self.mistake = False
+                self.local_pos = 0
+
+        elif but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            playsound('sounds/pick.wav')
+            if int(self.tim[:2]) > 31 or int(self.tim[3:5]) > 12:
+                self.mistake = True
+            temp = list(self.tim)
+            self.tim = ''
+            temp[position_list[self.local_pos]] = but_num
+            self.tim = self.tim.join(temp)
+            self.display_label.config(text=f'ДАТА: {self.tim}')
+            self.local_pos += 1
+            if self.local_pos == 6 and not self.mistake:
+                self.passw_stat = True
+                self.main_menu_stat = True
+                self.user_input = self.user_input[:1]
+                self.display_label.config(text=self.menu1[str(self.user_input)][0])
+                self.time_date_stat = 2
+                self.local_pos = 0
+                self.sound = True
+            elif self.mistake and self.local_pos == 6:
+                # TODO поменять звук отказа
+                playsound('sounds/deny.wav')
+                self.sound = True
+                self.local_pos = 0
+                self.mistake = False
+
+        elif self.time_date_stat == 0:
+            self.display_label.config(text=f'ДАТА: {self.tim}')
+            self.time_date_stat = 1
+            self.display_label.after(400, self.change_data)
+
+        elif self.time_date_stat == 1:
+            self.time_date_stat = 0
+            self.display_label.config(
+                text=f'ДАТА: {self.tim[:position_list[self.local_pos]]}_{self.tim[position_list[self.local_pos] + 1:]}')
+            self.display_label.after(400, self.change_data)
 
     def import_data(self, but_num=None):
         # print('import data',self.user_input, self.level)
