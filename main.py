@@ -19,6 +19,7 @@ class Main(tk.Frame):
         self.import_data_stat = False
         self.sound = True
         self.mistake = False
+        self.test = False
         self.password_main = '1234'
         self.user_input = ''
         self.user_number = ''
@@ -60,10 +61,12 @@ class Main(tk.Frame):
                       '3': ['НОМЕР ПРИБОРА'],
                       '41': ['АДРЕС:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['⬍УПР. АВТОМАТИКОЙ', '⬍УПРАВЛЕНИЕ ПУСКОМ'],
                       '51': ['ПРИБОР:', 'НОМЕР ШС'], '52': ['ПРИБОР:', 'НОМЕР ШС'],
-                      '61': [], '62': [], '63': ['НОМЕР ПРИБОРА'], '64': ['НОМЕР ПРИБОРА'], '65': [], '66': []}
+                      '61': [], '62': [], '63': ['⬍ ВКЛ.ТЕСТ', '⬍ ВЫКЛ.ТЕСТ'], '64': ['НОМЕР ПРИБОРА'], '65': [],
+                      '66': []}
         self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', '⬍ВКЛЮЧИТЬ', '⬍ВЫКЛЮЧИТЬ'],
                       '422': ['СОСТОЯНИЕ АСПТ:\n ВЗЯТ', f'СОСТОЯНИЕ АСПТ:\n {self.user_number}  З.ПУСК',
-                              '⬍ОТМЕНИТЬ ПУСК', '⬍ЗАПУСТИТЬ АУП']}
+                              '⬍ОТМЕНИТЬ ПУСК', '⬍ЗАПУСТИТЬ АУП'],
+                      '631': ['ПРИБОР:', '№ ИЗВЕЩАТЕЛЯ:', 'ВРЕМЯ, мин.:'], '632': ['ПРИБОР:', '№ ИЗВЕЩАТЕЛЯ:']}
 
     def init_main(self):
         self.background = tk.PhotoImage(file="images/b_background.png")
@@ -179,6 +182,8 @@ class Main(tk.Frame):
             self.change_time(but_num)
         elif self.user_input == '62':
             self.change_data(but_num)
+        elif self.test:
+            self.test_detector(but_num)
         elif self.entering_password:
             self.check_password_prog(but_num)
         elif self.passw_prog_stat:
@@ -332,7 +337,7 @@ class Main(tk.Frame):
             self.local_pos = 0
 
     def main_1(self, but_num):
-        # print('main_1', self.user_input, self.level, self.local_pos, self.global_pos)
+        print('main_1', self.user_input, self.level, self.local_pos, self.global_pos)
         if not self.import_data_stat:
             if '1' <= but_num <= str(len(self.menu1[self.user_input[:1]])):
                 self.local_pos = 0
@@ -349,6 +354,11 @@ class Main(tk.Frame):
                     self.passw_stat = False
                     self.time_date_stat = 0
                     self.change_data()
+                elif self.user_input == '63':
+                    self.main_menu_stat = False
+                    self.passw_stat = False
+                    self.test = True
+                    self.display_label.config(text=self.menu2[self.user_input][0])
                 else:
                     self.import_data_stat = True
                     self.display_label.config(text=self.menu2[self.user_input][0])
@@ -388,6 +398,12 @@ class Main(tk.Frame):
                     self.passw_stat = False
                     self.time_date_stat = 0
                     self.change_data()
+                elif self.user_input == '63':
+                    self.local_pos = 0
+                    self.main_menu_stat = False
+                    self.passw_stat = False
+                    self.test = True
+                    self.display_label.config(text=self.menu2[self.user_input][0])
                 else:
                     self.import_data_stat = True
                     self.local_pos = 0
@@ -674,6 +690,61 @@ class Main(tk.Frame):
     def test_indik_func(self, but_num):
         pass
 
+    def test_detector(self, but_num=None):
+        if len(self.user_input) < 3:
+            playsound('sounds/pick.wav')
+            if but_num == 'x':
+                self.passw_stat = True
+                self.main_menu_stat = True
+                self.test = False
+                self.user_input = self.user_input[:1]
+                self.display_label.config(text=self.menu1[str(self.user_input)][0])
+
+            elif but_num == 'right':
+                if self.local_pos == 1:
+                    self.local_pos = 0
+                else:
+                    self.local_pos += 1
+                self.display_label.config(text=self.menu2[str(self.user_input)][self.local_pos])
+
+            elif but_num == 'left':
+                if self.local_pos == 0:
+                    self.local_pos = 1
+                else:
+                    self.local_pos -= 1
+                self.display_label.config(text=self.menu2[str(self.user_input)][self.local_pos])
+
+            elif but_num == 'entr':
+                self.user_input += str(self.local_pos + 1)
+                self.display_label.config(text=self.menu3[str(self.user_input)][0])
+
+        else:
+            playsound('sounds/pick.wav')
+            param = self.menu3[self.user_input][self.level]
+            self.display_label.config(text=f'{param} {self.user_number}')
+            if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                self.user_number += but_num
+                self.display_label.config(text=f'{param} {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) != 0:
+                self.user_number = ''
+                self.display_label.config(text=f'{param} {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) == 0 and self.level == 0:
+                self.data_base = [1]
+                self.user_input = self.user_input[:2]
+                self.display_label.config(text=self.menu2[str(self.user_input)][0])
+            elif but_num == 'x' and self.level >= 1 and len(self.user_number) == 0:
+                self.level -= 1
+                param = self.menu3[self.user_input][self.level]
+                self.display_label.config(text=f'{param} {self.user_number}')
+            elif but_num == 'entr' and len(self.user_number) == 0:
+                playsound('sounds/deny.wav')
+            elif but_num == 'entr' and len(self.user_number) != 0:
+                # self.data_base.insert(self.level, self.user_number)
+                self.user_number = ''
+                self.level += 1
+                param = self.menu3[self.user_input][self.level]
+                self.display_label.config(text=f'{param} {self.user_number}')
+
     def change_password_func(self, but_num):
         pass
 
@@ -861,7 +932,7 @@ class Main(tk.Frame):
         #     TODO узнать куда возвращается пульт из запроса состояния
         elif self.user_input == '52':
             self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:                          '
-                                           f'47\n Rшс = 4,7 кОм')
+            f'47\n Rшс = 4,7 кОм')
         elif mode == 3:
             self.import_data_stat = False
             self.user_input = ''
