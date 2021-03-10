@@ -40,7 +40,7 @@ class Main(tk.Frame):
                              '5': 'С2000М v3.02 \n№ ЗОНЫ: НЕ ЗАДАН',
                              '9': 'НОМЕР 1'}, '-КОНЕЦ БУФЕРА-']
         self.buff_settings = ['⬍ПОКАЗЫВАТЬ ВСЕ\n СОБЫТИЯ', '⬍ТИП СОБЫТИЯ:\n ВСЕ', '⬍ДАТА:с 01.01.00\n по 31.12.99',
-                              '⬍РАЗДЕЛ:\n ВСЕ', '⬍ЭЛЕМЕНТ:\n ВСЕ','⬍ПРИБОР:\n ВСЕ',]
+                              '⬍РАЗДЕЛ:\n ВСЕ', '⬍ЭЛЕМЕНТ:\n ВСЕ', '⬍ПРИБОР:\n ВСЕ', ]
         self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА УСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
@@ -51,7 +51,8 @@ class Main(tk.Frame):
                             5: ['РЕЖИМ:', 'ЦЕНТР.УПРАВЛ.:−', 'СКОРОСТЬ: 9600 бит/с', 'ACCOUNT: 1234', 'СОБЫТИЯ LАRS', ],
                             6: ['РЕЖИМ ПРОГРАММИРОВАНИЯ']}
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР \nПО СОСТОЯНИЯМ']
-        self.menu_state = ['ПОЖАРЫ\n (0)','ТРЕВОГИ\n (0)','ЗАПУЩЕНЫ\n (0)', 'ОСТАНОВЛЕНЫ\n (0)', 'НЕИСПРАВНОСТИ\n (0)','ОТКЛЮЧЕНИЯ\n (0)']
+        self.menu_state = ['ПОЖАРЫ\n (0)', 'ТРЕВОГИ\n (0)', 'ЗАПУЩЕНЫ\n (0)', 'ОСТАНОВЛЕНЫ\n (0)',
+                           'НЕИСПРАВНОСТИ\n (0)', 'ОТКЛЮЧЕНИЯ\n (0)']
         self.menu0 = ['⬍1 ВЗЯТИЕ', '⬍2 СНЯТИЕ', '⬍3 СБРОС ТРЕВОГ', '⬍4 УПРАВЛЕНИЕ', '⬍5 ЗАПРОС', '⬍6 СЕРВИС']
         self.menu1 = {"1": ['⬍11 ШС ПРИБОРА', '⬍12 ГРУППА ШС', '⬍13 ВСЕ ШС'],
                       "2": ['⬍21 СНЯТИЕ ИНД', '⬍22 СНЯТИЕ ГРУППОВОЕ', '⬍23 СНЯТИЕ ОБЩЕЕ'], "3": ['ПРИБОР:'],
@@ -169,7 +170,7 @@ class Main(tk.Frame):
             self.brakepas()
         if self.menu_menu_stat:
             self.menu_menu(but_num)
-        elif but_num == 'menu' and not self.menu_menu_stat  and self.buff_event_stat!=True :
+        elif but_num == 'menu' and not self.menu_menu_stat and self.buff_event_stat != True:
             playsound('sounds/pick.wav')
             self.display_label.config(text='⬍УПРАВЛЕНИЕ')
             self.menu_menu_stat = True
@@ -393,7 +394,7 @@ class Main(tk.Frame):
 
             elif but_num == 'entr':
                 self.user_input += str(self.local_pos + 1)
-                if self.user_input =='42':
+                if self.user_input == '42':
                     self.global_pos += 1
                     self.display_label.config(text=self.menu2[self.user_input][0])
                     self.local_pos = 0
@@ -716,7 +717,7 @@ class Main(tk.Frame):
 
             elif but_num == 'right':
                 if self.global_pos >= len(self.buff_settings) - 1:
-                    self.global_pos =0
+                    self.global_pos = 0
                     self.display_label.config(text=self.buff_settings[self.global_pos])
                 else:
                     self.global_pos += 1
@@ -724,7 +725,7 @@ class Main(tk.Frame):
 
             elif but_num == 'left':
                 if self.global_pos == 0:
-                    self.global_pos = len(self.buff_settings)-1
+                    self.global_pos = len(self.buff_settings) - 1
                     self.display_label.config(text=self.buff_settings[self.global_pos])
                 else:
                     self.global_pos -= 1
@@ -787,7 +788,7 @@ class Main(tk.Frame):
                 playsound('sounds/deny.wav')
             elif but_num == 'entr' and len(self.user_number) != 0:
                 # self.data_base.insert(self.level, self.user_number)
-                if self.level < len(self.menu3[self.user_input])-1:
+                if self.level < len(self.menu3[self.user_input]) - 1:
                     self.user_number = ''
                     self.level += 1
                     param = self.menu3[self.user_input][self.level]
@@ -986,7 +987,7 @@ class Main(tk.Frame):
         #     TODO узнать куда возвращается пульт из запроса состояния
         elif self.user_input == '52':
             self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:                          '
-            f'47\n Rшс = 4,7 кОм')
+                                           f'47\n Rшс = 4,7 кОм')
         elif mode == 3:
             self.import_data_stat = False
             self.user_input = ''
@@ -996,7 +997,7 @@ class Main(tk.Frame):
         #     TODO Узнать куда возвращается пульт
         elif mode == 6:
             self.import_data_stat = False
-            self.local_pos = int(self.user_input[1:])-1
+            self.local_pos = int(self.user_input[1:]) - 1
             self.user_input = self.user_input[:1]
             self.after(250, self.display_label.config(text=self.menu1[self.user_input][self.local_pos]))
         else:
