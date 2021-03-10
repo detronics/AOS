@@ -20,6 +20,7 @@ class Main(tk.Frame):
         self.sound = True
         self.mistake = False
         self.test = False
+        self.buffer_control = False
         self.password_main = '1234'
         self.user_input = ''
         self.user_number = ''
@@ -38,6 +39,8 @@ class Main(tk.Frame):
                              '1': '\nПРИБОР 000', '2': 'НЕТ РАЗДЕЛА \nС2000М v3.02', '3': 'username',
                              '5': 'С2000М v3.02 \n№ ЗОНЫ: НЕ ЗАДАН',
                              '9': 'НОМЕР 1'}, '-КОНЕЦ БУФЕРА-']
+        self.buff_settings = ['⬍ПОКАЗЫВАТЬ ВСЕ\n СОБЫТИЯ', '⬍ТИП СОБЫТИЯ:\n ВСЕ', '⬍ДАТА:с 01.01.00\n по 31.12.99',
+                              '⬍РАЗДЕЛ:\n ВСЕ', '⬍ЭЛЕМЕНТ:\n ВСЕ','⬍ПРИБОР:\n ВСЕ',]
         self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА УСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
@@ -48,21 +51,21 @@ class Main(tk.Frame):
                             5: ['РЕЖИМ:', 'ЦЕНТР.УПРАВЛ.:−', 'СКОРОСТЬ: 9600 бит/с', 'ACCOUNT: 1234', 'СОБЫТИЯ LАRS', ],
                             6: ['РЕЖИМ ПРОГРАММИРОВАНИЯ']}
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР \nПО СОСТОЯНИЯМ']
-        self.menu_state = ['ТРЕВОГИ 0', 'НЕИСПРАВНОСТИ 0', 'ПОЖАРЫ 0', 'ЗАПУЩЕНО 0', 'ЕЩЕ', 'ЕЩЕ', 'ЕЩЕ']
+        self.menu_state = ['ПОЖАРЫ\n (0)','ТРЕВОГИ\n (0)','ЗАПУЩЕНЫ\n (0)', 'ОСТАНОВЛЕНЫ\n (0)', 'НЕИСПРАВНОСТИ\n (0)','ОТКЛЮЧЕНИЯ\n (0)']
         self.menu0 = ['⬍1 ВЗЯТИЕ', '⬍2 СНЯТИЕ', '⬍3 СБРОС ТРЕВОГ', '⬍4 УПРАВЛЕНИЕ', '⬍5 ЗАПРОС', '⬍6 СЕРВИС']
-        self.menu1 = {"1": ['⬍11 ВЗЯТИЕ ИНД', '⬍12 ВЗЯТИЕ ГРУППОВОЕ', '⬍13 ВЗЯТИЕ ОБЩЕЕ'],
-                      "2": ['⬍21 СНЯТИЕ ИНД', '⬍22 СНЯТИЕ ГРУППОВОЕ', '⬍23 СНЯТИЕ ОБЩЕЕ'], "3": ['НОМЕР ПРИБОРА'],
-                      "4": ['⬍41 УПРАВЛЕНИЕ РЕЛЕ', '⬍42 УПРАВЛ. АСПТ', ],
+        self.menu1 = {"1": ['⬍11 ШС ПРИБОРА', '⬍12 ГРУППА ШС', '⬍13 ВСЕ ШС'],
+                      "2": ['⬍21 СНЯТИЕ ИНД', '⬍22 СНЯТИЕ ГРУППОВОЕ', '⬍23 СНЯТИЕ ОБЩЕЕ'], "3": ['ПРИБОР:'],
+                      "4": ['⬍41 УПРАВЛ. РЕЛЕ', '⬍42 УПРАВЛ. АСПТ', ],
                       "5": ['⬍51 ЗАПРОС ШС', '⬍52 ЗАПРОС АЦП'],
-                      "6": ['⬍61 ВРЕМЯ', '⬍62 ДАТА', '⬍63 ТЕСТ ИЗВЕЩ.', '⬍64 ТЕСТ ИНДИКАЦ.', '⬍65 ПЕЧАТЬ БУФЕР',
+                      "6": ['⬍61 ВРЕМЯ', '⬍62 ДАТА', '⬍63  ТЕСТ ИЗВЕЩ.', '⬍64  ТЕСТ  ИНДИКАЦ', '⬍65 ПЕЧАТЬ БУФЕР',
                             '⬍66 СБРОС БУФ.ИТ']}
-        self.menu2 = {'11': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '12': ['НОМЕР ПРИБОРА'], '13': ['НОМЕР ПРИБОРА'],
-                      '21': ['НОМЕР ПРИБОРА', 'НОМЕР ШЛЕЙФА'], '22': ['НОМЕР ПРИБОРА'], '23': ['НОМЕР ПРИБОРА'],
-                      '3': ['НОМЕР ПРИБОРА'],
-                      '41': ['АДРЕС:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['⬍УПР. АВТОМАТИКОЙ', '⬍УПРАВЛЕНИЕ ПУСКОМ'],
+        self.menu2 = {'11': ['ПРИБОР:', 'НОМЕР ШС'], '12': ['ПРИБОР:'], '13': ['ПРИБОР:'],
+                      '21': ['ПРИБОР:', 'НОМЕР ШС'], '22': ['ПРИБОР:'], '23': ['ПРИБОР:'],
+                      '3': ['ПРИБОР:'],
+                      '41': ['ПРИБОР:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['⬍УПР. АВТОМАТИКОЙ', '⬍УПРАВЛЕНИЕ ПУСКОМ'],
                       '51': ['ПРИБОР:', 'НОМЕР ШС'], '52': ['ПРИБОР:', 'НОМЕР ШС'],
-                      '61': [], '62': [], '63': ['⬍ ВКЛ.ТЕСТ', '⬍ ВЫКЛ.ТЕСТ'], '64': ['НОМЕР ПРИБОРА'], '65': [],
-                      '66': []}
+                      '61': [], '62': [], '63': ['⬍ ВКЛ.ТЕСТ', '⬍ ВЫКЛ.ТЕСТ'], '64': ['ПРИБОР:'], '65': [],
+                      '66': ['ПРИБОР:']}
         self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', '⬍ВКЛЮЧИТЬ', '⬍ВЫКЛЮЧИТЬ'],
                       '422': ['СОСТОЯНИЕ АСПТ:\n ВЗЯТ', f'СОСТОЯНИЕ АСПТ:\n {self.user_number}  З.ПУСК',
                               '⬍ОТМЕНИТЬ ПУСК', '⬍ЗАПУСТИТЬ АУП'],
@@ -166,9 +169,9 @@ class Main(tk.Frame):
             self.brakepas()
         if self.menu_menu_stat:
             self.menu_menu(but_num)
-        elif but_num == 'menu' and not self.menu_menu_stat:
+        elif but_num == 'menu' and not self.menu_menu_stat  and self.buff_event_stat!=True :
             playsound('sounds/pick.wav')
-            self.display_label.config(text='УПРАВЛЕНИЕ')
+            self.display_label.config(text='⬍УПРАВЛЕНИЕ')
             self.menu_menu_stat = True
         elif self.home_menu_stat:
             self.menu_home_func(but_num)
@@ -361,18 +364,12 @@ class Main(tk.Frame):
                     self.display_label.config(text=self.menu2[self.user_input][0])
                 #     TODO выяснить работу режимов 65 66
                 elif self.user_input == '65':
-                    print('pop', self.user_input)
-                    self.global_pos -= 1
-                    self.user_input = self.user_input[:1]
-                    self.local_pos = 5
-                    print('pop', self.user_input)
-                    self.display_label.config(text=self.menu0[self.local_pos])
-                elif self.user_input == '66':
-                    self.global_pos -= 1
-                    self.user_input = self.user_input[:1]
-                    self.local_pos = 5
-                    self.display_label.config(text=self.menu0[self.local_pos])
-
+                    self.main_menu_stat = False
+                    self.passw_stat = False
+                    self.global_pos = 0
+                    self.local_pos = 0
+                    self.user_input = ''
+                    self.start_time()
                 else:
                     self.import_data_stat = True
                     self.display_label.config(text=self.menu2[self.user_input][0])
@@ -418,6 +415,13 @@ class Main(tk.Frame):
                     self.passw_stat = False
                     self.test = True
                     self.display_label.config(text=self.menu2[self.user_input][0])
+                elif self.user_input == '65':
+                    self.main_menu_stat = False
+                    self.passw_stat = False
+                    self.global_pos = 0
+                    self.local_pos = 0
+                    self.user_input = ''
+                    self.start_time()
                 else:
                     self.import_data_stat = True
                     self.local_pos = 0
@@ -675,31 +679,59 @@ class Main(tk.Frame):
 
     def buff_event_func(self, but_num):
         playsound('sounds/pick.wav')
-        if but_num == 'right':
-            if self.local_pos >= len(self.buff_events) - 2:
-                self.local_pos = len(self.buff_events) - 1
-                self.display_label.config(text='-КОНЕЦ БУФЕРА-')
-            else:
-                self.local_pos += 1
-                self.display_label.config(text=self.buff_events[self.local_pos]['name'])
-        elif but_num == 'left':
-            if self.local_pos <= 1:
-                self.display_label.config(text='-НАЧАЛО БУФЕРА-')
+        if not self.buffer_control:
+            if but_num == 'right':
+                if self.local_pos >= len(self.buff_events) - 2:
+                    self.local_pos = len(self.buff_events) - 1
+                    self.display_label.config(text='-КОНЕЦ БУФЕРА-')
+                else:
+                    self.local_pos += 1
+                    self.display_label.config(text=self.buff_events[self.local_pos]['name'])
+            elif but_num == 'left':
+                if self.local_pos <= 1:
+                    self.display_label.config(text='-НАЧАЛО БУФЕРА-')
+                    self.local_pos = 0
+                else:
+                    self.local_pos -= 1
+                    self.display_label.config(text=self.buff_events[self.local_pos]['name'])
+
+            elif but_num == 'x':
+                self.passw_prog_stat = False
+                self.buff_event_stat = False
                 self.local_pos = 0
-            else:
-                self.local_pos -= 1
+                self.global_pos = 0
+                self.user_input = ''
+                self.start_time()
+
+            elif but_num in ['1', '2', '3', '5', '9', '0']:
+                self.display_label.config(text=self.buff_events[self.local_pos][but_num])
+
+            elif but_num == 'menu':
+                self.buffer_control = True
+                self.display_label.config(text=self.buff_settings[0])
+        else:
+            if but_num == 'x':
+                self.buffer_control = False
                 self.display_label.config(text=self.buff_events[self.local_pos]['name'])
 
-        elif but_num == 'x':
-            self.passw_prog_stat = False
-            self.buff_event_stat = False
-            self.local_pos = 0
-            self.global_pos = 0
-            self.user_input = ''
-            self.start_time()
+            elif but_num == 'right':
+                if self.global_pos >= len(self.buff_settings) - 1:
+                    self.global_pos =0
+                    self.display_label.config(text=self.buff_settings[self.global_pos])
+                else:
+                    self.global_pos += 1
+                    self.display_label.config(text=self.buff_settings[self.global_pos])
 
-        elif but_num in ['1', '2', '3', '5', '9', '0']:
-            self.display_label.config(text=self.buff_events[self.local_pos][but_num])
+            elif but_num == 'left':
+                if self.global_pos == 0:
+                    self.global_pos = len(self.buff_settings)-1
+                    self.display_label.config(text=self.buff_settings[self.global_pos])
+                else:
+                    self.global_pos -= 1
+                    self.display_label.config(text=self.buff_settings[self.global_pos])
+
+            elif but_num == 'entr':
+                pass
 
     def test_indik_func(self, but_num):
         pass
@@ -964,10 +996,9 @@ class Main(tk.Frame):
         #     TODO Узнать куда возвращается пульт
         elif mode == 6:
             self.import_data_stat = False
-            self.user_input = ''
-            self.local_pos = 0
-            self.global_pos = 0
-            self.after(250, self.display_label.config(text='⬍1 ВЗЯТИЕ'))
+            self.local_pos = int(self.user_input[1:])-1
+            self.user_input = self.user_input[:1]
+            self.after(250, self.display_label.config(text=self.menu1[self.user_input][self.local_pos]))
         else:
             if self.local_pos == 0:
                 self.display_label.config(text=keyword[mode - 1][0])
