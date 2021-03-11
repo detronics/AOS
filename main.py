@@ -26,6 +26,7 @@ class Main(tk.Frame):
         self.user_number = ''
         self.password_prog = '123456'
         self.aspt_stat = 0
+        self.type_event_val = 0
         self.tim = ''
         self.time_date_stat = 2
         self.level = 0
@@ -39,9 +40,16 @@ class Main(tk.Frame):
                              '1': '\nПРИБОР 000', '2': 'НЕТ РАЗДЕЛА \nС2000М v3.02', '3': 'username',
                              '5': 'С2000М v3.02 \n№ ЗОНЫ: НЕ ЗАДАН',
                              '9': 'НОМЕР 1'}, '-КОНЕЦ БУФЕРА-']
-        self.buff_settings = ['⬍ПОКАЗЫВАТЬ ВСЕ\n СОБЫТИЯ', '⬍ТИП СОБЫТИЯ:\n ВСЕ', '⬍ДАТА:с 01.01.00\n по 31.12.99',
-                              '⬍РАЗДЕЛ:\n ВСЕ', '⬍ЭЛЕМЕНТ:\n ВСЕ', '⬍ПРИБОР:\n ВСЕ', ]
-        self.menu_home = ['ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
+        self.type_events = ['⬍ ВСЕ','⬍ ПОЖАРЫ','⬍ ТРЕВОГИ','⬍ ПУСКИ','⬍ ОСТАНОВЫ','⬍ НЕИСПРАВНОСТИ','⬍ ОТКЛЮЧЕНИЯ',
+                            '⬍ ВЫКЛ. АВТОМАТИК','⬍ НОРМЫ',]
+        self.buff_settings = ['⬍ПОКАЗЫВАТЬ ВСЕ\n СОБЫТИЯ',
+                              f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}',
+                              '⬍ДАТА:с 01.01.00\n по 31.12.99',
+                              '⬍РАЗДЕЛ:\n  ВСЕ', '⬍ЭЛЕМЕНТ:\n  ВСЕ', '⬍ПРИБОР:\n  ВСЕ', ]
+        self.area_settings = ['⬍ВВЕСТИ НОМЕР..','⬍ВЫБРАТЬ \nИЗ СПИСКА','⬍РАЗРЕШИТЬ ВСЕ']
+        self.element_settings = ['⬍ВЫБРАТЬ \nИЗ СПИСКА','⬍РАЗРЕШИТЬ ВСЕ']
+        self.device_settings = ['⬍ВВЕСТИ \nАДРЕС ПРИБОРА','⬍ВВЕСТИ \n№ ВХОДА/ВЫХОДА','⬍РАЗРЕШИТЬ ВСЕ']
+        self.menu_home = ['⬍ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА УСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
         self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
@@ -181,7 +189,7 @@ class Main(tk.Frame):
         elif but_num == 'home':
             playsound('sounds/pick.wav')
             self.home_menu_stat = True
-            self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
+            self.display_label.config(text='⬍ЖУРНАЛ СОБЫТИЙ')
         elif self.user_input == '61':
             self.change_time(but_num)
         elif self.user_input == '62':
@@ -202,6 +210,47 @@ class Main(tk.Frame):
             self.sound = False
         else:
             self.start_time()
+
+    def choose_type_events(self, but_num=None):
+        self.display_label.config(text=f'⬍ТИП СОБЫТИЯ:\n{self.type_events[self.type_event_val]}')
+
+        if but_num == 'x':
+            playsound('sounds/pick.wav')
+            self.level = 0
+            self.type_event_val = 0
+            self.display_label.config(text=self.buff_settings[self.global_pos])
+        elif but_num == 'entr':
+            # TODO sound success
+            print(self.type_event_val)
+            self.level = 0
+            self.display_label.config(text=f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}')
+        elif but_num == 'right':
+            playsound('sounds/pick.wav')
+            if self.type_event_val == 8:
+                self.type_event_val = 0
+            else:
+                self.type_event_val +=1
+            self.display_label.config(text=f'⬍ТИП СОБЫТИЯ:\n{self.type_events[self.type_event_val]}')
+
+        elif but_num == 'left':
+            playsound('sounds/pick.wav')
+            if self.type_event_val == 0:
+                self.type_event_val = 8
+            else:
+                self.type_event_val -=1
+            self.display_label.config(text=f'⬍ТИП СОБЫТИЯ:\n{self.type_events[self.type_event_val]}')
+
+    def set_data_range(self, but_num=None):
+        pass
+
+    def choose_area(self, but_num=None):
+        print('area')
+
+    def choose_element(self, but_num=None):
+        pass
+
+    def choose_device(self, but_num=None):
+        pass
 
     def check_password(self, but_num):
         # print('check password')
@@ -678,61 +727,74 @@ class Main(tk.Frame):
                 self.local_pos = 0
                 self.global_pos = 0
 
-    def buff_event_func(self, but_num):
-        playsound('sounds/pick.wav')
-        if not self.buffer_control:
-            if but_num == 'right':
-                if self.local_pos >= len(self.buff_events) - 2:
-                    self.local_pos = len(self.buff_events) - 1
-                    self.display_label.config(text='-КОНЕЦ БУФЕРА-')
-                else:
-                    self.local_pos += 1
-                    self.display_label.config(text=self.buff_events[self.local_pos]['name'])
-            elif but_num == 'left':
-                if self.local_pos <= 1:
-                    self.display_label.config(text='-НАЧАЛО БУФЕРА-')
+    def buff_event_func(self, but_num=None):
+        if self.level == 0:
+            playsound('sounds/pick.wav')
+            if not self.buffer_control:
+                if but_num == 'right':
+                    if self.local_pos >= len(self.buff_events) - 2:
+                        self.local_pos = len(self.buff_events) - 1
+                        self.display_label.config(text='-КОНЕЦ БУФЕРА-')
+                    else:
+                        self.local_pos += 1
+                        self.display_label.config(text=self.buff_events[self.local_pos]['name'])
+                elif but_num == 'left':
+                    if self.local_pos <= 1:
+                        self.display_label.config(text='-НАЧАЛО БУФЕРА-')
+                        self.local_pos = 0
+                    else:
+                        self.local_pos -= 1
+                        self.display_label.config(text=self.buff_events[self.local_pos]['name'])
+
+                elif but_num == 'x':
+                    self.passw_prog_stat = False
+                    self.buff_event_stat = False
                     self.local_pos = 0
-                else:
-                    self.local_pos -= 1
+                    self.global_pos = 0
+                    self.user_input = ''
+                    self.start_time()
+
+                elif but_num in ['1', '2', '3', '5', '9', '0']:
+                    self.display_label.config(text=self.buff_events[self.local_pos][but_num])
+
+                elif but_num == 'menu':
+                    self.buffer_control = True
+                    self.display_label.config(text=self.buff_settings[0])
+            else:
+                if but_num == 'x':
+                    self.buffer_control = False
                     self.display_label.config(text=self.buff_events[self.local_pos]['name'])
 
-            elif but_num == 'x':
-                self.passw_prog_stat = False
-                self.buff_event_stat = False
-                self.local_pos = 0
-                self.global_pos = 0
-                self.user_input = ''
-                self.start_time()
+                elif but_num == 'right':
+                    print(self.type_event_val, 'kol', self.type_events[self.type_event_val][1:], self.buff_settings[self.global_pos])
+                    if self.global_pos >= len(self.buff_settings) - 1:
+                        self.global_pos = 0
+                        self.display_label.config(text=self.buff_settings[self.global_pos])
+                    else:
+                        self.global_pos += 1
+                        self.display_label.config(text=self.buff_settings[self.global_pos])
 
-            elif but_num in ['1', '2', '3', '5', '9', '0']:
-                self.display_label.config(text=self.buff_events[self.local_pos][but_num])
+                elif but_num == 'left':
+                    if self.global_pos == 0:
+                        self.global_pos = len(self.buff_settings) - 1
+                        self.display_label.config(text=self.buff_settings[self.global_pos])
+                    else:
+                        self.global_pos -= 1
+                        self.display_label.config(text=self.buff_settings[self.global_pos])
 
-            elif but_num == 'menu':
-                self.buffer_control = True
-                self.display_label.config(text=self.buff_settings[0])
+                elif but_num == 'entr':
+                    if self.global_pos == 0:
+                        self.buffer_control = False
+                        self.display_label.config(text=self.buff_events[self.local_pos]['name'])
+                    else:
+                        self.level += 1
+                        function_list =['empty',self.choose_type_events,self.choose_area,self.set_data_range,
+                                        self.choose_element,self.choose_device ]
+                        function_list[self.global_pos]()
         else:
-            if but_num == 'x':
-                self.buffer_control = False
-                self.display_label.config(text=self.buff_events[self.local_pos]['name'])
-
-            elif but_num == 'right':
-                if self.global_pos >= len(self.buff_settings) - 1:
-                    self.global_pos = 0
-                    self.display_label.config(text=self.buff_settings[self.global_pos])
-                else:
-                    self.global_pos += 1
-                    self.display_label.config(text=self.buff_settings[self.global_pos])
-
-            elif but_num == 'left':
-                if self.global_pos == 0:
-                    self.global_pos = len(self.buff_settings) - 1
-                    self.display_label.config(text=self.buff_settings[self.global_pos])
-                else:
-                    self.global_pos -= 1
-                    self.display_label.config(text=self.buff_settings[self.global_pos])
-
-            elif but_num == 'entr':
-                pass
+            function_list = ['empty',self.choose_type_events,self.choose_area,self.set_data_range,
+                                        self.choose_element,self.choose_device]
+            function_list[self.global_pos](but_num)
 
     def test_indik_func(self, but_num):
         pass
