@@ -25,8 +25,7 @@ class Main(tk.Frame):
         self.user_input = ''
         self.user_number = ''
         self.password_prog = '123456'
-        self.start_data = '01.01.00'
-        self.end_data = '31.12.99'
+        self.data_range = ['31.12.99', '01.01.00', ]
         self.aspt_stat = 0
         self.type_event_val = 0
         self.tim = ''
@@ -47,7 +46,7 @@ class Main(tk.Frame):
                             '⬍ ВЫКЛ. АВТОМАТИК', '⬍ НОРМЫ', ]
         self.buff_settings = ['⬍ПОКАЗЫВАТЬ ВСЕ\n СОБЫТИЯ',
                               f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}',
-                              f'⬍ДАТА:с {self.start_data}\n           по {self.end_data}',
+                              f'⬍ДАТА:с {self.data_range[1]}\n           по {self.data_range[0]}',
                               '⬍РАЗДЕЛ:\n  ВСЕ', '⬍ЭЛЕМЕНТ:\n  ВСЕ', '⬍ПРИБОР:\n  ВСЕ', ]
         self.area_settings = ['⬍ВВЕСТИ НОМЕР..', '⬍ВЫБРАТЬ \nИЗ СПИСКА', '⬍РАЗРЕШИТЬ ВСЕ']
         self.element_settings = ['⬍ВЫБРАТЬ \nИЗ СПИСКА', '⬍РАЗРЕШИТЬ ВСЕ']
@@ -241,43 +240,66 @@ class Main(tk.Frame):
             self.display_label.config(text=f'⬍ТИП СОБЫТИЯ:\n{self.type_events[self.type_event_val]}')
 
     def set_data_range(self, but_num=None):
-        position_list = [0, 1, 3, 4, 6, 7, -8]
-        print(self.local_pos, self.global_pos)
-        prefix = ['С ДАТЫ :', 'ПО ДАТУ:']
+        position_list = ['empty',0, 1, 3, 4, 6, 7, -8]
+        prefix = [ 'ПО ДАТУ:','С ДАТЫ :',]
+        control_datarange = ['31.12.99', '01.01.00']
         if but_num == 'x':
             playsound('sounds/pick.wav')
-            self.level = 0
-            self.local_pos = 1
-            self.global_pos = 2
-            self.display_label.config(text=self.buff_settings[self.global_pos])
+            if self.local_pos > 1:
+                self.data_range[-self.level] = control_datarange[-self.level]
+                self.local_pos = 1
+            elif self.level == 2 and self.local_pos == 1:
+                self.level -=1
+            else:
+                self.level = 0
+                self.local_pos = 1
+                self.display_label.config(text=self.buff_settings[self.global_pos])
+
+        elif but_num == 'entr':
+            if not self.mistake:
+                playsound('sounds/pick.wav')
+                self.local_pos = 1
+                self.level += 1
+                self.buff_settings[self.global_pos] = f'⬍ДАТА:с {self.data_range[1]}\n           по {self.data_range[0]}'
+            else:
+                playsound('sounds/deny.wav')
+                self.mistake = False
+                self.local_pos = 1
 
         elif but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             playsound('sounds/pick.wav')
-            if int(self.tim[:2]) > 31 or int(self.tim[3:5]) > 12:
+            if int(self.data_range[-self.level][:2]) > 31 or int(self.data_range[-self.level][3:5]) > 12:
                 self.mistake = True
-            temp = list(self.tim)
-            self.tim = ''
+            temp = list(self.data_range[-self.level])
+            self.data_range[-self.level] = ''
             temp[position_list[self.local_pos]] = but_num
-            self.tim = self.tim.join(temp)
-            self.display_label.config(text=f'ДАТА: {self.tim}')
+            self.data_range[-self.level] = self.data_range[-self.level].join(temp)
+            self.display_label.config(text=f'{prefix[-self.level]} {self.data_range[-self.level]}')
             self.local_pos += 1
-            if self.local_pos == 6 and not self.mistake:
-                self.passw_stat = True
-
-            elif self.mistake and self.local_pos == 6:
+            if self.local_pos == 7 and not self.mistake:
+                self.buff_settings[self.global_pos] = f'⬍ДАТА:с {self.data_range[1]}\n           по {self.data_range[0]}'
+                self.level  += 1
+                self.local_pos = 1
+            elif self.mistake and self.local_pos == 7:
                 # TODO поменять звук отказа
                 playsound('sounds/deny.wav')
-                self.local_pos = 0
+                self.local_pos = 1
                 self.mistake = False
 
+        elif self.level == 3 :
+            # TODO sound
+            self.level = 0
+            self.local_pos = 1
+            self.display_label.config(text=self.buff_settings[self.global_pos])
+
         elif self.time_date_stat == 2:
-            self.display_label.config(text=f'{prefix[-self.global_pos]}{self.start_data}')
+            self.display_label.config(text=f'{prefix[-self.level]}{self.data_range[-self.level]}')
             self.time_date_stat = 1
             self.display_label.after(400, self.buff_event_func)
 
         elif self.time_date_stat == 1:
             self.time_date_stat = 2
-            self.display_label.config(text=f'{prefix[0]} ')
+            self.display_label.config(text=f'{prefix[-self.level]}{self.data_range[-self.level][:position_list[self.local_pos]]}_{self.data_range[-self.level][position_list[self.local_pos] + 1:]}')
             self.display_label.after(400, self.buff_event_func)
 
     def choose_area(self, but_num=None):
@@ -786,6 +808,7 @@ class Main(tk.Frame):
                 elif but_num == 'x':
                     self.passw_prog_stat = False
                     self.buff_event_stat = False
+                    self.time_date_stat = 2
                     self.local_pos = 0
                     self.global_pos = 0
                     self.user_input = ''
@@ -912,12 +935,16 @@ class Main(tk.Frame):
 
         if but_num == 'x':
             playsound('sounds/pick.wav')
-            self.passw_stat = True
-            self.main_menu_stat = True
-            self.user_input = self.user_input[:1]
-            self.display_label.config(text=self.menu1[str(self.user_input)][0])
-            self.time_date_stat = 2
-            self.sound = True
+            if self.local_pos > 0:
+                self.local_pos = 0
+                self.sound = True
+            else:
+                self.passw_stat = True
+                self.main_menu_stat = True
+                self.user_input = self.user_input[:1]
+                self.display_label.config(text=self.menu1[str(self.user_input)][0])
+                self.time_date_stat = 2
+                self.sound = True
 
         elif but_num == 'entr':
             if not self.mistake:
@@ -978,14 +1005,17 @@ class Main(tk.Frame):
             # TODO переименовать переменную
 
         if but_num == 'x':
-            # TODO узнать как работает х при начатом наборе даты
             playsound('sounds/pick.wav')
-            self.passw_stat = True
-            self.main_menu_stat = True
-            self.user_input = self.user_input[:1]
-            self.display_label.config(text=self.menu1[str(self.user_input)][0])
-            self.time_date_stat = 2
-            self.sound = True
+            if self.local_pos>0:
+                self.local_pos = 0
+                self.sound = True
+            else:
+                self.passw_stat = True
+                self.main_menu_stat = True
+                self.user_input = self.user_input[:1]
+                self.display_label.config(text=self.menu1[str(self.user_input)][0])
+                self.time_date_stat = 2
+                self.sound = True
 
         elif but_num == 'entr':
             if not self.mistake:
