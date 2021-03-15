@@ -48,7 +48,7 @@ class Main(tk.Frame):
                               f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}',
                               f'⬍ДАТА:с {self.data_range[1]}\n           по {self.data_range[0]}',
                               '⬍РАЗДЕЛ:\n  ВСЕ', '⬍ЭЛЕМЕНТ:\n  ВСЕ', '⬍ПРИБОР:\n  ВСЕ', ]
-        self.area_settings = ['⬍ВВЕСТИ НОМЕР..', '⬍ВЫБРАТЬ \nИЗ СПИСКА', '⬍РАЗРЕШИТЬ ВСЕ']
+        self.area_settings = ['empty','⬍ВВЕСТИ НОМЕР..', '⬍ВЫБРАТЬ \nИЗ СПИСКА', '⬍РАЗРЕШИТЬ ВСЕ']
         self.element_settings = ['⬍ВЫБРАТЬ \nИЗ СПИСКА', '⬍РАЗРЕШИТЬ ВСЕ']
         self.device_settings = ['⬍ВВЕСТИ \nАДРЕС ПРИБОРА', '⬍ВВЕСТИ \n№ ВХОДА/ВЫХОДА', '⬍РАЗРЕШИТЬ ВСЕ']
         self.menu_home = ['⬍ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
@@ -303,7 +303,40 @@ class Main(tk.Frame):
             self.display_label.after(400, self.buff_event_func)
 
     def choose_area(self, but_num=None):
-        print('area', self.global_pos)
+        self.display_label.config(text=self.area_settings[self.local_pos])
+        if but_num == 'x':
+            playsound('sounds/pick.wav')
+            self.level = 0
+            self.local_pos = 1
+            self.display_label.config(text=self.buff_settings[self.local_pos])
+        elif but_num == 'right':
+            playsound('sounds/pick.wav')
+            if self.local_pos == 3:
+                self.local_pos = 1
+            else:
+                self.local_pos += 1
+            self.display_label.config(text=self.area_settings[self.local_pos])
+        elif but_num == 'left':
+            playsound('sounds/pick.wav')
+            if self.local_pos == 1:
+                self.local_pos = 3
+            else:
+                self.local_pos -= 1
+            self.display_label.config(text=self.area_settings[self.local_pos])
+        elif but_num == 'entr':
+            playsound('sounds/pick.wav')
+            if self.local_pos == 3:
+                self.buff_settings[self.global_pos] = '⬍РАЗДЕЛ:\n  ВСЕ'
+                self.local_pos = 1
+                self.level = 0
+                self.display_label.config(text=self.buff_settings[self.global_pos])
+            elif self.local_pos == 2:
+                self.level = 2
+
+            elif self.local_pos == 1:
+                self.level = 3
+                self.display_label.config(text='РАЗДЕЛ:')
+
 
     def choose_element(self, but_num=None):
         print('elenent')
