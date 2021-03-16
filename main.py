@@ -373,9 +373,28 @@ class Main(tk.Frame):
                     self.level = 3
                     self.display_label.config(text='РАЗДЕЛ:')
 
-
     def choose_element(self, but_num=None):
-        print('elenent')
+        print(self.local_pos, self.level)
+        self.display_label.config(text=self.element_settings[self.local_pos-1])
+        if but_num == 'x':
+            playsound('sounds/pick.wav')
+            self.level = 0
+            self.local_pos = 1
+            self.display_label.config(text=self.buff_settings[self.local_pos])
+        elif but_num == 'right':
+            playsound('sounds/pick.wav')
+            if self.local_pos == 1:
+                self.local_pos = 0
+            else:
+                self.local_pos += 1
+            self.display_label.config(text=self.element_settings[self.local_pos-1])
+        elif but_num == 'left':
+            playsound('sounds/pick.wav')
+            if self.local_pos == 0:
+                self.local_pos = 1
+            else:
+                self.local_pos -= 1
+            self.display_label.config(text=self.element_settings[self.local_pos-1])
 
     def choose_device(self, but_num=None):
         print('device')
