@@ -47,8 +47,8 @@ class Main(tk.Frame):
         self.buff_settings = ['⬍ПОКАЗЫВАТЬ ВСЕ\n СОБЫТИЯ',
                               f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}',
                               f'⬍ДАТА:с {self.data_range[1]}\n           по {self.data_range[0]}',
-                              '⬍РАЗДЕЛ:\n  ВСЕ', '⬍ЭЛЕМЕНТ:\n  ВСЕ', '⬍ПРИБОР:\n  ВСЕ', ]
-        self.area_settings = ['empty','⬍ВВЕСТИ НОМЕР..', '⬍ВЫБРАТЬ \nИЗ СПИСКА', '⬍РАЗРЕШИТЬ ВСЕ']
+                              '⬍РАЗДЕЛ:  ВСЕ', '⬍ЭЛЕМЕНТ:  ВСЕ', '⬍ПРИБОР:  ВСЕ', ]
+        self.area_settings = ['empty','⬍ВВЕСТИ НОМЕР..', '⬍ВЫБРАТЬ \nИЗ СПИСКА..', '⬍РАЗРЕШИТЬ ВСЕ']
         self.element_settings = ['⬍ВЫБРАТЬ \nИЗ СПИСКА', '⬍РАЗРЕШИТЬ ВСЕ']
         self.device_settings = ['⬍ВВЕСТИ \nАДРЕС ПРИБОРА', '⬍ВВЕСТИ \n№ ВХОДА/ВЫХОДА', '⬍РАЗРЕШИТЬ ВСЕ']
         self.menu_home = ['⬍ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
@@ -304,38 +304,74 @@ class Main(tk.Frame):
 
     def choose_area(self, but_num=None):
         self.display_label.config(text=self.area_settings[self.local_pos])
-        if but_num == 'x':
+        if self.level == 3:
             playsound('sounds/pick.wav')
-            self.level = 0
-            self.local_pos = 1
-            self.display_label.config(text=self.buff_settings[self.local_pos])
-        elif but_num == 'right':
-            playsound('sounds/pick.wav')
-            if self.local_pos == 3:
-                self.local_pos = 1
-            else:
-                self.local_pos += 1
-            self.display_label.config(text=self.area_settings[self.local_pos])
-        elif but_num == 'left':
-            playsound('sounds/pick.wav')
-            if self.local_pos == 1:
-                self.local_pos = 3
-            else:
-                self.local_pos -= 1
-            self.display_label.config(text=self.area_settings[self.local_pos])
-        elif but_num == 'entr':
-            playsound('sounds/pick.wav')
-            if self.local_pos == 3:
-                self.buff_settings[self.global_pos] = '⬍РАЗДЕЛ:\n  ВСЕ'
-                self.local_pos = 1
+            if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                self.user_number += but_num
+                self.display_label.config(text=f'РАЗДЕЛ: {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) != 0:
+                self.user_number = ''
+                self.display_label.config(text=f'РАЗДЕЛ: {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) == 0:
                 self.level = 0
-                self.display_label.config(text=self.buff_settings[self.global_pos])
-            elif self.local_pos == 2:
-                self.level = 2
+                self.display_label.config(text=self.buff_settings[self.local_pos])
+            elif but_num == 'entr' and len(self.user_number) == 0:
+                self.level = 0
+                self.display_label.config(text=self.buff_settings[3])
+            elif but_num == 'entr' and len(self.user_number) != 0:
+                self.level = 0
+                self.buff_settings[3] = f'⬍РАЗДЕЛ: {self.user_number} \n НЕТ РАЗДЕЛА'
+                self.user_number = ''
+                self.display_label.config(text=self.buff_settings[3])
 
-            elif self.local_pos == 1:
-                self.level = 3
-                self.display_label.config(text='РАЗДЕЛ:')
+        elif self.level == 2:
+            playsound('sounds/pick.wav')
+            if but_num == 'x':
+                self.level = 0
+                self.display_label.config(text=self.buff_settings[3])
+            if but_num == 'entr':
+                if self.user_input == 'change':
+                    self.buff_settings[3] = '⬍РАЗДЕЛ:  ВСЕ'
+                self.level = 0
+                self.display_label.config(text=self.buff_settings[3])
+
+            elif but_num == 'right' or but_num == 'left':
+                self.user_input += 'change'
+                self.display_label.config(text=f'Выбор:  ВСЕ')
+
+        else:
+            if but_num == 'x':
+                playsound('sounds/pick.wav')
+                self.level = 0
+                self.local_pos = 1
+                self.display_label.config(text=self.buff_settings[self.local_pos])
+            elif but_num == 'right':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 3:
+                    self.local_pos = 1
+                else:
+                    self.local_pos += 1
+                self.display_label.config(text=self.area_settings[self.local_pos])
+            elif but_num == 'left':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 1:
+                    self.local_pos = 3
+                else:
+                    self.local_pos -= 1
+                self.display_label.config(text=self.area_settings[self.local_pos])
+            elif but_num == 'entr':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 3:
+                    self.buff_settings[self.global_pos] = '⬍РАЗДЕЛ:  ВСЕ'
+                    self.local_pos = 1
+                    self.level = 0
+                    self.display_label.config(text=self.buff_settings[self.global_pos])
+                elif self.local_pos == 2:
+                    self.level = 2
+                    self.display_label.config(text=f'Выбор:{self.buff_settings[self.global_pos][8:]}')
+                elif self.local_pos == 1:
+                    self.level = 3
+                    self.display_label.config(text='РАЗДЕЛ:')
 
 
     def choose_element(self, but_num=None):
@@ -839,6 +875,10 @@ class Main(tk.Frame):
                         self.display_label.config(text=self.buff_events[self.local_pos]['name'])
 
                 elif but_num == 'x':
+                    self.buff_settings = ['⬍ПОКАЗЫВАТЬ ВСЕ\n СОБЫТИЯ',
+                                          f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}',
+                                          f'⬍ДАТА:с {self.data_range[1]}\n           по {self.data_range[0]}',
+                                          '⬍РАЗДЕЛ:  ВСЕ', '⬍ЭЛЕМЕНТ:  ВСЕ', '⬍ПРИБОР:  ВСЕ', ]
                     self.passw_prog_stat = False
                     self.buff_event_stat = False
                     self.time_date_stat = 2
@@ -857,7 +897,6 @@ class Main(tk.Frame):
                 if but_num == 'x':
                     self.buffer_control = False
                     self.type_event_val = 0
-                    self.buff_settings[self.global_pos] = f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}'
                     self.global_pos = 0
                     self.display_label.config(text=self.buff_events[self.local_pos]['name'])
 
