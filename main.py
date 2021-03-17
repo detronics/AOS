@@ -49,8 +49,8 @@ class Main(tk.Frame):
                               f'⬍ДАТА:с {self.data_range[1]}\n           по {self.data_range[0]}',
                               '⬍РАЗДЕЛ:  ВСЕ', '⬍ЭЛЕМЕНТ:  ВСЕ', '⬍ПРИБОР:  ВСЕ', ]
         self.area_settings = ['empty','⬍ВВЕСТИ НОМЕР..', '⬍ВЫБРАТЬ \nИЗ СПИСКА..', '⬍РАЗРЕШИТЬ ВСЕ']
-        self.element_settings = ['⬍ВЫБРАТЬ \nИЗ СПИСКА', '⬍РАЗРЕШИТЬ ВСЕ']
-        self.device_settings = ['⬍ВВЕСТИ \nАДРЕС ПРИБОРА', '⬍ВВЕСТИ \n№ ВХОДА/ВЫХОДА', '⬍РАЗРЕШИТЬ ВСЕ']
+        self.element_settings = ['⬍ВЫБРАТЬ \nИЗ СПИСКА..','⬍РАЗРЕШИТЬ ВСЕ']
+        self.device_settings = ['⬍ВВЕСТИ \nАДРЕС ПРИБОРА..', '⬍ВВЕСТИ \n№ ВХОДА/ВЫХОДА', '⬍РАЗРЕШИТЬ ВСЕ']
         self.menu_home = ['⬍ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА УСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
@@ -374,30 +374,119 @@ class Main(tk.Frame):
                     self.display_label.config(text='РАЗДЕЛ:')
 
     def choose_element(self, but_num=None):
-        print(self.local_pos, self.level)
-        self.display_label.config(text=self.element_settings[self.local_pos-1])
-        if but_num == 'x':
+        if self.level == 2:
             playsound('sounds/pick.wav')
-            self.level = 0
-            self.local_pos = 1
-            self.display_label.config(text=self.buff_settings[self.local_pos])
-        elif but_num == 'right':
-            playsound('sounds/pick.wav')
-            if self.local_pos == 1:
-                self.local_pos = 0
-            else:
-                self.local_pos += 1
-            self.display_label.config(text=self.element_settings[self.local_pos-1])
-        elif but_num == 'left':
-            playsound('sounds/pick.wav')
-            if self.local_pos == 0:
+            if but_num == 'x':
+                self.level = 0
                 self.local_pos = 1
-            else:
-                self.local_pos -= 1
-            self.display_label.config(text=self.element_settings[self.local_pos-1])
+                self.display_label.config(text=self.buff_settings[self.local_pos])
+            elif but_num == 'entr':
+                self.level = 0
+                self.local_pos = 1
+                self.display_label.config(text=self.buff_settings[self.local_pos])
+        else:
+            self.display_label.config(text=self.element_settings[self.local_pos - 1])
+            if but_num == 'x':
+                playsound('sounds/pick.wav')
+                self.level = 0
+                self.local_pos = 1
+                self.display_label.config(text=self.buff_settings[self.local_pos])
+            elif but_num == 'right':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 1:
+                    self.local_pos = 0
+                else:
+                    self.local_pos += 1
+                self.display_label.config(text=self.element_settings[self.local_pos-1])
+            elif but_num == 'left':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 0:
+                    self.local_pos = 1
+                else:
+                    self.local_pos -= 1
+                self.display_label.config(text=self.element_settings[self.local_pos-1])
+            elif but_num == 'entr':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 0:
+                    self.level = 0
+                    self.display_label.config(text=self.buff_settings[self.global_pos])
+                if self.local_pos == 1:
+                    self.level += 1
+                    print(self.level)
+                    self.display_label.config(text=f'Выбор: ⬍ВСЕ')
 
     def choose_device(self, but_num=None):
-        print('device')
+        if self.level == 2:
+            playsound('sounds/pick.wav')
+            if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                self.user_number += but_num
+                self.display_label.config(text=f'ПРИБОР: {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) != 0:
+                self.user_number = ''
+                self.display_label.config(text=f'ПРИБОР: {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) == 0:
+                self.level = 0
+                self.display_label.config(text=self.buff_settings[self.local_pos])
+            elif but_num == 'entr' and len(self.user_number) == 0:
+                self.level = 0
+                self.display_label.config(text=self.buff_settings[3])
+            elif but_num == 'entr' and len(self.user_number) != 0:
+                self.level = 0
+                self.buff_settings[5] = f'⬍ПРИБОР:  \n Адр.{self.user_number}'
+                self.user_number = ''
+                self.display_label.config(text=self.buff_settings[5])
+        elif self.level == 3:
+            playsound('sounds/pick.wav')
+            if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                self.user_number += but_num
+                self.display_label.config(text=f'№ ВХОДА/ВЫХОДА:\n {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) != 0:
+                self.user_number = ''
+                self.display_label.config(text=f'№ ВХОДА/ВЫХОДА:\n  {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) == 0:
+                self.level = 0
+                self.display_label.config(text=self.buff_settings[self.local_pos])
+            elif but_num == 'entr' and len(self.user_number) == 0:
+                self.level = 0
+                self.display_label.config(text=self.buff_settings[3])
+            elif but_num == 'entr' and len(self.user_number) != 0:
+                self.level = 0
+                self.buff_settings[5] = f'⬍ПРИБОР:  \n Адр.{self.user_number}'
+                self.user_number = ''
+                self.display_label.config(text=self.buff_settings[5])
+        else:
+            self.display_label.config(text=self.device_settings[self.local_pos - 1])
+            if but_num == 'x':
+                playsound('sounds/pick.wav')
+                self.level = 0
+                self.local_pos = 1
+                self.display_label.config(text=self.buff_settings[self.local_pos])
+            elif but_num == 'right':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 2:
+                    self.local_pos = 0
+                else:
+                    self.local_pos += 1
+                self.display_label.config(text=self.device_settings[self.local_pos - 1])
+            elif but_num == 'left':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 0:
+                    self.local_pos = 2
+                else:
+                    self.local_pos -= 1
+                self.display_label.config(text=self.device_settings[self.local_pos - 1])
+            elif but_num == 'entr':
+                playsound('sounds/pick.wav')
+                if self.local_pos == 0:
+                    self.buff_settings[5] = '⬍ПРИБОР:  ВСЕ'
+                    self.level = 0
+                    self.display_label.config(text=self.buff_settings[self.global_pos])
+                if self.local_pos == 1:
+                    self.level = 2
+                    self.display_label.config(text=f'ПРИБОР:')
+                if self.local_pos == 2:
+                    self.level = 3
+                    self.display_label.config(text='№ ВХОДА/ВЫХОДА:')
 
     def check_password(self, but_num):
         # print('check password')
