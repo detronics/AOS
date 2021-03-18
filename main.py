@@ -923,7 +923,7 @@ class Main(tk.Frame):
             elif self.local_pos == 2:
                 self.display_label.config(text='3')
             elif self.local_pos == 3:
-                self.display_label.config(text='4')
+                self.display_label.config(text='ПАРОЛЬ:')
             elif self.local_pos == 4:
                 self.local_pos = 0
                 self.global_pos = 0
@@ -1107,8 +1107,8 @@ class Main(tk.Frame):
                     param = self.menu3[self.user_input][self.level]
                     self.display_label.config(text=f'{param} {self.user_number}')
 
-    def change_password_func(self, but_num):
-        pass
+    def change_password_func(self, but_num=None):
+        print('parol')
 
     def change_time(self, but_num=None, ):
         position_list = [0, 1, 3, 4, 6, 7, -8]
