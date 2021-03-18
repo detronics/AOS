@@ -435,6 +435,7 @@ class Main(tk.Frame):
                 self.buff_settings[5] = f'⬍ПРИБОР:  \n Адр.{self.user_number}'
                 self.user_number = ''
                 self.display_label.config(text=self.buff_settings[5])
+
         elif self.level == 3:
             playsound('sounds/pick.wav')
             if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
@@ -451,7 +452,9 @@ class Main(tk.Frame):
                 self.display_label.config(text=self.buff_settings[3])
             elif but_num == 'entr' and len(self.user_number) != 0:
                 self.level = 0
-                self.buff_settings[5] = f'⬍ПРИБОР:  \n Адр.{self.user_number}'
+                self.local_pos = 1
+                if 'Адр.' in self.buff_settings[5]:
+                    self.buff_settings[5] += f'/{self.user_number}'
                 self.user_number = ''
                 self.display_label.config(text=self.buff_settings[5])
         else:
