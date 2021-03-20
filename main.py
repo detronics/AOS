@@ -21,6 +21,9 @@ class Main(tk.Frame):
         self.mistake = False
         self.test = False
         self.buffer_control = False
+        self.crossout = False
+        self.choose_pass_abilities = 0
+        self.change_pass = 0
         self.password_main = '1234'
         self.user_input = ''
         self.user_number = ''
@@ -52,6 +55,8 @@ class Main(tk.Frame):
         self.element_settings = ['⬍ВЫБРАТЬ \nИЗ СПИСКА..','⬍РАЗРЕШИТЬ ВСЕ']
         self.device_settings = ['⬍ВВЕСТИ \nАДРЕС ПРИБОРА..', '⬍ВВЕСТИ \n№ ВХОДА/ВЫХОДА', '⬍РАЗРЕШИТЬ ВСЕ']
         self.menu_home = ['⬍ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
+        self.password_menu = ['⬍ИЗМЕНИТЬ','⬍УДАЛИТЬ', '⬍ДОБАВИТЬ']
+        self.password_abilities = ['⬍ВЗЯТИЕ И СНЯТИЕ','⬍ВЗЯТИЕ', '⬍ВСЕ ФУНКЦИИ']
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА УСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
         self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
@@ -196,6 +201,8 @@ class Main(tk.Frame):
             self.change_time(but_num)
         elif self.user_input == '62':
             self.change_data(but_num)
+        elif self.change_pass == 2:
+            self.change_password_func(but_num)
         elif self.test:
             self.test_detector(but_num)
         elif self.entering_password:
@@ -552,16 +559,22 @@ class Main(tk.Frame):
             self.display_label.config(text='ЖУРНАЛ СОБЫТИЙ')
         elif but_num == 'entr':
             if self.user_input == self.password_prog:
-                self.user_input = ''
-                self.passw_prog_stat = True
-                self.entering_password = False
-                self.display_label.config(text='1 ВРЕМЯ И ДАТА')
-                self.buff_events.insert(-1, {'name': 'ПРОГРАММИРОВАНИЕ   \nС2000М v3.02',
-                                             '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
-                                             '1': 'ПРОГРАММИРОВАНИЕ \nП000 С1 ХО', '2': 'НЕТ РАЗДЕЛА \nС2000М v3.02',
-                                             '3': '№ПАРОЛЯ: НЕТ',
-                                             '5': 'С2000М v3.02  \n№ЗОНЫ:  НЕ ЗАДАН',
-                                             '9': 'НОМЕР 1'})
+                if self.change_pass == 1:
+                    self.entering_password = False
+                    self.user_input = ''
+                    self.change_pass = 2
+                    self.display_label.config(text='№ ПАРОЛЯ:')
+                else:
+                    self.user_input = ''
+                    self.passw_prog_stat = True
+                    self.entering_password = False
+                    self.display_label.config(text='1 ВРЕМЯ И ДАТА')
+                    self.buff_events.insert(-1, {'name': 'ПРОГРАММИРОВАНИЕ   \nС2000М v3.02',
+                                                 '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
+                                                 '1': 'ПРОГРАММИРОВАНИЕ \nП000 С1 ХО', '2': 'НЕТ РАЗДЕЛА \nС2000М v3.02',
+                                                 '3': '№ПАРОЛЯ: НЕТ',
+                                                 '5': 'С2000М v3.02  \n№ЗОНЫ:  НЕ ЗАДАН',
+                                                 '9': 'НОМЕР 1'})
             else:
                 self.user_input = ''
                 playsound('sounds/deny.wav')
@@ -923,6 +936,11 @@ class Main(tk.Frame):
             elif self.local_pos == 2:
                 self.display_label.config(text='3')
             elif self.local_pos == 3:
+                self.local_pos = 0
+                self.global_pos = 0
+                self.change_pass = 1
+                self.home_menu_stat = False
+                self.entering_password = True
                 self.display_label.config(text='ПАРОЛЬ:')
             elif self.local_pos == 4:
                 self.local_pos = 0
@@ -1108,7 +1126,155 @@ class Main(tk.Frame):
                     self.display_label.config(text=f'{param} {self.user_number}')
 
     def change_password_func(self, but_num=None):
-        print('parol')
+        if self.level == 1:
+            if self.crossout:
+                self.new_password_entering(but_num)
+            else:
+                if but_num == 'x' and len(self.user_number) == 0:
+                    self.level = 0
+                    self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+                elif but_num == 'entr':
+                    self.user_number = ''
+                    self.display_label.config(text=f'НОВ. ПАРОЛЬ: {self.user_number}')
+                    self.crossout = True
+        elif self.level == 2:
+            if self.crossout:
+                self.new_password_entering(but_num)
+            else:
+                if but_num == 'x' and len(self.user_number) == 0:
+                    self.level = 0
+                    self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+                elif but_num == 'right':
+                    if self.local_pos == 1:
+                        self.local_pos = 0
+                    else:
+                        self.local_pos = 1
+                    self.display_label.config(text=self.password_menu[self.local_pos])
+                elif but_num == 'left':
+                    if self.local_pos == 0:
+                        self.local_pos = 1
+                    else:
+                        self.local_pos = 0
+                    self.display_label.config(text=self.password_menu[self.local_pos])
+                elif but_num == 'entr' and self.local_pos == 0:
+                    self.user_number = ''
+                    self.crossout = True
+                    self.display_label.config(text=f'НОВ. ПАРОЛЬ: {self.user_number}')
+                elif but_num == 'entr' and self.local_pos == 1:
+                    self.user_number = ''
+                    self.level = 0
+                    self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+        elif self.level == 3:
+            if self.crossout:
+                self.new_password_entering(but_num)
+            else:
+                if but_num == 'x' and len(self.user_number) == 0:
+                    self.level = 0
+                    self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+                elif but_num == 'entr':
+                    self.user_number = ''
+                    self.display_label.config(text=f'НОВ. ПАРОЛЬ: {self.user_number}')
+                    self.crossout = True
+        else:
+            playsound('sounds/pick.wav')
+            self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+            if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                self.user_number += but_num
+                self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) != 0:
+                self.user_number = ''
+                self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+            elif but_num == 'x' and len(self.user_number) == 0:
+                self.home_menu_stat = True
+                self.local_pos = 3
+                self.display_label.config(text='ПАРОЛИ')
+            elif but_num == 'entr':
+                if self.user_number == '1':
+                    self.level = 1
+                    self.user_number = ''
+                    self.display_label.config(text='⬍ ИЗМЕНИТЬ')
+                elif self.user_number == '2':
+                    self.level = 2
+                    self.user_number = ''
+                    self.display_label.config(text='⬍ ИЗМЕНИТЬ')
+                else:
+                    self.level = 3
+                    self.user_number = ''
+                    self.display_label.config(text='⬍ ДОБАВИТЬ')
+
+    def new_password_entering(self, but_num=None):
+        pass_param = ['⬍УПР. ШЛЕЙФАМИ','⬍УПР. РАЗДЕЛАМИ']
+        if  self.choose_pass_abilities == 0:
+            param = ['НОВ. ПАРОЛЬ:','ПОДТВЕРДИТЕ:']
+            if but_num == 'x' and len(self.user_number) == 0:
+                self.crossout = False
+                self.local_pos = 0
+                self.level = 0
+                self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+            elif but_num == 'entr' and len(self.user_number) == 0:
+                playsound('sounds/pick.wav')
+                self.display_label.config(text=f'{param[self.local_pos]}{self.user_number}')
+            elif but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                self.user_number += but_num
+                p = '*' * len(self.user_number)
+                self.display_label.config(text=f'{param[self.local_pos]}{p}')
+            elif but_num == 'entr' and len(self.user_number) != 0:
+                if self.local_pos == 0:
+                    self.local_pos += 1
+                    self.user_input = self.user_number
+                    self.user_number = ''
+                    self.display_label.config(text=f'{param[self.local_pos]}{self.user_number}')
+                else:
+                    if self.user_input == self.user_number:
+                        self.user_input = ''
+                        self.user_number = ''
+                        self.local_pos = 0
+                        self.choose_pass_abilities = 1
+                        self.display_label.config(text='⬍УПР. ШЛЕЙФАМИ')
+                    else:
+                        playsound('sounds/deny.wav')
+                        self.user_number = ''
+                        self.display_label.config(text=f'{param[self.local_pos]}{self.user_number}')
+        elif self.choose_pass_abilities == 1:
+            if but_num == 'x' and len(self.user_number) == 0:
+                self.level = 0
+                self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+                self.choose_pass_abilities = 0
+            elif but_num == 'right':
+                if self.local_pos == 1:
+                    self.local_pos = 0
+                else:
+                    self.local_pos = 1
+                self.display_label.config(text=pass_param[self.local_pos])
+            elif but_num == 'left':
+                if self.local_pos == 0:
+                    self.local_pos = 1
+                else:
+                    self.local_pos = 0
+                self.display_label.config(text=pass_param[self.local_pos])
+            elif but_num == 'entr' and self.local_pos == 0:
+                print('is')
+            elif but_num == 'entr' and self.local_pos == 1:
+                print('area')
+
+        else:
+            if but_num == 'x' and len(self.user_number) == 0:
+                self.level = 0
+                self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
+                self.choose_pass_abilities = 0
+            elif but_num == 'right':
+                if self.local_pos == 2:
+                    self.local_pos = 0
+                else:
+                    self.local_pos += 1
+                self.display_label.config(text=self.password_abilities[self.local_pos])
+            elif but_num == 'left':
+                if self.local_pos == 0:
+                    self.local_pos = 2
+                else:
+                    self.local_pos -= 1
+                self.display_label.config(text=self.password_abilities[self.local_pos])
+
 
     def change_time(self, but_num=None, ):
         position_list = [0, 1, 3, 4, 6, 7, -8]
