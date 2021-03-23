@@ -9,6 +9,7 @@ class Main(tk.Frame):
         super().__init__(root)
         self.init_main()
         self.times = True
+        self.programm_mode =False
         self.passw_stat = False
         self.main_menu_stat = False
         self.home_menu_stat = False
@@ -58,7 +59,7 @@ class Main(tk.Frame):
         self.menu_home = ['⬍ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.password_menu = ['⬍ИЗМЕНИТЬ', '⬍УДАЛИТЬ', '⬍ДОБАВИТЬ']
         self.password_abilities = ['⬍ВЗЯТИЕ И СНЯТИЕ', '⬍ВЗЯТИЕ', '⬍ВСЕ ФУНКЦИИ']
-        self.test_indik = ['⬍ С2000М','⬍ ДРУГИЕ ПРИБОРЫ']
+        self.test_indik = ['⬍ С2000М', '⬍ ДРУГИЕ ПРИБОРЫ']
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА \nУСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
         self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
@@ -66,7 +67,7 @@ class Main(tk.Frame):
                                                   'НАСТРОЙКА АЛГОРИТМА ПОЖАР2', 'СБРОС УСТАНОВОК НА ЗАВОДСКИЕ', ],
                             4: ['АДРЕС С2000=127', 'КОЛЬЦЕВОЙ', 'АДРЕС', 'ПЕРИОД 1', 'ПЕРИОД 2', ],
                             5: ['РЕЖИМ:', 'ЦЕНТР.УПРАВЛ.:−', 'СКОРОСТЬ: 9600 бит/с', 'ACCOUNT: 1234', 'СОБЫТИЯ LАRS', ],
-                            6: ['РЕЖИМ ПРОГРАММИРОВАНИЯ']}
+                            6: ['РЕЖИМ \nПРОГРАММИРОВАНИЯ']}
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР \nПО СОСТОЯНИЯМ']
         self.menu_state = ['ПОЖАРЫ\n (0)', 'ТРЕВОГИ\n (0)', 'ЗАПУЩЕНЫ\n (0)', 'ОСТАНОВЛЕНЫ\n (0)',
                            'НЕИСПРАВНОСТИ\n (0)', 'ОТКЛЮЧЕНИЯ\n (0)']
@@ -187,7 +188,7 @@ class Main(tk.Frame):
             self.brakepas()
         if self.menu_menu_stat:
             self.menu_menu(but_num)
-        elif but_num == 'menu' and not self.menu_menu_stat and self.buff_event_stat != True:
+        elif but_num == 'menu' and not self.menu_menu_stat and self.buff_event_stat != True and self.programm_mode==False:
             playsound('sounds/pick.wav')
             self.display_label.config(text='⬍УПРАВЛЕНИЕ')
             self.menu_menu_stat = True
@@ -195,7 +196,7 @@ class Main(tk.Frame):
             self.menu_home_func(but_num)
         elif self.buff_event_stat:
             self.buff_event_func(but_num)
-        elif but_num == 'home':
+        elif but_num == 'home' and self.programm_mode == False:
             playsound('sounds/pick.wav')
             self.home_menu_stat = True
             self.display_label.config(text='⬍ЖУРНАЛ СОБЫТИЙ')
@@ -575,7 +576,7 @@ class Main(tk.Frame):
                     self.user_input = ''
                     self.passw_prog_stat = True
                     self.entering_password = False
-                    self.display_label.config(text='1 ВРЕМЯ И ДАТА')
+                    self.display_label.config(text='⬍1 ВРЕМЯ И ДАТА')
                     self.buff_events.insert(-1, {'name': 'ПРОГРАММИРОВАНИЕ   \nС2000М v3.02',
                                                  '0': f'{time.strftime("%m.%d")}   {time.strftime("%H:%M:%S")}',
                                                  '1': 'ПРОГРАММИРОВАНИЕ \nП000 С1 ХО',
@@ -959,40 +960,65 @@ class Main(tk.Frame):
                 self.entering_password = True
                 self.display_label.config(text='ПАРОЛЬ:')
 
-    def prog_menu_func(self, but_num):
-        playsound('sounds/pick.wav')
-        if but_num == 'right':
-            if self.local_pos == 5:
-                self.local_pos = -1
-            self.local_pos += 1
-            self.display_label.config(text=self.menu_settings[self.local_pos])
+    def date_and_time(self, but_num):
+        print('datetime')
 
-        elif but_num == 'left':
-            if self.local_pos == 0:
-                self.local_pos = 6
-            self.local_pos -= 1
-            self.display_label.config(text=self.menu_settings[self.local_pos])
+    def config_device(self, but_num):
+        print('config')
 
-        elif but_num == 'x':
+    def settings_s2000m(self, but_num):
+        print('s2000m')
+
+    def rs_485(self, but_num):
+        print('rs485')
+
+    def rs_232(self, but_num):
+        print('rs232')
+
+    def prog_mode(self, but_num=None):
+        self.programm_mode = True
+        self.display_label.config(text='РЕЖИМ \nПРОГРАММИРОВАНИЯ')
+        if but_num == 'x':
+            self.programm_mode = False
             self.passw_prog_stat = False
             self.local_pos = 0
             self.global_pos = 0
             self.user_input = ''
             self.start_time()
 
-        elif but_num == 'entr':
-            self.global_pos += 1
-            if self.local_pos == 0:
-                self.display_label.config(text='1')
-            elif self.local_pos == 1:
-                self.local_pos = 0
-            elif self.local_pos == 2:
-                self.display_label.config(text='3')
-            elif self.local_pos == 3:
-                self.display_label.config(text='4')
-            elif self.local_pos == 4:
+    def prog_menu_func(self, but_num):
+        if self.global_pos == 0:
+            playsound('sounds/pick.wav')
+            if but_num == 'right':
+                if self.local_pos == 5:
+                    self.local_pos = -1
+                self.local_pos += 1
+                self.display_label.config(text=self.menu_settings[self.local_pos])
+
+            elif but_num == 'left':
+                if self.local_pos == 0:
+                    self.local_pos = 6
+                self.local_pos -= 1
+                self.display_label.config(text=self.menu_settings[self.local_pos])
+
+            elif but_num == 'x':
+                self.passw_prog_stat = False
                 self.local_pos = 0
                 self.global_pos = 0
+                self.user_input = ''
+                self.start_time()
+
+            elif but_num == 'entr':
+                function_list = [self.date_and_time, self.config_device, self.settings_s2000m, self.rs_485,
+                                 self.rs_232, self.prog_mode]
+                self.global_pos += 1
+                function_list[self.local_pos]()
+
+        else:
+            print('loc_pos', self.local_pos, 'glob', self.global_pos, 'lev', self.level)
+            function_list = [self.date_and_time, self.config_device, self.settings_s2000m, self.rs_485,
+                             self.rs_232, self.prog_mode]
+            function_list[self.local_pos](but_num)
 
     def buff_event_func(self, but_num=None):
         if self.level == 0:
@@ -1072,10 +1098,10 @@ class Main(tk.Frame):
     def test_indik_func(self, but_num):
         playsound('sounds/pick.wav')
         if but_num == 'x':
-             self.local_pos = 2
-             self.home_menu_stat = True
-             self.testing_ind = False
-             self.display_label.config(text=self.menu_home[self.local_pos])
+            self.local_pos = 2
+            self.home_menu_stat = True
+            self.testing_ind = False
+            self.display_label.config(text=self.menu_home[self.local_pos])
         elif but_num == 'right':
             if self.local_pos == 1:
                 self.local_pos = 0
