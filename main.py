@@ -22,6 +22,7 @@ class Main(tk.Frame):
         self.test = False
         self.buffer_control = False
         self.crossout = False
+        self.testing_ind = False
         self.choose_pass_abilities = 0
         self.change_pass = 0
         self.password_main = '1234'
@@ -57,7 +58,8 @@ class Main(tk.Frame):
         self.menu_home = ['⬍ЖУРНАЛ СОБЫТИЙ', 'УПРАВЛЕНИЕ', 'ТЕСТ ИНДИКАЦИИ', 'ПАРОЛИ', 'НАСТРОЙКИ', ]
         self.password_menu = ['⬍ИЗМЕНИТЬ', '⬍УДАЛИТЬ', '⬍ДОБАВИТЬ']
         self.password_abilities = ['⬍ВЗЯТИЕ И СНЯТИЕ', '⬍ВЗЯТИЕ', '⬍ВСЕ ФУНКЦИИ']
-        self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА УСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
+        self.test_indik = ['⬍ С2000М','⬍ ДРУГИЕ ПРИБОРЫ']
+        self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА \nУСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
         self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
                             2: ['ПРИБОР:', ], 3: ['ЗВУКОВОЙ СИГНАЛИЗАТОР', 'ДОСТУП К ФУНКЦИЯМ', 'КОНТРОЛЬ ПИТАНИЯ',
@@ -205,6 +207,8 @@ class Main(tk.Frame):
             self.change_password_func(but_num)
         elif self.test:
             self.test_detector(but_num)
+        elif self.testing_ind:
+            self.test_indik_func(but_num)
         elif self.entering_password:
             self.check_password_prog(but_num)
         elif self.passw_prog_stat:
@@ -931,14 +935,16 @@ class Main(tk.Frame):
                 self.home_menu_stat = False
                 self.local_pos = len(self.buff_events) - 2
                 self.display_label.config(text=self.buff_events[self.local_pos]['name'])
-
             elif self.local_pos == 1:
                 self.local_pos = 0
                 self.global_pos = 0
                 self.home_menu_stat = False
                 self.display_label.config(text=f'ПАРОЛЬ:')
             elif self.local_pos == 2:
-                self.display_label.config(text='3')
+                self.home_menu_stat = False
+                self.testing_ind = True
+                self.local_pos = 0
+                self.display_label.config(text='⬍ С2000М')
             elif self.local_pos == 3:
                 self.local_pos = 0
                 self.global_pos = 0
@@ -1064,7 +1070,32 @@ class Main(tk.Frame):
             function_list[self.global_pos](but_num)
 
     def test_indik_func(self, but_num):
-        pass
+        playsound('sounds/pick.wav')
+        if but_num == 'x':
+             self.local_pos = 2
+             self.home_menu_stat = True
+             self.testing_ind = False
+             self.display_label.config(text=self.menu_home[self.local_pos])
+        elif but_num == 'right':
+            if self.local_pos == 1:
+                self.local_pos = 0
+                self.display_label.config(text=self.test_indik[self.local_pos])
+            else:
+                self.local_pos = 1
+                self.display_label.config(text=self.test_indik[self.local_pos])
+        elif but_num == 'left':
+            if self.local_pos == 0:
+                self.local_pos = 1
+                self.display_label.config(text=self.test_indik[self.local_pos])
+            else:
+                self.local_pos = 0
+                self.display_label.config(text=self.test_indik[self.local_pos])
+        elif but_num == 'entr':
+            playsound('sounds/pick.wav')
+            self.local_pos = 2
+            self.home_menu_stat = True
+            self.testing_ind = False
+            self.display_label.config(text=self.menu_home[self.local_pos])
 
     def test_detector(self, but_num=None):
         # TODO уточнить работу данной функции
