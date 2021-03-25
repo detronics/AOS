@@ -9,7 +9,7 @@ class Main(tk.Frame):
         super().__init__(root)
         self.init_main()
         self.times = True
-        self.programm_mode =False
+        self.programm_mode = False
         self.passw_stat = False
         self.main_menu_stat = False
         self.home_menu_stat = False
@@ -26,15 +26,17 @@ class Main(tk.Frame):
         self.testing_ind = False
         self.choose_pass_abilities = 0
         self.change_pass = 0
+        self.singh = '+'
         self.password_main = '1234'
         self.user_input = ''
         self.user_number = ''
         self.password_prog = '123456'
         self.data_range = ['31.12.99', '01.01.00', ]
-        self.aspt_stat = 0
+        self.aspt_or_corrett_time = 0
         self.type_event_val = 0
         self.tim = ''
         self.dat = time.strftime("%d:%m:%y")
+        self.corrector_time = '0.00'
         self.time_date_stat = 2
         self.temp_val = -1
         self.level = 0
@@ -190,7 +192,7 @@ class Main(tk.Frame):
             self.brakepas()
         if self.menu_menu_stat:
             self.menu_menu(but_num)
-        elif but_num == 'menu' and not self.menu_menu_stat and self.buff_event_stat != True and self.programm_mode==False:
+        elif but_num == 'menu' and not self.menu_menu_stat and self.buff_event_stat != True and self.programm_mode == False:
             playsound('sounds/pick.wav')
             self.display_label.config(text='⬍УПРАВЛЕНИЕ')
             self.menu_menu_stat = True
@@ -787,31 +789,32 @@ class Main(tk.Frame):
                 elif but_num == 'entr' and len(self.user_number) != 0:
                     if self.user_number not in self.data_base_aspt.keys():
                         self.data_base_aspt[self.user_number] = [0, 0]
-                    self.aspt_stat = 422 - int(self.user_input)
+                    self.aspt_or_corrett_time = 422 - int(self.user_input)
                     self.import_data_stat = False
                     self.display_label.config(
-                        text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
+                        text=self.menu3[self.user_input][
+                            self.data_base_aspt[self.user_number][self.aspt_or_corrett_time]])
                     self.level = 1
 
         else:
             self.main_3(but_num)
 
     def main_3(self, but_num):
-        if self.aspt_stat == 2:
+        if self.aspt_or_corrett_time == 2:
             if but_num == 'entr':
-                self.aspt_stat = 422 - int(self.user_input)
-                self.data_base_aspt[self.user_number][self.aspt_stat] = 1
+                self.aspt_or_corrett_time = 422 - int(self.user_input)
+                self.data_base_aspt[self.user_number][self.aspt_or_corrett_time] = 1
                 self.import_data_stat = False
                 self.display_label.config(
-                    text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
+                    text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_or_corrett_time]])
                 self.local_pos = 2
             elif but_num == 'x':
                 self.local_pos = 0
                 self.import_data_stat = False
-                self.aspt_stat = 422 - int(self.user_input)
+                self.aspt_or_corrett_time = 422 - int(self.user_input)
                 self.level = 1
                 self.display_label.config(
-                    text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
+                    text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_or_corrett_time]])
         else:
             if not self.import_data_stat:
                 if but_num == 'entr':
@@ -843,23 +846,25 @@ class Main(tk.Frame):
                     self.import_data_stat = False
                     self.local_pos = 0
                     self.display_label.config(
-                        text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
+                        text=self.menu3[self.user_input][
+                            self.data_base_aspt[self.user_number][self.aspt_or_corrett_time]])
 
                 elif but_num == 'entr':
                     self.import_data_stat = False
                     if self.user_input == '421':
-                        self.data_base_aspt[self.user_number][self.aspt_stat] = -self.local_pos + 3
+                        self.data_base_aspt[self.user_number][self.aspt_or_corrett_time] = -self.local_pos + 3
                         self.display_label.config(
-                            text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_stat]])
+                            text=self.menu3[self.user_input][
+                                self.data_base_aspt[self.user_number][self.aspt_or_corrett_time]])
 
                     else:
                         if self.local_pos == 2:
                             self.local_pos = 0
-                            self.data_base_aspt[self.user_number][self.aspt_stat] = 0
+                            self.data_base_aspt[self.user_number][self.aspt_or_corrett_time] = 0
                             self.display_label.config(text=self.menu3[self.user_input][0])
                         else:
                             self.display_label.config(text=f'ПОДТВЕРДИТЕ ПУСК\n ПРИБОР: {self.user_number} ')
-                            self.aspt_stat = 2
+                            self.aspt_or_corrett_time = 2
 
     def menu_menu(self, but_num):
         if self.global_pos == 1:
@@ -962,7 +967,7 @@ class Main(tk.Frame):
                 self.entering_password = True
                 self.display_label.config(text='ПАРОЛЬ:')
 
-    def date_and_time(self, but_num= None):
+    def date_and_time(self, but_num=None):
         if self.global_pos == 2:
             self.change_time(but_num)
         elif self.global_pos == 3:
@@ -972,20 +977,24 @@ class Main(tk.Frame):
         else:
             self.display_label.config(text=self.menu_prog_1[1][self.level])
             if but_num == 'x':
+                playsound('sounds/pick.wav')
                 self.global_pos = 0
                 self.level = 0
                 self.display_label.config(text=self.menu_settings[self.local_pos])
             elif but_num == 'right':
+                playsound('sounds/pick.wav')
                 if self.level == 2:
                     self.level = -1
                 self.level += 1
                 self.display_label.config(text=self.menu_prog_1[1][self.level])
             elif but_num == 'left':
+                playsound('sounds/pick.wav')
                 if self.level == 0:
                     self.level = 3
                 self.level -= 1
                 self.display_label.config(text=self.menu_prog_1[1][self.level])
             elif but_num == 'entr':
+                playsound('sounds/pick.wav')
                 if self.level == 0:
                     self.global_pos = 2
                     self.time_date_stat = 0
@@ -998,8 +1007,31 @@ class Main(tk.Frame):
                     self.global_pos = 4
                     self.correct_time()
 
-    def config_device(self, but_num):
-        print('config')
+    def config_device(self, but_num = None):
+        self.display_label.config(text=f'ПРИБОР: {self.user_number}')
+        if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            playsound('sounds/pick.wav')
+            self.user_number += but_num
+            self.display_label.config(text=f'ПРИБОР: {self.user_number}')
+        elif but_num == 'x' and len(self.user_number) != 0:
+            playsound('sounds/pick.wav')
+            self.user_number = ''
+            self.display_label.config(text=f'ПРИБОР: {self.user_number}')
+        elif but_num == 'x' and len(self.user_number) == 0:
+            playsound('sounds/pick.wav')
+            self.global_pos = 0
+            self.level = 0
+            self.display_label.config(text=self.menu_settings[self.local_pos])
+        elif but_num == 'entr' and len(self.user_number) == 0:
+            # TODO utochnity
+            playsound('sounds/deny.wav')
+            self.after(10, self.display_label.config(text='Неизвестная команда'))
+            self.after(500, self.config_device)
+        elif but_num == 'entr' and len(self.user_number) != 0:
+            playsound('sounds/deny.wav')
+            self.user_number = ''
+            self.after(10, self.display_label.config(text='НЕТ ПРИБОРА'))
+            self.after(1000, self.config_device)
 
     def settings_s2000m(self, but_num):
         print('s2000m')
@@ -1021,7 +1053,7 @@ class Main(tk.Frame):
             self.user_input = ''
             self.start_time()
 
-    def prog_menu_func(self, but_num):
+    def prog_menu_func(self, but_num=None):
         if self.global_pos == 0:
             playsound('sounds/pick.wav')
             if but_num == 'right':
@@ -1393,7 +1425,7 @@ class Main(tk.Frame):
                 playsound('sounds/deny.wav')
                 self.display_label.config(text=f'№ УРОВНЯ: {self.user_number}')
 
-    def change_time(self, but_num=None,):
+    def change_time(self, but_num=None, ):
         position_list = [0, 1, 3, 4, 6, 7, -8]
         if self.sound:
             self.tim = time.strftime("%H:%M:%S")
@@ -1451,7 +1483,7 @@ class Main(tk.Frame):
             self.display_label.config(text=f'ВРЕМЯ: {self.tim}')
             self.local_pos += 1
             if self.local_pos == 6 and not self.mistake:
-                if self.temp_val >=0:
+                if self.temp_val >= 0:
                     self.global_pos = 1
                     self.level = 0
                     self.local_pos = 0
@@ -1576,24 +1608,50 @@ class Main(tk.Frame):
                 text=f'ДАТА: {self.dat[:position_list[self.local_pos]]}_{self.dat[position_list[self.local_pos] + 1:]}')
             self.display_label.after(400, self.change_data)
 
-    def correct_time(self,but_num=None):
-        self.display_label.config(text=f'С/СУТКИ: {self.user_input}')
+    def correct_time(self, but_num=None):
+        steps = [0.18, 0.17]
+        self.display_label.config(text=f'С/СУТКИ: {self.singh}{self.corrector_time}')
         if but_num == 'x':
+            playsound('sounds/pick.wav')
+            self.corrector_time = '0.00'
+            self.singh = '+'
             self.global_pos = 1
             self.level = 2
             self.local_pos = 0
             self.display_label.config(text=self.menu_prog_1[1][self.level])
+            return
         elif but_num == 'entr':
+            playsound('sounds/pick.wav')
             self.global_pos = 1
             self.level = 2
             self.local_pos = 0
             self.display_label.config(text=self.menu_prog_1[1][self.level])
         elif but_num == 'right':
-
-            self.display_label.config(text=f'С/СУТКИ: {self.user_input}')
+            playsound('sounds/pick.wav')
+            if self.corrector_time == '0.00':
+                self.aspt_or_corrett_time = 0
+            elif self.aspt_or_corrett_time == 1:
+                self.aspt_or_corrett_time = 0
+            else:
+                self.aspt_or_corrett_time = 1
+            self.corrector_time = round(float(self.corrector_time) + steps[self.aspt_or_corrett_time], 2)
         elif but_num == 'left':
+            playsound('sounds/pick.wav')
+            if self.corrector_time == 0.18:
+                self.aspt_or_corrett_time = 0
+                self.corrector_time = round(float(self.corrector_time) - steps[self.aspt_or_corrett_time], 2)
+            elif self.aspt_or_corrett_time == 1:
+                self.aspt_or_corrett_time = 0
+                self.corrector_time = round(float(self.corrector_time) - steps[self.aspt_or_corrett_time - 1], 2)
+            else:
+                self.aspt_or_corrett_time = 1
+                self.corrector_time = round(float(self.corrector_time) - steps[self.aspt_or_corrett_time-1], 2)
 
-            self.display_label.config(text=f'С/СУТКИ: {self.user_input}')
+        if float(self.corrector_time) >= 0.00:
+            self.singh = '+'
+        else:
+            self.singh = ''
+        self.display_label.config(text=f'С/СУТКИ: {self.singh}{self.corrector_time}')
 
     def import_data(self, but_num=None):
         # print('import data',self.user_input, self.level)
