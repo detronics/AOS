@@ -37,6 +37,7 @@ class Main(tk.Frame):
         self.tim = ''
         self.dat = time.strftime("%d:%m:%y")
         self.corrector_time = '0.00'
+        self.console_adress = '127'
         self.time_date_stat = 2
         self.temp_val = -1
         self.level = 0
@@ -67,10 +68,10 @@ class Main(tk.Frame):
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА \nУСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
         self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
-                            2: ['ПРИБОР:', ], 3: ['ЗВУКОВОЙ СИГНАЛИЗАТОР', 'ДОСТУП К ФУНКЦИЯМ', 'КОНТРОЛЬ ПИТАНИЯ',
-                                                  'НАСТРОЙКА АЛГОРИТМА ПОЖАР2', 'СБРОС УСТАНОВОК НА ЗАВОДСКИЕ', ],
-                            4: ['АДРЕС С2000=127', 'КОЛЬЦЕВОЙ', 'АДРЕС', 'ПЕРИОД 1', 'ПЕРИОД 2', ],
-                            5: ['РЕЖИМ:', 'ЦЕНТР.УПРАВЛ.:−', 'СКОРОСТЬ: 9600 бит/с', 'ACCOUNT: 1234', 'СОБЫТИЯ LАRS', ],
+                            2: ['ПРИБОР:', ], 3: ['⬍ЗВУКОВОЙ \nСИГНАЛИЗАТОР', '⬍ДОСТУП \nК ФУНКЦИЯМ', '⬍КОНТРОЛЬ \nПИТАНИЯ','⬍КОНТРОЛЬ СВЯЗИ \nПО RS-232',
+                                                  '⬍НАСТРОЙКА \nАЛГОРИТМА ПОЖАР2', '⬍СБРОС УСТАНОВОК \nНА ЗАВОДСКИЕ', ],
+                            4: [f'АДРЕС С2000={self.console_adress}', 'КОЛЬЦЕВОЙ                        :-', 'АДРЕС                     =126', 'ПЕРИОД 1                     =240', 'ПЕРИОД 2                     =2', ],
+                            5: ['РЕЖИМ: \n ПРИНТЕР',f'АДРЕС С2000=127','ТАЙМ.СВЯЗИ =20', 'ЦЕНТР.УПРАВЛ.                    :−', 'СКОРОСТЬ: \n9600 бит/с', 'ACCOUNT: \n1234', '⬍СОБЫТИЯ LАRS', ],
                             6: ['РЕЖИМ \nПРОГРАММИРОВАНИЯ']}
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР \nПО СОСТОЯНИЯМ']
         self.menu_state = ['ПОЖАРЫ\n (0)', 'ТРЕВОГИ\n (0)', 'ЗАПУЩЕНЫ\n (0)', 'ОСТАНОВЛЕНЫ\n (0)',
@@ -1033,14 +1034,70 @@ class Main(tk.Frame):
             self.after(10, self.display_label.config(text='НЕТ ПРИБОРА'))
             self.after(1000, self.config_device)
 
-    def settings_s2000m(self, but_num):
-        print('s2000m')
+    def settings_s2000m(self, but_num=None):
+        print(self.local_pos, self.level)
+        self.display_label.config(text=self.menu_prog_1[3][self.level])
+        if but_num == 'x':
+            playsound('sounds/pick.wav')
+            self.global_pos = 0
+            self.level = 0
+            self.display_label.config(text=self.menu_settings[self.local_pos])
+        elif but_num == 'right':
+            playsound('sounds/pick.wav')
+            if self.level == 5:
+                self.level = -1
+            self.level += 1
+            self.display_label.config(text=self.menu_prog_1[3][self.level])
+        elif but_num == 'left':
+            playsound('sounds/pick.wav')
+            if self.level == 0:
+                self.level = 6
+            self.level -= 1
+            self.display_label.config(text=self.menu_prog_1[3][self.level])
+        elif but_num == 'entr':
+            playsound('sounds/pick.wav')
 
-    def rs_485(self, but_num):
-        print('rs485')
+    def rs_485(self, but_num=None):
+        self.display_label.config(text=self.menu_prog_1[4][self.level])
+        if but_num == 'x':
+            playsound('sounds/pick.wav')
+            self.global_pos = 0
+            self.level = 0
+            self.display_label.config(text=self.menu_settings[self.local_pos])
+        elif but_num == 'right':
+            playsound('sounds/pick.wav')
+            if self.level == len(self.menu_prog_1[4])-1:
+                self.level = -1
+            self.level += 1
+            self.display_label.config(text=self.menu_prog_1[4][self.level])
+        elif but_num == 'left':
+            playsound('sounds/pick.wav')
+            if self.level == 0:
+                self.level = len(self.menu_prog_1[4])
+            self.level -= 1
+            self.display_label.config(text=self.menu_prog_1[4][self.level])
+        elif but_num == 'entr' and self.level == 0:
+            playsound('sounds/deny.wav')
 
-    def rs_232(self, but_num):
-        print('rs232')
+    def rs_232(self, but_num=None):
+        self.display_label.config(text=self.menu_prog_1[5][self.level])
+        if but_num == 'x':
+            playsound('sounds/pick.wav')
+            self.global_pos = 0
+            self.level = 0
+            self.display_label.config(text=self.menu_settings[self.local_pos])
+        elif but_num == 'right':
+            playsound('sounds/pick.wav')
+            if self.level == len(self.menu_prog_1[5])-1:
+                self.level = -1
+            self.level += 1
+            self.display_label.config(text=self.menu_prog_1[5][self.level])
+        elif but_num == 'left':
+            playsound('sounds/pick.wav')
+            if self.level == 0:
+                self.level = len(self.menu_prog_1[5])
+            self.level -= 1
+            self.display_label.config(text=self.menu_prog_1[5][self.level])
 
     def prog_mode(self, but_num=None):
         self.programm_mode = True
