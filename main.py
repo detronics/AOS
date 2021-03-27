@@ -37,7 +37,6 @@ class Main(tk.Frame):
         self.tim = ''
         self.dat = time.strftime("%d:%m:%y")
         self.corrector_time = '0.00'
-        self.console_adress = '127'
         self.time_date_stat = 2
         self.temp_val = -1
         self.level = 0
@@ -67,11 +66,18 @@ class Main(tk.Frame):
         self.test_indik = ['⬍ С2000М', '⬍ ДРУГИЕ ПРИБОРЫ']
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА \nУСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
+        self.rs_485_set = [127, '-', 126, 240, 2]
         self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
-                            2: ['ПРИБОР:', ], 3: ['⬍ЗВУКОВОЙ \nСИГНАЛИЗАТОР', '⬍ДОСТУП \nК ФУНКЦИЯМ', '⬍КОНТРОЛЬ \nПИТАНИЯ','⬍КОНТРОЛЬ СВЯЗИ \nПО RS-232',
-                                                  '⬍НАСТРОЙКА \nАЛГОРИТМА ПОЖАР2', '⬍СБРОС УСТАНОВОК \nНА ЗАВОДСКИЕ', ],
-                            4: [f'АДРЕС С2000={self.console_adress}', 'КОЛЬЦЕВОЙ                        :-', 'АДРЕС                     =126', 'ПЕРИОД 1                     =240', 'ПЕРИОД 2                     =2', ],
-                            5: ['РЕЖИМ: \n ПРИНТЕР',f'АДРЕС С2000=127','ТАЙМ.СВЯЗИ =20', 'ЦЕНТР.УПРАВЛ.                    :−', 'СКОРОСТЬ: \n9600 бит/с', 'ACCOUNT: \n1234', '⬍СОБЫТИЯ LАRS', ],
+                            2: ['ПРИБОР:', ],
+                            3: ['⬍ЗВУКОВОЙ \nСИГНАЛИЗАТОР', '⬍ДОСТУП \nК ФУНКЦИЯМ', '⬍КОНТРОЛЬ \nПИТАНИЯ',
+                                '⬍КОНТРОЛЬ СВЯЗИ \nПО RS-232',
+                                '⬍НАСТРОЙКА \nАЛГОРИТМА ПОЖАР2', '⬍СБРОС УСТАНОВОК \nНА ЗАВОДСКИЕ', ],
+                            4: [f'АДРЕС С2000={self.rs_485_set[0]}', f'КОЛЬЦЕВОЙ                        :{self.rs_485_set[1]}',
+                                f'АДРЕС                     ={self.rs_485_set[2]}', f'ПЕРИОД 1                     ={self.rs_485_set[3]}',
+                                f'ПЕРИОД 2                     ={self.rs_485_set[4]}', ],
+                            5: ['РЕЖИМ: \n ПРИНТЕР', f'АДРЕС С2000=127', 'ТАЙМ.СВЯЗИ =20',
+                                'ЦЕНТР.УПРАВЛ.                  :−', 'СКОРОСТЬ: \n9600 бит/с', 'ACCOUNT: \n1234',
+                                '⬍СОБЫТИЯ LАRS', ],
                             6: ['РЕЖИМ \nПРОГРАММИРОВАНИЯ']}
         self.menu_menu_list = ['УПРАВЛЕНИЕ', 'ПРОСМОТР \nПО СОСТОЯНИЯМ']
         self.menu_state = ['ПОЖАРЫ\n (0)', 'ТРЕВОГИ\n (0)', 'ЗАПУЩЕНЫ\n (0)', 'ОСТАНОВЛЕНЫ\n (0)',
@@ -1008,7 +1014,7 @@ class Main(tk.Frame):
                     self.global_pos = 4
                     self.correct_time()
 
-    def config_device(self, but_num = None):
+    def config_device(self, but_num=None):
         self.display_label.config(text=f'ПРИБОР: {self.user_number}')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             playsound('sounds/pick.wav')
@@ -1066,7 +1072,7 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu_settings[self.local_pos])
         elif but_num == 'right':
             playsound('sounds/pick.wav')
-            if self.level == len(self.menu_prog_1[4])-1:
+            if self.level == len(self.menu_prog_1[4]) - 1:
                 self.level = -1
             self.level += 1
             self.display_label.config(text=self.menu_prog_1[4][self.level])
@@ -1088,7 +1094,7 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu_settings[self.local_pos])
         elif but_num == 'right':
             playsound('sounds/pick.wav')
-            if self.level == len(self.menu_prog_1[5])-1:
+            if self.level == len(self.menu_prog_1[5]) - 1:
                 self.level = -1
             self.level += 1
             self.display_label.config(text=self.menu_prog_1[5][self.level])
@@ -1109,6 +1115,23 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.user_input = ''
             self.start_time()
+
+    def change_rs_set(self, but_num, param):
+        self.display_label.config(text=f'{param} {self.user_number}')
+        if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            self.user_number += but_num
+            self.display_label.config(text=f'{param} {self.user_number}')
+        elif but_num == 'x' and len(self.user_number) != 0:
+            self.user_number = ''
+            self.display_label.config(text=f'{param} {self.user_number}')
+        elif but_num == 'x' and len(self.user_number) == 0:
+            self.display_label.config(text=self.menu_prog_1[4][self.level])
+        elif but_num == 'entr' and len(self.user_number) == 0:
+            # TODO utochnity
+            playsound('sounds/deny.wav')
+            self.display_label.config(text=f'{param} {self.user_number}')
+        elif but_num == 'entr' and len(self.user_number) != 0:
+            pass
 
     def prog_menu_func(self, but_num=None):
         if self.global_pos == 0:
@@ -1702,7 +1725,7 @@ class Main(tk.Frame):
                 self.corrector_time = round(float(self.corrector_time) - steps[self.aspt_or_corrett_time - 1], 2)
             else:
                 self.aspt_or_corrett_time = 1
-                self.corrector_time = round(float(self.corrector_time) - steps[self.aspt_or_corrett_time-1], 2)
+                self.corrector_time = round(float(self.corrector_time) - steps[self.aspt_or_corrett_time - 1], 2)
 
         if float(self.corrector_time) >= 0.00:
             self.singh = '+'
