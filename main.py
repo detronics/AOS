@@ -67,15 +67,19 @@ class Main(tk.Frame):
         self.menu_settings = ['⬍1 ВРЕМЯ И ДАТА', '⬍2 НАСТРОЙКА \nУСТРОЙСТВ', '⬍3 УСТАНОВКИ С2000М', '⬍4 RS-485',
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
         self.rs_485_set = [127, '-', 126, 240, 2]
-        self.rs_232_mode = ['⬍ПРИНТЕР','⬍КОМПЬЮТЕР','⬍ПИ/РЕЗЕРВ','⬍RS-202TD','ATS100 (LARS)','⬍TRX-150 (CID)',]
+        self.rs_232_mode = ['⬍ПРИНТЕР', '⬍КОМПЬЮТЕР', '⬍ПИ/РЕЗЕРВ', '⬍RS-202TD', '⬍ATS100 (LARS)', '⬍TRX-150 (CID)']
+        self.rs_485_mod = ['АДРЕС С2000=', 'КОЛЬЦЕВОЙ                        : ', 'АДРЕС                     =',
+                           'ПЕРИОД 1                     =', 'ПЕРИОД 2                     =']
         self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
                             2: ['ПРИБОР:', ],
                             3: ['⬍ЗВУКОВОЙ \nСИГНАЛИЗАТОР', '⬍ДОСТУП \nК ФУНКЦИЯМ', '⬍КОНТРОЛЬ \nПИТАНИЯ',
                                 '⬍КОНТРОЛЬ СВЯЗИ \nПО RS-232',
                                 '⬍НАСТРОЙКА \nАЛГОРИТМА ПОЖАР2', '⬍СБРОС УСТАНОВОК \nНА ЗАВОДСКИЕ', ],
-                            4: [f'АДРЕС С2000={self.rs_485_set[0]}', f'КОЛЬЦЕВОЙ                        :{self.rs_485_set[1]}',
-                                f'АДРЕС                     ={self.rs_485_set[2]}', f'ПЕРИОД 1                     ={self.rs_485_set[3]}',
-                                f'ПЕРИОД 2                     ={self.rs_485_set[4]}', ],
+                            4: [f'{self.rs_485_mod[0]}{self.rs_485_set[0]}',
+                                f'{self.rs_485_mod[1]}{self.rs_485_set[1]}',
+                                f'{self.rs_485_mod[2]}{self.rs_485_set[2]}',
+                                f'{self.rs_485_mod[3]}{self.rs_485_set[3]}',
+                                f'{self.rs_485_mod[4]}{self.rs_485_set[4]}', ],
                             5: [f'РЕЖИМ: \n {self.rs_232_mode[0][1:]}', f'АДРЕС С2000=127', 'ТАЙМ.СВЯЗИ =20',
                                 'ЦЕНТР.УПРАВЛ.                  :−', 'СКОРОСТЬ: \n9600 бит/с', 'ACCOUNT: \n1234',
                                 '⬍СОБЫТИЯ LАRS', ],
@@ -1066,7 +1070,7 @@ class Main(tk.Frame):
 
     def rs_485(self, but_num=None):
         if self.global_pos == 2:
-            self.change_rs_set(but_num=but_num, param=self.menu_prog_1[4][self.level][:-3])
+            self.change_rs_set(but_num=but_num, param=self.rs_485_mod[self.level])
         else:
             self.display_label.config(text=self.menu_prog_1[4][self.level])
             if but_num == 'x':
@@ -1086,34 +1090,69 @@ class Main(tk.Frame):
                     self.level = len(self.menu_prog_1[4])
                 self.level -= 1
                 self.display_label.config(text=self.menu_prog_1[4][self.level])
-            elif but_num == 'entr' :
-                self.global_pos = 2
-                self.change_rs_set(param=self.menu_prog_1[4][self.level][:-3], )
-                print(self.local_pos, self.global_pos, self.level,self.menu_prog_1[4][self.level][:-3])
-
+            elif but_num == 'entr':
+                if self.level == 1:
+                    playsound('sounds/pick.wav')
+                    playsound('sounds/pick.wav')
+                    if self.rs_485_set[self.level] == '-':
+                        self.rs_485_set[self.level] = '+'
+                    else:
+                        self.rs_485_set[self.level] = '-'
+                    self.menu_prog_1[4][self.level] = f'КОЛЬЦЕВОЙ                        : {self.rs_485_set[1]}'
+                    self.display_label.config(text=self.menu_prog_1[4][self.level])
+                else:
+                    playsound('sounds/pick.wav')
+                    self.global_pos = 2
+                    self.change_rs_set(param=self.rs_485_mod[self.level] )
 
     def rs_232(self, but_num=None):
-        self.display_label.config(text=self.menu_prog_1[5][self.level])
-        if but_num == 'x':
-            playsound('sounds/pick.wav')
-            self.global_pos = 0
-            self.level = 0
-            self.display_label.config(text=self.menu_settings[self.local_pos])
-        elif but_num == 'right':
-            playsound('sounds/pick.wav')
-            if self.level == len(self.menu_prog_1[5]) - 1:
-                self.level = -1
-            self.level += 1
+        if self.global_pos == 2:
+            if but_num == 'x':
+                playsound('sounds/pick.wav')
+                self.global_pos = 1
+                self.display_label.config(text=self.menu_prog_1[5][self.level])
+            elif but_num == 'right':
+                playsound('sounds/pick.wav')
+                if self.level == len(self.rs_232_mode) - 1:
+                    self.level = -1
+                self.level += 1
+                self.display_label.config(text=f'РЕЖИМ: \n {self.rs_232_mode[self.level]}')
+            elif but_num == 'left':
+                playsound('sounds/pick.wav')
+                if self.level == 0:
+                    self.level = len(self.rs_232_mode)
+                self.level -= 1
+                self.display_label.config(text=f'РЕЖИМ: \n {self.rs_232_mode[self.level]}')
+            elif but_num == 'entr':
+                playsound('sounds/pick.wav')
+                playsound('sounds/pick.wav')
+                self.global_pos = 1
+                self.menu_prog_1[5][0] = f'РЕЖИМ: \n {self.rs_232_mode[self.level][1:]}'
+                self.display_label.config(text=self.menu_prog_1[5][0])
+                self.level = 0
+        else:
             self.display_label.config(text=self.menu_prog_1[5][self.level])
-        elif but_num == 'left':
-            playsound('sounds/pick.wav')
-            if self.level == 0:
-                self.level = len(self.menu_prog_1[5])
-            self.level -= 1
-            self.display_label.config(text=self.menu_prog_1[5][self.level])
-        elif but_num == 'entr' and self.level == 0:
-            self.global_pos = 2
-
+            if but_num == 'x':
+                playsound('sounds/pick.wav')
+                self.global_pos = 0
+                self.level = 0
+                self.display_label.config(text=self.menu_settings[self.local_pos])
+            elif but_num == 'right':
+                playsound('sounds/pick.wav')
+                if self.level == len(self.menu_prog_1[5]) - 1:
+                    self.level = -1
+                self.level += 1
+                self.display_label.config(text=self.menu_prog_1[5][self.level])
+            elif but_num == 'left':
+                playsound('sounds/pick.wav')
+                if self.level == 0:
+                    self.level = len(self.menu_prog_1[5])
+                self.level -= 1
+                self.display_label.config(text=self.menu_prog_1[5][self.level])
+            elif but_num == 'entr' and self.level == 0:
+                playsound('sounds/pick.wav')
+                self.global_pos = 2
+                self.display_label.config(text=self.menu_prog_1[5][0][:8] + '⬍' + self.menu_prog_1[5][0][8:])
 
     def prog_mode(self, but_num=None):
         self.programm_mode = True
@@ -1128,31 +1167,27 @@ class Main(tk.Frame):
 
     def change_rs_set(self, param, but_num=None, ):
         self.display_label.config(text=f'{param} {self.user_number}')
-        if self.level == 1:
-            if but_num == 'x':
-                pass
-            elif but_num == 'entr':
-                pass
-        else:
-            if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
-                playsound('sounds/pick.wav')
-                self.user_number += but_num
-                self.display_label.config(text=f'{param} {self.user_number}')
-            elif but_num == 'x' and len(self.user_number) != 0:
-                playsound('sounds/pick.wav')
-                self.user_number = ''
-                self.display_label.config(text=f'{param} {self.user_number}')
-            elif but_num == 'x' and len(self.user_number) == 0:
-                playsound('sounds/pick.wav')
-                self.display_label.config(text=self.menu_prog_1[4][self.level])
-            elif but_num == 'entr' and len(self.user_number) == 0:
-                playsound('sounds/pick.wav')
-            elif but_num == 'entr' and len(self.user_number) != 0:
-                playsound('sounds/pick.wav')
-                playsound('sounds/pick.wav')
-                self.rs_485_set[self.level] = self.user_number
-                self.user_number = ''
-                self.global_pos=1
+        if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            playsound('sounds/pick.wav')
+            self.user_number += but_num
+            self.display_label.config(text=f'{param} {self.user_number}')
+        elif but_num == 'x' and len(self.user_number) != 0:
+            playsound('sounds/pick.wav')
+            self.user_number = ''
+            self.display_label.config(text=f'{param} {self.user_number}')
+        elif but_num == 'x' and len(self.user_number) == 0:
+            playsound('sounds/pick.wav')
+            self.global_pos = 1
+            self.display_label.config(text=self.menu_prog_1[4][self.level])
+        elif but_num == 'entr' and len(self.user_number) == 0:
+            playsound('sounds/pick.wav')
+        elif but_num == 'entr' and len(self.user_number) != 0:
+            playsound('sounds/pick.wav')
+            playsound('sounds/pick.wav')
+            self.rs_485_set[self.level] = self.user_number
+            self.menu_prog_1[4][self.level] = self.rs_485_mod[self.level] + self.rs_485_set[self.level]
+            self.user_number = ''
+            self.global_pos = 1
 
     def prog_menu_func(self, but_num=None):
         if self.global_pos == 0:
