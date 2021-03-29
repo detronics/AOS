@@ -18,7 +18,7 @@ class Main(tk.Frame):
         self.passw_prog_stat = False
         self.buff_event_stat = False
         self.import_data_stat = False
-        self.sound = True
+        self.time_capture = True
         self.mistake = False
         self.test = False
         self.buffer_control = False
@@ -234,10 +234,6 @@ class Main(tk.Frame):
             self.check_password(but_num)
         elif self.main_menu_stat:
             self.main_menu(but_num)
-
-        elif but_num == 'mute':
-            # TODO допилить звук
-            self.sound = False
         else:
             self.start_time()
 
@@ -248,7 +244,8 @@ class Main(tk.Frame):
             self.level = 0
             self.display_label.config(text=self.buff_settings[self.global_pos])
         elif but_num == 'entr':
-            # TODO sound success
+            playsound('sounds/pick.wav')
+            playsound('sounds/pick.wav')
             self.level = 0
             self.buff_settings[self.global_pos] = f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}'
             self.display_label.config(text=f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}')
@@ -1497,40 +1494,48 @@ class Main(tk.Frame):
                         self.display_label.config(text=f'{param[self.local_pos]}{self.user_number}')
         elif self.choose_pass_abilities == 1:
             if but_num == 'x' and len(self.user_number) == 0:
+                playsound('sounds/pick.wav')
                 self.level = 0
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 self.choose_pass_abilities = 0
             elif but_num == 'right':
+                playsound('sounds/pick.wav')
                 if self.local_pos == 1:
                     self.local_pos = 0
                 else:
                     self.local_pos = 1
                 self.display_label.config(text=pass_param[self.local_pos])
             elif but_num == 'left':
+                playsound('sounds/pick.wav')
                 if self.local_pos == 0:
                     self.local_pos = 1
                 else:
                     self.local_pos = 0
                 self.display_label.config(text=pass_param[self.local_pos])
             elif but_num == 'entr' and self.local_pos == 0:
+                playsound('sounds/pick.wav')
                 self.choose_pass_abilities = 2
                 self.display_label.config(text=self.password_abilities[self.local_pos])
             elif but_num == 'entr' and self.local_pos == 1:
+                playsound('sounds/pick.wav')
                 self.choose_pass_abilities = 3
                 self.display_label.config(text='№ УРОВНЯ:')
 
         elif self.choose_pass_abilities == 2:
             if but_num == 'x':
+                playsound('sounds/pick.wav')
                 self.level = 0
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 self.choose_pass_abilities = 0
             elif but_num == 'right':
+                playsound('sounds/pick.wav')
                 if self.local_pos == 2:
                     self.local_pos = 0
                 else:
                     self.local_pos += 1
                 self.display_label.config(text=self.password_abilities[self.local_pos])
             elif but_num == 'left':
+                playsound('sounds/pick.wav')
                 if self.local_pos == 0:
                     self.local_pos = 2
                 else:
@@ -1538,7 +1543,8 @@ class Main(tk.Frame):
                 self.display_label.config(text=self.password_abilities[self.local_pos])
             elif but_num == 'entr':
                 playsound('sounds/pick.wav')
-                # TODO
+                playsound('sounds/pick.wav')
+
                 self.level = 0
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 self.choose_pass_abilities = 0
@@ -1552,7 +1558,6 @@ class Main(tk.Frame):
                 self.display_label.config(text=f'№ УРОВНЯ: {self.user_number}')
             elif but_num == 'entr' and len(self.user_number) != 0:
                 playsound('sounds/pick.wav')
-                # TODO
                 self.user_number = ''
                 self.level = 0
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
@@ -1563,15 +1568,15 @@ class Main(tk.Frame):
 
     def change_time(self, but_num=None, ):
         position_list = [0, 1, 3, 4, 6, 7, -8]
-        if self.sound:
+        if self.time_capture:
             self.tim = time.strftime("%H:%M:%S")
-            self.sound = False
+            self.time_capture = False
 
         if but_num == 'x':
             playsound('sounds/pick.wav')
             if self.local_pos > 0:
                 self.local_pos = 0
-                self.sound = True
+                self.time_capture = True
             elif self.temp_val >= 0:
                 self.global_pos = 1
                 self.level = 0
@@ -1584,7 +1589,7 @@ class Main(tk.Frame):
                 self.user_input = self.user_input[:1]
                 self.display_label.config(text=self.menu1[str(self.user_input)][0])
                 self.time_date_stat = 2
-                self.sound = True
+                self.time_capture = True
 
         elif but_num == 'entr':
             if not self.mistake:
@@ -1601,10 +1606,10 @@ class Main(tk.Frame):
                     self.user_input = self.user_input[:1]
                     self.display_label.config(text=self.menu1[str(self.user_input)][0])
                     self.time_date_stat = 2
-                    self.sound = True
+                    self.time_capture = True
             else:
                 playsound('sounds/deny.wav')
-                self.sound = True
+                self.time_capture = True
                 self.mistake = False
                 self.local_pos = 0
 
@@ -1632,11 +1637,11 @@ class Main(tk.Frame):
                     self.display_label.config(text=self.menu1[str(self.user_input)][0])
                     self.time_date_stat = 2
                     self.local_pos = 0
-                    self.sound = True
+                    self.time_capture = True
             elif self.mistake and self.local_pos == 6:
                 # TODO поменять звук отказа
                 playsound('sounds/deny.wav')
-                self.sound = True
+                self.time_capture = True
                 self.local_pos = 0
                 self.mistake = False
 
@@ -1653,16 +1658,14 @@ class Main(tk.Frame):
 
     def change_data(self, but_num=None):
         position_list = [0, 1, 3, 4, 6, 7, -8]
-        if self.sound:
+        if self.time_capture:
             self.dat = time.strftime("%d:%m:%y")
-            self.sound = False
-            # TODO переименовать переменную
-
+            self.time_capture = False
         if but_num == 'x':
             playsound('sounds/pick.wav')
             if self.local_pos > 0:
                 self.local_pos = 0
-                self.sound = True
+                self.time_capture = True
             elif self.temp_val >= 0:
                 self.global_pos = 1
                 self.level = 1
@@ -1675,7 +1678,7 @@ class Main(tk.Frame):
                 self.user_input = self.user_input[:1]
                 self.display_label.config(text=self.menu1[str(self.user_input)][0])
                 self.time_date_stat = 2
-                self.sound = True
+                self.time_capture = True
 
         elif but_num == 'entr':
             if not self.mistake:
@@ -1692,10 +1695,10 @@ class Main(tk.Frame):
                     self.user_input = self.user_input[:1]
                     self.display_label.config(text=self.menu1[str(self.user_input)][0])
                     self.time_date_stat = 2
-                    self.sound = True
+                    self.time_capture = True
             else:
                 playsound('sounds/deny.wav')
-                self.sound = True
+                self.time_capture = True
                 self.mistake = False
                 self.local_pos = 0
 
@@ -1725,11 +1728,11 @@ class Main(tk.Frame):
                     self.display_label.config(text=self.menu1[str(self.user_input)][0])
                     self.time_date_stat = 2
                     self.local_pos = 0
-                    self.sound = True
+                    self.time_capture = True
             elif self.mistake and self.local_pos == 6:
                 # TODO поменять звук отказа
                 playsound('sounds/deny.wav')
-                self.sound = True
+                self.time_capture = True
                 self.local_pos = 0
                 self.mistake = False
 
