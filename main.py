@@ -521,7 +521,6 @@ class Main(tk.Frame):
                     self.display_label.config(text='№ ВХОДА/ВЫХОДА:')
 
     def check_password(self, but_num):
-        # print('check password')
         playsound('sounds/pick.wav')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             self.user_input += but_num
@@ -607,7 +606,6 @@ class Main(tk.Frame):
                 self.display_label.after(1000, self.timer)
 
     def main_menu(self, but_num):
-        # print('main', self.user_input, self.level, self.local_pos, self.global_pos)
         playsound('sounds/pick.wav')
         if self.global_pos == 0:
             self.main_0(but_num)
@@ -617,7 +615,6 @@ class Main(tk.Frame):
             self.main_2(but_num)
 
     def main_0(self, but_num):
-        print('main_0', self.user_input, self.level, self.local_pos, self.global_pos)
         if but_num in ['1', '2', '4', '5', '6']:
             self.user_input += but_num
             self.local_pos = 0
