@@ -266,5 +266,233 @@ class main_2_test(unittest.TestCase):
 
 class main_3_test(unittest.TestCase):
 
+    def test_x_not_impport(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number = 0, 2, '421', 1, False,0,''
+        Example.main_3(but_num='x')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number]
+        self.assertListEqual(result, [0, 2, '421', 0, True,0,''])
+
+    def test_entr_not_impport(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number = 0, 2, '421', 1, False,0,''
+        Example.main_3(but_num='entr')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number]
+        self.assertListEqual(result, [2, 2, '421', 1, True,0,''])
+
+    def test_right_import(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number = 2, 2, '421', 1, True,0,''
+        Example.main_3(but_num='right')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number]
+        self.assertListEqual(result, [3, 2, '421', 1, True,0,''])
+
+    def test_left_import(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number = 3, 2, '421', 1, True,0,''
+        Example.main_3(but_num='left')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number]
+        self.assertListEqual(result, [2, 2, '421', 1, True,0,''])
+
+    def test_x_import(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt = 3, 2, '421', 1, True,0,'5', {'5': [0, 0]}
+        Example.main_3(but_num='x')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt]
+        self.assertListEqual(result, [0, 2, '421', 1, False,0,'5',{'5': [0, 0]}])
+
+    def test_entr_import421(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt = 3, 2, '421', 1, True,0,'5', {'5': [0, 0]}
+        Example.main_3(but_num='entr')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt]
+        self.assertListEqual(result, [3, 2, '421', 1, False,0,'5',{'5': [0, 0]}])
+
+    def test_entr_import422v1(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt = 2, 2, '422', 1, True,0,'5', {'5': [0, 0]}
+        Example.main_3(but_num='entr')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt]
+        self.assertListEqual(result, [0, 2, '422', 1, False,0,'5',{'5': [0, 0]}])
+
+    def test_entr_import422v2(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt = 3, 2, '422', 1, True,0,'5', {'5': [0, 0]}
+        Example.main_3(but_num='entr')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt]
+        self.assertListEqual(result, [3, 2, '422', 1, False,2,'5',{'5': [0, 0]}])
+
+    def test_entr_aspt(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt = 3, 2, '422', 1, True,2,'5', {'5': [0, 0]}
+        Example.main_3(but_num='entr')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt]
+        self.assertListEqual(result, [2, 2, '422', 1, False,0,'5',{'5': [1, 0]}])
+
+    def test_x_aspt(self):
+        Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt = 3, 2, '422', 1, True,2,'5', {'5': [0, 0]}
+        Example.main_3(but_num='x')
+        result = [Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat,Example.aspt_or_corrett_time, Example.user_number,Example.data_base_aspt]
+        self.assertListEqual(result, [0, 2, '422', 1, False,0,'5',{'5': [0, 0]}])
+
+class menu_menu_1_test(unittest.TestCase):
+
+    def test_x(self):
+        Example.menu_menu_stat, Example.local_pos,Example.global_pos = True,0,0
+        Example.menu_menu_1(but_num='x')
+        result = [Example.menu_menu_stat, Example.local_pos,Example.global_pos ]
+        self.assertListEqual(result, [False,0,0])
+
+    def test_right(self):
+        Example.menu_menu_stat, Example.local_pos,Example.global_pos = True,0,0
+        Example.menu_menu_1(but_num='right')
+        result = [Example.menu_menu_stat, Example.local_pos,Example.global_pos ]
+        self.assertListEqual(result, [True,1,0])
+
+    def test_left(self):
+        Example.menu_menu_stat, Example.local_pos,Example.global_pos = True,0,0
+        Example.menu_menu_1(but_num='left')
+        result = [Example.menu_menu_stat, Example.local_pos,Example.global_pos ]
+        self.assertListEqual(result, [True,1,0])
+
+    def test_entr_l0(self):
+        Example.menu_menu_stat, Example.local_pos,Example.global_pos = True,0,0
+        Example.menu_menu_1(but_num='entr')
+        result = [Example.menu_menu_stat, Example.local_pos,Example.global_pos]
+        self.assertListEqual(result, [False,0,0])
+
+    def test_entr_l1(self):
+        Example.menu_menu_stat, Example.local_pos,Example.global_pos = True,1,0
+        Example.menu_menu_1(but_num='entr')
+        result = [Example.menu_menu_stat, Example.local_pos,Example.global_pos]
+        self.assertListEqual(result, [True,0,1])
+
+class menu_menu_2_test(unittest.TestCase):
+
+    def test_x(self):
+        Example.menu_menu_stat, Example.local_pos, Example.global_pos = True, 0, 1
+        Example.menu_menu_2(but_num='x')
+        result = [Example.menu_menu_stat, Example.local_pos, Example.global_pos]
+        self.assertListEqual(result, [True, 0, 0])
+
+    def test_right(self):
+        Example.menu_menu_stat, Example.local_pos, Example.global_pos = True, 0, 1
+        Example.menu_menu_2(but_num='right')
+        result = [Example.menu_menu_stat, Example.local_pos, Example.global_pos]
+        self.assertListEqual(result, [True, 1, 1])
+
+    def test_left(self):
+        Example.menu_menu_stat, Example.local_pos, Example.global_pos = True, 0, 1
+        Example.menu_menu_2(but_num='left')
+        result = [Example.menu_menu_stat, Example.local_pos, Example.global_pos]
+        self.assertListEqual(result, [True, 5, 1])
+
+class menu_home_func_test(unittest.TestCase):
+
+    def test_x(self):
+        Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input = True, 0, 0,''
+        Example.menu_home_func(but_num='x')
+        result = [Example.home_menu_stat, Example.local_pos, Example.global_pos,Example.user_input]
+        self.assertListEqual(result, [False, 0, 0, ''])
+
+    def test_right(self):
+        Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input = True, 0, 0,''
+        Example.menu_home_func(but_num='right')
+        result = [Example.home_menu_stat, Example.local_pos, Example.global_pos,Example.user_input]
+        self.assertListEqual(result, [True, 1, 0, ''])
+
+    def test_left(self):
+        Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input = True, 0, 0,''
+        Example.menu_home_func(but_num='left')
+        result = [Example.home_menu_stat, Example.local_pos, Example.global_pos,Example.user_input]
+        self.assertListEqual(result, [True, 4, 0, ''])
+
+    def test_entr_v0(self):
+        Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input, Example.buff_event_stat = True, 0, 0,'',False
+        Example.menu_home_func(but_num='entr')
+        result = [Example.home_menu_stat, Example.local_pos, Example.global_pos,Example.user_input,Example.buff_event_stat]
+        self.assertListEqual(result, [False, 1, 0, '',True])
+
+    def test_entr_v1(self):
+        Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input, Example.buff_event_stat = True, 1, 0,'',False
+        Example.menu_home_func(but_num='entr')
+        result = [Example.home_menu_stat, Example.local_pos, Example.global_pos,Example.user_input,Example.buff_event_stat]
+        self.assertListEqual(result, [False, 0, 0, '',False])
+
+    def test_entr_v2(self):
+        Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input, Example.testing_ind = True, 2, 0,'',False
+        Example.menu_home_func(but_num='entr')
+        result = [Example.home_menu_stat, Example.local_pos, Example.global_pos,Example.user_input,Example.testing_ind]
+        self.assertListEqual(result, [False, 0, 0, '',True])
+
+    def test_entr_v3(self):
+        Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input, Example.entering_password,Example.change_pass = True, 3, 0,'',False,0
+        Example.menu_home_func(but_num='entr')
+        result = [Example.home_menu_stat, Example.local_pos, Example.global_pos,Example.user_input,Example.entering_password,Example.change_pass]
+        self.assertListEqual(result, [False, 0, 0, '',True,1])
+
+    def test_entr_v4(self):
+        Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input, Example.entering_password,Example.change_pass = True, 4, 0,'',False,0
+        Example.menu_home_func(but_num='entr')
+        result = [Example.home_menu_stat, Example.local_pos, Example.global_pos,Example.user_input,Example.entering_password,Example.change_pass]
+        self.assertListEqual(result, [False, 0, 0, '',True,0])
+
+class date_and_time_test(unittest.TestCase):
+
+    def test_x(self):
+        Example.global_pos,Example.level,Example.time_date_stat  = 1,1,2
+        Example.date_and_time(but_num='x')
+        result = [  Example.global_pos,Example.level,Example.time_date_stat]
+        self.assertListEqual(result, [0, 0, 2])
+
+    def test_right(self):
+        Example.global_pos,Example.level,Example.time_date_stat  = 1,1,2
+        Example.date_and_time(but_num='right')
+        result = [  Example.global_pos,Example.level,Example.time_date_stat]
+        self.assertListEqual(result, [1, 2, 2])
+
+    def test_left(self):
+        Example.global_pos,Example.level,Example.time_date_stat  = 1,1,2
+        Example.date_and_time(but_num='left')
+        result = [Example.global_pos,Example.level,Example.time_date_stat]
+        self.assertListEqual(result, [1, 0, 2])
+
+    def test_entr_l0(self):
+        Example.global_pos,Example.level,Example.time_date_stat  = 1,0,2
+        Example.date_and_time(but_num='entr')
+        result = [Example.global_pos,Example.level,Example.time_date_stat]
+        self.assertListEqual(result, [2, 0, 1])
+
+    def test_entr_l1(self):
+        Example.global_pos,Example.level,Example.time_date_stat = 1,1,2
+        Example.date_and_time(but_num='entr')
+        result = [Example.global_pos,Example.level,Example.time_date_stat]
+        self.assertListEqual(result, [3, 1, 1])
+
+    def test_entr_l2(self):
+        Example.global_pos,Example.level,Example.time_date_stat = 1,2,2
+        Example.date_and_time(but_num='entr')
+        result = [Example.global_pos,Example.level,Example.time_date_stat]
+        self.assertListEqual(result, [4, 2, 2])
+
+class config_device_test(unittest.TestCase):
+
+    def test_x_unfill(self):
+        Example.global_pos, Example.local_pos,Example.level, Example.user_number = 1, 1, 0, ''
+        Example.config_device(but_num='x')
+        result = [Example.global_pos,Example.local_pos, Example.level, Example.user_number]
+        self.assertListEqual(result, [0, 1, 0, ''])
+
+    def test_x_fill(self):
+        Example.global_pos, Example.local_pos,Example.level, Example.user_number = 1, 1, 0, '12'
+        Example.config_device(but_num='x')
+        result = [Example.global_pos,Example.local_pos, Example.level, Example.user_number]
+        self.assertListEqual(result, [1, 1, 0, ''])
+
+    def test_entr_fill(self):
+        Example.global_pos, Example.local_pos,Example.level, Example.user_number = 1, 1, 0, '12'
+        Example.config_device(but_num='entr')
+        result = [Example.global_pos,Example.local_pos, Example.level, Example.user_number]
+        self.assertListEqual(result, [1, 1, 0, ''])
+
+    def test_number(self):
+        Example.global_pos, Example.local_pos,Example.level, Example.user_number = 1, 1, 0, ''
+        Example.config_device(but_num='1')
+        result = [Example.global_pos,Example.local_pos, Example.level, Example.user_number]
+        self.assertListEqual(result, [1, 1, 0, '1'])
+
+class settings_s2000m_test(unittest.TestCase):
+
     def test_x(self):
         pass
