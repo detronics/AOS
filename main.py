@@ -1033,7 +1033,7 @@ class Main(tk.Frame):
             self.after(1000, self.config_device)
 
     def settings_s2000m(self, but_num=None):
-        print(self.local_pos, self.level,self.global_pos)
+        print(self.local_pos, self.level, self.global_pos)
         self.display_label.config(text=self.menu_prog_1[3][self.level])
         if but_num == 'x':
             playsound('sounds/pick.wav')
@@ -1090,7 +1090,7 @@ class Main(tk.Frame):
                 else:
                     playsound('sounds/pick.wav')
                     self.global_pos = 2
-                    self.change_rs_set(param=self.rs_485_mod[self.level] )
+                    self.change_rs_set(param=self.rs_485_mod[self.level])
 
     def rs_232(self, but_num=None):
         if self.global_pos == 2:
@@ -1701,7 +1701,8 @@ class Main(tk.Frame):
             playsound('sounds/pick.wav')
             if int(self.dat[:2]) > 31 or int(self.dat[3:5]) > 12:
                 self.mistake = True
-            else:self.mistake = False
+            else:
+                self.mistake = False
             temp = list(self.dat)
             self.dat = ''
             temp[position_list[self.local_pos]] = but_num
@@ -1868,6 +1869,7 @@ class Main(tk.Frame):
             else:
                 self.local_pos = 0
                 self.after(1500, self.import_data)
+
 
 if __name__ == '__main__':
     root = tk.Tk()
