@@ -817,7 +817,6 @@ class Main(tk.Frame):
                 self.local_pos = 0
                 self.import_data_stat = False
                 self.aspt_or_corrett_time = 422 - int(self.user_input)
-                self.level = 1
                 self.display_label.config(
                     text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_or_corrett_time]])
         else:
@@ -922,6 +921,9 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu_menu_list[self.local_pos])
 
     def menu_home_func(self, but_num):
+        self.global_pos = 0
+        self.user_input = ''
+        self.user_number = ''
         playsound('sounds/pick.wav')
         if but_num == 'right':
             if self.local_pos == 4:
@@ -938,8 +940,6 @@ class Main(tk.Frame):
         elif but_num == 'x':
             self.home_menu_stat = False
             self.local_pos = 0
-            self.global_pos = 0
-            self.user_input = ''
             self.start_time()
 
         elif but_num == 'entr':
@@ -960,14 +960,12 @@ class Main(tk.Frame):
                 self.display_label.config(text='⬍ С2000М')
             elif self.local_pos == 3:
                 self.local_pos = 0
-                self.global_pos = 0
                 self.change_pass = 1
                 self.home_menu_stat = False
                 self.entering_password = True
                 self.display_label.config(text='ПАРОЛЬ:')
             elif self.local_pos == 4:
                 self.local_pos = 0
-                self.global_pos = 0
                 self.home_menu_stat = False
                 self.entering_password = True
                 self.display_label.config(text='ПАРОЛЬ:')
@@ -1025,7 +1023,6 @@ class Main(tk.Frame):
         elif but_num == 'x' and len(self.user_number) == 0:
             playsound('sounds/pick.wav')
             self.global_pos = 0
-            self.level = 0
             self.display_label.config(text=self.menu_settings[self.local_pos])
         elif but_num == 'entr' and len(self.user_number) == 0:
             playsound('sounds/deny.wav')
@@ -1036,7 +1033,7 @@ class Main(tk.Frame):
             self.after(1000, self.config_device)
 
     def settings_s2000m(self, but_num=None):
-        print(self.local_pos, self.level)
+        print(self.local_pos, self.level,self.global_pos)
         self.display_label.config(text=self.menu_prog_1[3][self.level])
         if but_num == 'x':
             playsound('sounds/pick.wav')
