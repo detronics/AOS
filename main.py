@@ -1033,7 +1033,6 @@ class Main(tk.Frame):
             self.after(1000, self.config_device)
 
     def settings_s2000m(self, but_num=None):
-        print(self.local_pos, self.level, self.global_pos)
         self.display_label.config(text=self.menu_prog_1[3][self.level])
         if but_num == 'x':
             playsound('sounds/pick.wav')
@@ -1093,6 +1092,7 @@ class Main(tk.Frame):
                     self.change_rs_set(param=self.rs_485_mod[self.level])
 
     def rs_232(self, but_num=None):
+        print(self.level, self.local_pos, self.global_pos)
         if self.global_pos == 2:
             if but_num == 'x':
                 playsound('sounds/pick.wav')
@@ -1310,6 +1310,7 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu_home[self.local_pos])
 
     def test_detector(self, but_num=None):
+        print(self.user_input, self.local_pos, self.passw_stat, self.main_menu_stat, self.test)
         # TODO уточнить работу данной функции куда возращается функция при включении/выключениии темта
         if len(self.user_input) < 3:
             playsound('sounds/pick.wav')
@@ -1361,10 +1362,8 @@ class Main(tk.Frame):
                 self.after(10, self.display_label.config(text='НЕТ ПРИБОРА'))
                 self.after(500, self.test_detector)
             elif but_num == 'entr' and len(self.user_number) != 0:
-                print('lol')
                 # self.data_base.insert(self.level, self.user_number)
                 if self.level < len(self.menu3[self.user_input]) - 1:
-                    print('lol1')
                     self.user_number = ''
                     self.level += 1
                     param = self.menu3[self.user_input][self.level]
