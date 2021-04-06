@@ -441,7 +441,6 @@ class Main(tk.Frame):
                     self.display_label.config(text=self.buff_settings[self.global_pos])
                 if self.local_pos == 1:
                     self.level += 1
-                    print(self.level)
                     self.display_label.config(text=f'Выбор: ⬍ВСЕ')
 
     def choose_device(self, but_num=None):

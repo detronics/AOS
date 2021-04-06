@@ -5,7 +5,7 @@ from main import Main
 Example = Main(root=tk.Tk())
 
 
-class main_0_test(unittest.TestCase):
+class Main0Test(unittest.TestCase):
 
     def test_right(self):
         Example.local_pos, Example.global_pos, Example.passw_stat, Example.main_menu_stat, Example.user_input = 0, 0, False, False, ''
@@ -51,7 +51,7 @@ class main_0_test(unittest.TestCase):
         self.assertListEqual(result, [0, 1, False, False, '3', True])
 
 
-class check_main_pass_test(unittest.TestCase):
+class CheckMainPassTest(unittest.TestCase):
 
     def test_number(self):
         Example.passw_stat, Example.main_menu_stat, Example.user_input = False, False, ''
@@ -96,7 +96,7 @@ class check_main_pass_test(unittest.TestCase):
         self.assertListEqual(result, [True])
 
 
-class check_prog_passs_test(unittest.TestCase):
+class CheckProgPassTest(unittest.TestCase):
 
     def test_x_unfill(self):
         Example.entering_password, Example.times, Example.user_input, Example.change_pass, Example.passw_prog_stat, Example.home_menu_stat = True, False, '', 0, False, False
@@ -148,7 +148,7 @@ class check_prog_passs_test(unittest.TestCase):
         self.assertListEqual(result, [False, True, '', 0, False, False])
 
 
-class main_1_test(unittest.TestCase):
+class Main1Test(unittest.TestCase):
 
     def test_x(self):
         Example.local_pos, Example.global_pos, Example.user_input, Example.main_menu_stat, Example.passw_stat, Example.test = 0, 1, '1', True, True, False
@@ -218,7 +218,7 @@ class main_1_test(unittest.TestCase):
         self.assertListEqual(result, [0, 1, '22', True, True, False, True])
 
 
-class main_2_test(unittest.TestCase):
+class Main2Test(unittest.TestCase):
 
     def test_x(self):
         Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat = 0, 2, '42', 0, False
@@ -280,7 +280,7 @@ class main_2_test(unittest.TestCase):
         self.assertListEqual(result, [0, 2, '421', '1', 1, False])
 
 
-class main_3_test(unittest.TestCase):
+class Main3Test(unittest.TestCase):
 
     def test_x_not_impport(self):
         Example.local_pos, Example.global_pos, Example.user_input, Example.level, Example.import_data_stat, Example.aspt_or_corrett_time, Example.user_number = 0, 2, '421', 1, False, 0, ''
@@ -359,7 +359,7 @@ class main_3_test(unittest.TestCase):
         self.assertListEqual(result, [0, 2, '422', 1, False, 0, '5', {'5': [0, 0]}])
 
 
-class menu_menu_1_test(unittest.TestCase):
+class MenuMenu1Test(unittest.TestCase):
 
     def test_x(self):
         Example.menu_menu_stat, Example.local_pos, Example.global_pos = True, 0, 0
@@ -392,7 +392,7 @@ class menu_menu_1_test(unittest.TestCase):
         self.assertListEqual(result, [True, 0, 1])
 
 
-class menu_menu_2_test(unittest.TestCase):
+class MenuMenu2Test(unittest.TestCase):
 
     def test_x(self):
         Example.menu_menu_stat, Example.local_pos, Example.global_pos = True, 0, 1
@@ -413,7 +413,7 @@ class menu_menu_2_test(unittest.TestCase):
         self.assertListEqual(result, [True, 5, 1])
 
 
-class menu_home_func_test(unittest.TestCase):
+class MenuHomeFuncTest(unittest.TestCase):
 
     def test_x(self):
         Example.home_menu_stat, Example.local_pos, Example.global_pos, Example.user_input = True, 0, 0, ''
@@ -469,7 +469,7 @@ class menu_home_func_test(unittest.TestCase):
         self.assertListEqual(result, [False, 0, 0, '', True, 0])
 
 
-class date_and_time_test(unittest.TestCase):
+class DateAndTimeTest(unittest.TestCase):
 
     def test_x(self):
         Example.global_pos, Example.level, Example.time_date_stat = 1, 1, 2
@@ -508,7 +508,7 @@ class date_and_time_test(unittest.TestCase):
         self.assertListEqual(result, [4, 2, 2])
 
 
-class config_device_test(unittest.TestCase):
+class ConfigDeviceTest(unittest.TestCase):
 
     def test_x_unfill(self):
         Example.global_pos, Example.local_pos, Example.level, Example.user_number = 1, 1, 0, ''
@@ -535,7 +535,7 @@ class config_device_test(unittest.TestCase):
         self.assertListEqual(result, [1, 1, 0, '1'])
 
 
-class settings_s2000m_test(unittest.TestCase):
+class SettingsS2000mTest(unittest.TestCase):
 
     def test_x(self):
         Example.global_pos, Example.level, Example.local_pos = 1, 0, 2
@@ -556,7 +556,7 @@ class settings_s2000m_test(unittest.TestCase):
         self.assertListEqual(result, [1, 5, 2])
 
 
-class rs_485_test(unittest.TestCase):
+class Rs485Test(unittest.TestCase):
 
     def test_x(self):
         Example.level, Example.local_pos, Example.global_pos = 0, 3, 1
@@ -589,7 +589,7 @@ class rs_485_test(unittest.TestCase):
         self.assertListEqual(result, [1, 3, 1])
 
 
-class rs_232_test(unittest.TestCase):
+class Rs232Test(unittest.TestCase):
 
     def test_x_g2(self):
         Example.level, Example.local_pos, Example.global_pos = 0, 4, 2
@@ -640,7 +640,7 @@ class rs_232_test(unittest.TestCase):
         self.assertListEqual(result, [0, 4, 2])
 
 
-class prog_mode_test(unittest.TestCase):
+class ProgModeTest(unittest.TestCase):
 
     def test_x(self):
         Example.level, Example.local_pos, Example.global_pos, Example.programm_mode, Example.passw_prog_stat, Example.user_input = 0, 4, 2, True, True, '2'
@@ -650,7 +650,7 @@ class prog_mode_test(unittest.TestCase):
         self.assertListEqual(result, [0, 0, 0, False, False, ''])
 
 
-class change_rs_set_test(unittest.TestCase):
+class ChangeRsSetTest(unittest.TestCase):
 
     def test_x_unfill(self):
         Example.user_number, Example.level, Example.local_pos, Example.global_pos = '', 0, 2, 3
@@ -677,7 +677,7 @@ class change_rs_set_test(unittest.TestCase):
         self.assertListEqual(result, ['', 0, 2, 1])
 
 
-class prog_menu_func_test(unittest.TestCase):
+class ProgMenuFuncTest(unittest.TestCase):
 
     def test_x(self):
         Example.level, Example.local_pos, Example.global_pos, Example.passw_prog_stat = 0, 0, 0, True
@@ -698,7 +698,7 @@ class prog_menu_func_test(unittest.TestCase):
         self.assertListEqual(result, [0, 5, 0, True])
 
 
-class buff_event_func_test(unittest.TestCase):
+class BuffEventFuncTest(unittest.TestCase):
 
     def test_xlbuf(self):
         Example.global_pos, Example.local_pos, Example.level, Example.time_date_stat, Example.user_input, Example.buffer_control, Example.buff_event_stat = 0, 1, 0, 2, '', False, True
@@ -757,7 +757,7 @@ class buff_event_func_test(unittest.TestCase):
         self.assertListEqual(result, [0, 1, 0, 2, '', False, True])
 
 
-class test_indik_func_test(unittest.TestCase):
+class TestIndikFuncTest(unittest.TestCase):
 
     def test_x(self):
         Example.local_pos, Example.home_menu_stat, Example.testing_ind = 0, False, True
@@ -784,7 +784,7 @@ class test_indik_func_test(unittest.TestCase):
         self.assertListEqual(result, [2, True, False])
 
 
-class test_detector_test(unittest.TestCase):
+class TestDetectorTest(unittest.TestCase):
 
     def test_x_len2(self):
         Example.local_pos, Example.user_input, Example.passw_stat, Example.main_menu_stat, Example.test = 0, '63', False, False, True
@@ -853,7 +853,7 @@ class test_detector_test(unittest.TestCase):
         self.assertListEqual(result, [0, '631', False, False, True, '', 2])
 
 
-class change_password_func_test(unittest.TestCase):
+class ChangePasswordFuncTest(unittest.TestCase):
 
     def test_x_lv1(self):
         Example.level, Example.local_pos, Example.user_number = 1, 0, '',
@@ -951,7 +951,7 @@ class change_password_func_test(unittest.TestCase):
         self.assertListEqual(result, [3, 0, '', False, 2, False])
 
 
-class new_password_entering_test(unittest.TestCase):
+class NewPasswordEnteringTest(unittest.TestCase):
 
     def test_x_ab0(self):
         Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities = 1, 0, '', True, 0
@@ -1079,7 +1079,7 @@ class new_password_entering_test(unittest.TestCase):
         self.assertListEqual(result, [1, 1, '', True, 3, ''])
 
 
-class change_time_test(unittest.TestCase):
+class ChangeTimeTest(unittest.TestCase):
 
     def test_x_v1(self):
         Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos, \
@@ -1154,7 +1154,7 @@ class change_time_test(unittest.TestCase):
         self.assertListEqual(result, [True, 0, '61', 1, 1, -1, 1, False, False, False])
 
 
-class correct_time_test(unittest.TestCase):
+class CorrectTimeTest(unittest.TestCase):
 
     def test_x(self):
         Example.level, Example.local_pos, Example.global_pos, Example.corrector_time, Example.aspt_or_corrett_time = 2, 0, 1, '0.00', 0
@@ -1185,7 +1185,7 @@ class correct_time_test(unittest.TestCase):
         self.assertListEqual(result, [2, 0, 1, -0.17, 0])
 
 
-class import_data_test(unittest.TestCase):
+class ImportDataTest(unittest.TestCase):
 
     def test_x_unfill_l0(self):
         Example.level, Example.local_pos, Example.global_pos, Example.user_number, Example.user_input, Example.import_data_stat = 0, 0, 1, '', '22', True
@@ -1237,28 +1237,214 @@ class import_data_test(unittest.TestCase):
         self.assertListEqual(result, [2, 0, 1, '', '41', True])
 
 
-class choose_type_events_test(unittest.TestCase):
+class ChooseTypeEventsTest(unittest.TestCase):
 
     def test_x(self):
         Example.level, Example.type_event_val = 1, 0
         Example.choose_type_events(but_num='x')
-        result = [Example.level,Example.type_event_val]
+        result = [Example.level, Example.type_event_val]
         self.assertListEqual(result, [0, 0])
 
     def test_entr(self):
         Example.level, Example.type_event_val = 1, 0
         Example.choose_type_events(but_num='entr')
-        result = [Example.level,Example.type_event_val]
+        result = [Example.level, Example.type_event_val]
         self.assertListEqual(result, [0, 0])
 
     def test_right(self):
         Example.level, Example.type_event_val = 1, 0
         Example.choose_type_events(but_num='right')
-        result = [Example.level,Example.type_event_val]
+        result = [Example.level, Example.type_event_val]
         self.assertListEqual(result, [1, 1])
 
     def test_left(self):
         Example.level, Example.type_event_val = 1, 0
         Example.choose_type_events(but_num='left')
-        result = [Example.level,Example.type_event_val]
+        result = [Example.level, Example.type_event_val]
         self.assertListEqual(result, [1, 7])
+
+
+class SetDataRangeTest(unittest.TestCase):
+
+    def test_x_v1(self):
+        Example.level, Example.local_pos, Example.mistake, Example.time_date_stat = 1, 2, False, 2
+        Example.set_data_range(but_num='x')
+        result = [Example.level, Example.local_pos, Example.mistake, Example.time_date_stat]
+        self.assertListEqual(result, [1, 1, False, 2])
+
+    def test_x_v2(self):
+        Example.level, Example.local_pos, Example.mistake, Example.time_date_stat = 2, 1, False, 2
+        Example.set_data_range(but_num='x')
+        result = [Example.level, Example.local_pos, Example.mistake, Example.time_date_stat]
+        self.assertListEqual(result, [1, 1, False, 2])
+
+    def test_x_v3(self):
+        Example.level, Example.local_pos, Example.mistake, Example.time_date_stat = 1, 0, False, 2
+        Example.set_data_range(but_num='x')
+        result = [Example.level, Example.local_pos, Example.mistake, Example.time_date_stat]
+        self.assertListEqual(result, [0, 1, False, 2])
+
+    def test_entr_mist(self):
+        Example.level, Example.local_pos, Example.mistake, Example.time_date_stat = 1, 2, True, 2
+        Example.set_data_range(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.mistake, Example.time_date_stat]
+        self.assertListEqual(result, [1, 1, False, 2])
+
+    def test_entr_notmist(self):
+        Example.level, Example.local_pos, Example.mistake, Example.time_date_stat = 1, 2, False, 2
+        Example.set_data_range(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.mistake, Example.time_date_stat]
+        self.assertListEqual(result, [2, 1, False, 2])
+
+    def test_number_v1(self):
+        Example.level, Example.local_pos, Example.mistake, Example.time_date_stat = 1, 2, False, 2
+        Example.set_data_range(but_num='1')
+        result = [Example.level, Example.local_pos, Example.mistake, Example.time_date_stat]
+        self.assertListEqual(result, [1, 3, False, 2])
+
+    def test_number_v2(self):
+        Example.level, Example.local_pos, Example.mistake, Example.time_date_stat = 1, 7, False, 2
+        Example.set_data_range(but_num='1')
+        result = [Example.level, Example.local_pos, Example.mistake, Example.time_date_stat]
+        self.assertListEqual(result, [2, 1, False, 2])
+
+    def test_number_v3(self):
+        Example.level, Example.local_pos, Example.mistake, Example.time_date_stat = 1, 7, True, 2
+        Example.set_data_range(but_num='1')
+        result = [Example.level, Example.local_pos, Example.mistake, Example.time_date_stat]
+        self.assertListEqual(result, [1, 1, False, 2])
+
+
+class ChooseAreaTest(unittest.TestCase):
+
+    def test_x_fill_lv3(self):
+        Example.level, Example.local_pos, Example.user_number = 3, 2, '12'
+        Example.choose_area(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [3, 2, ''])
+
+    def test_x_unfill_lv3(self):
+        Example.level, Example.local_pos, Example.user_number = 3, 2, ''
+        Example.choose_area(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [0, 2, ''])
+
+    def test_number_lv3(self):
+        Example.level, Example.local_pos, Example.user_number = 3, 2, ''
+        Example.choose_area(but_num='1')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [3, 2, '1'])
+
+    def test_entr_unfill_lv3(self):
+        Example.level, Example.local_pos, Example.user_number = 3, 2, ''
+        Example.choose_area(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [0, 2, ''])
+
+    def test_entr_fill_lv3(self):
+        Example.level, Example.local_pos, Example.user_number = 3, 2, '12'
+        Example.choose_area(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [0, 2, ''])
+
+    def test_x_lv2(self):
+        Example.level, Example.local_pos, Example.user_number = 2, 2, ''
+        Example.choose_area(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [0, 2, ''])
+
+    def test_entr_lv2(self):
+        Example.level, Example.local_pos, Example.user_number = 2, 2, ''
+        Example.choose_area(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [0, 2, ''])
+
+    def test_x_lv1(self):
+        Example.level, Example.local_pos, Example.user_number = 1, 2, ''
+        Example.choose_area(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [0, 1, ''])
+
+    def test_right_lv1(self):
+        Example.level, Example.local_pos, Example.user_number = 1, 2, ''
+        Example.choose_area(but_num='right')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [1, 3, ''])
+
+    def test_left_lv1(self):
+        Example.level, Example.local_pos, Example.user_number = 1, 2, ''
+        Example.choose_area(but_num='left')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [1, 1, ''])
+
+    def test_entr_lv1_l3(self):
+        Example.level, Example.local_pos, Example.user_number = 1, 3, ''
+        Example.choose_area(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [0, 1, ''])
+
+    def test_entr_lv1_l2(self):
+        Example.level, Example.local_pos, Example.user_number = 1, 2, ''
+        Example.choose_area(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [2, 2, ''])
+
+    def test_entr_lv1_l1(self):
+        Example.level, Example.local_pos, Example.user_number = 1, 3, ''
+        Example.choose_area(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number]
+        self.assertListEqual(result, [3, 1, ''])
+
+
+class ChooseElement(unittest.TestCase):
+
+    def test_x_lv2(self):
+        Example.level, Example.local_pos, = 2, 1
+        Example.choose_element(but_num='x')
+        result = [Example.level, Example.local_pos]
+        self.assertListEqual(result, [0, 1])
+
+    def test_entr_lv2(self):
+        Example.level, Example.local_pos, = 2, 1
+        Example.choose_element(but_num='entr')
+        result = [Example.level, Example.local_pos]
+        self.assertListEqual(result, [0, 1])
+
+    def test_x_lv1(self):
+        Example.level, Example.local_pos, = 1, 1
+        Example.choose_element(but_num='x')
+        result = [Example.level, Example.local_pos]
+        self.assertListEqual(result, [0, 1])
+
+    def test_right_lv1(self):
+        Example.level, Example.local_pos, = 1, 0
+        Example.choose_element(but_num='right')
+        result = [Example.level, Example.local_pos]
+        self.assertListEqual(result, [1, 1])
+
+    def test_left_lv1(self):
+        Example.level, Example.local_pos, = 1, 0
+        Example.choose_element(but_num='left')
+        result = [Example.level, Example.local_pos]
+        self.assertListEqual(result, [1, 1])
+
+    def test_entr_lv1_l0(self):
+        Example.level, Example.local_pos, = 1, 0
+        Example.choose_element(but_num='entr')
+        result = [Example.level, Example.local_pos]
+        self.assertListEqual(result, [0, 0])
+
+    def test_entr_lv1_l1(self):
+        Example.level, Example.local_pos, = 1, 1
+        Example.choose_element(but_num='entr')
+        result = [Example.level, Example.local_pos]
+        self.assertListEqual(result, [2, 1])
+
+
+class ChooseDevice(unittest.TestCase):
+
+    def test_x_lv2(self):
+        Example.level, Example.local_pos,Example.user_number = 2, 1,''
+        Example.choose_device(but_num='x')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [0, 1,''])
