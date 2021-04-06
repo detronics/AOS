@@ -1379,6 +1379,7 @@ class Main(tk.Frame):
             if self.crossout:
                 self.new_password_entering(but_num)
             else:
+                playsound('sounds/pick.wav')
                 if but_num == 'x' and len(self.user_number) == 0:
                     self.level = 0
                     self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
@@ -1390,10 +1391,12 @@ class Main(tk.Frame):
             if self.crossout:
                 self.new_password_entering(but_num)
             else:
+                playsound('sounds/pick.wav')
                 if but_num == 'x' and len(self.user_number) == 0:
                     self.level = 0
                     self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 elif but_num == 'right':
+
                     if self.local_pos == 1:
                         self.local_pos = 0
                     else:
@@ -1417,6 +1420,7 @@ class Main(tk.Frame):
             if self.crossout:
                 self.new_password_entering(but_num)
             else:
+                playsound('sounds/pick.wav')
                 if but_num == 'x' and len(self.user_number) == 0:
                     self.level = 0
                     self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
@@ -1434,6 +1438,7 @@ class Main(tk.Frame):
                 self.user_number = ''
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
             elif but_num == 'x' and len(self.user_number) == 0:
+                self.change_pass = 0
                 self.home_menu_stat = True
                 self.local_pos = 3
                 self.display_label.config(text='ПАРОЛИ')
@@ -1512,7 +1517,6 @@ class Main(tk.Frame):
                 playsound('sounds/pick.wav')
                 self.choose_pass_abilities = 3
                 self.display_label.config(text='№ УРОВНЯ:')
-
         elif self.choose_pass_abilities == 2:
             if but_num == 'x':
                 playsound('sounds/pick.wav')
@@ -1536,7 +1540,6 @@ class Main(tk.Frame):
             elif but_num == 'entr':
                 playsound('sounds/pick.wav')
                 playsound('sounds/pick.wav')
-
                 self.level = 0
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 self.choose_pass_abilities = 0
@@ -1828,7 +1831,6 @@ class Main(tk.Frame):
             ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}'],
         ]
         mode = int(self.user_input[:1])
-        print('mode', mode)
         if self.user_input == '41':
             self.after(1500, self.import_data)
         elif self.user_input == '51':
