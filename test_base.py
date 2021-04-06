@@ -831,5 +831,354 @@ class test_detector_test(unittest.TestCase):
 
 class change_password_func_test(unittest.TestCase):
 
+    def test_x_lv1(self):
+        Example.level, Example.local_pos, Example.user_number  = 1,0,'',
+        Example.change_password_func(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number ]
+        self.assertListEqual(result, [0,0,''])
+
+    def test_entr_lv1(self):
+        Example.level, Example.local_pos, Example.user_number  = 1,0,'',
+        Example.change_password_func(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number ]
+        self.assertListEqual(result, [1,0,''])
+
+    def test_x_lv2(self):
+        Example.level, Example.local_pos, Example.user_number  = 2,0,'',
+        Example.change_password_func(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number ]
+        self.assertListEqual(result, [0,0,''])
+
+    def test_right_lv2(self):
+        Example.level, Example.local_pos, Example.user_number  = 2,0,'',
+        Example.change_password_func(but_num='right')
+        result = [Example.level, Example.local_pos, Example.user_number ]
+        self.assertListEqual(result, [2,1,''])
+
+    def test_left_lv2(self):
+        Example.level, Example.local_pos, Example.user_number,Example.crossout  = 2,0,'',False
+        Example.change_password_func(but_num='left')
+        result = [Example.level, Example.local_pos, Example.user_number ]
+        self.assertListEqual(result, [2,1,''])
+
+    def test_entr_lv2_l0(self):
+        Example.level, Example.local_pos, Example.user_number,Example.crossout  = 2,0,'',False
+        Example.change_password_func(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number,Example.crossout ]
+        self.assertListEqual(result, [2,0,'',True])
+
+    def test_entr_lv2_l1(self):
+        Example.level, Example.local_pos, Example.user_number ,Example.crossout = 2,1,'',False
+        Example.change_password_func(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number ]
+        self.assertListEqual(result, [0,1,''])
+
+    def test_entr_lv3(self):
+        Example.level, Example.local_pos, Example.user_number,Example.crossout  = 3,0,'',False
+        Example.change_password_func(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number,Example.crossout ]
+        self.assertListEqual(result, [3,0,'',True])
+
+    def test_x_lv3(self):
+        Example.level, Example.local_pos, Example.user_number,Example.crossout  = 3,0,'',False
+        Example.change_password_func(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number,Example.crossout ]
+        self.assertListEqual(result, [0,0,'',False])
+
+    def test_number(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout = 0, 0, '', False
+        Example.change_password_func(but_num='1')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout]
+        self.assertListEqual(result, [0, 0, '1', False])
+
+    def test_x_unfill(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.change_pass, Example.home_menu_stat = 0, 0, '', False,2, False
+        Example.change_password_func(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.change_pass,Example.home_menu_stat]
+        self.assertListEqual(result, [0, 3, '', False,0,True])
+
+    def test_x_fill(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.change_pass, Example.home_menu_stat = 0, 0, '12', False,2, False
+        Example.change_password_func(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.change_pass,Example.home_menu_stat]
+        self.assertListEqual(result, [0, 0, '', False,2,False])
+
+    def test_entr_1(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.change_pass, Example.home_menu_stat = 0, 0, '1', False,2, False
+        Example.change_password_func(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.change_pass,Example.home_menu_stat]
+        self.assertListEqual(result, [1, 0, '', False,2,False])
+
+    def test_entr_2(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.change_pass, Example.home_menu_stat = 0, 0, '2', False,2, False
+        Example.change_password_func(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.change_pass,Example.home_menu_stat]
+        self.assertListEqual(result, [2, 0, '', False,2,False])
+
+    def test_entr_3(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.change_pass, Example.home_menu_stat = 0, 0, '3', False,2, False
+        Example.change_password_func(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.change_pass,Example.home_menu_stat]
+        self.assertListEqual(result, [3, 0, '', False,2,False])
+
+class new_password_entering_test(unittest.TestCase):
+
+    def test_x_ab0(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities = 1, 0, '',True,0
+        Example.new_password_entering(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout]
+        self.assertListEqual(result, [0, 0, '',False])
+
+    def test_number_ab0(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities = 1, 0, '',True,0
+        Example.new_password_entering(but_num='1')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities]
+        self.assertListEqual(result, [1, 0, '1',True,0])
+
+    def test_entr_ab0_l0(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 0, '3',True,0,''
+        Example.new_password_entering(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 1, '',True,0,''])
+
+    def test_entr_ab0_l1(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '1',True,0,'1'
+        Example.new_password_entering(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 0, '',True,1,''])
+
+    def test_entr_ab0_l1v2(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,0,'1'
+        Example.new_password_entering(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 1, '',True,0,'1'])
+
+    def test_x_ab1(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,1,''
+        Example.new_password_entering(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [0, 1, '',True,0,''])
+
+    def test_right_ab1(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,1,''
+        Example.new_password_entering(but_num='right')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 0, '',True,1,''])
+
+    def test_left_ab1(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,1,''
+        Example.new_password_entering(but_num='left')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 0, '',True,1,''])
+
+    def test_entr_ab1_l1(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 0, '',True,1,''
+        Example.new_password_entering(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 0, '',True,2,''])
+
+    def test_entr_ab1_l2(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,1,''
+        Example.new_password_entering(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 1, '',True,3,''])
+
+    def test_x_ab2(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,2,''
+        Example.new_password_entering(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [0, 1, '',True,0,''])
+
+    def test_right_ab2(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,2,''
+        Example.new_password_entering(but_num='right')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 2, '',True,2,''])
+
+    def test_left_ab2(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,2,''
+        Example.new_password_entering(but_num='left')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 0, '',True,2,''])
+
+    def test_entr_ab2(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,2,''
+        Example.new_password_entering(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [0, 1, '',True,0,''])
+
+    def test_x_ab3(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,3,''
+        Example.new_password_entering(but_num='x')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [0, 1, '',True,0,''])
+
+    def test_number_ab3(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,3,''
+        Example.new_password_entering(but_num='1')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 1, '1',True,3,''])
+
+    def test_entr_ab3_fill(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '11',True,3,''
+        Example.new_password_entering(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [0, 1, '',True,0,''])
+
+    def test_entr_ab3_unfill(self):
+        Example.level, Example.local_pos, Example.user_number, Example.crossout, Example.choose_pass_abilities,Example.user_input = 1, 1, '',True,3,''
+        Example.new_password_entering(but_num='entr')
+        result = [Example.level, Example.local_pos, Example.user_number, Example.crossout,Example.choose_pass_abilities,Example.user_input]
+        self.assertListEqual(result, [1, 1, '',True,3,''])
+
+class change_time_test(unittest.TestCase):
+
+    def test_x_v1(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat = False,1,'12',1,1,-1,1,False,False
+        Example.change_time(but_num='x')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat]
+        self.assertListEqual(result, [True,0,'12',1,1,-1,1,False,False])
+
+    def test_x_v2(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat = False,0,'12',1,1,1,1,False,False
+        Example.change_time(but_num='x')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat]
+        self.assertListEqual(result, [False,0,'12',0,1,1,2,False,False])
+
+    def test_x_v3(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat = False,0,'12',1,1,-1,1,False,False
+        Example.change_time(but_num='x')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat]
+        self.assertListEqual(result, [True,0,'1',1,1,-1,2,True,True])
+
+    def test_entr_v1(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat, Example.mistake = False,1,'12',1,1,0,1,False,False,False
+        Example.change_time(but_num='entr')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat,Example.mistake]
+        self.assertListEqual(result, [False,0,'12',0,1,0,2,False,False,False])
+
+    def test_entr_v2(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat, Example.mistake = False,1,'12',1,1,-1,1,False,False,False
+        Example.change_time(but_num='entr')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat,Example.mistake]
+        self.assertListEqual(result, [True,1,'1',1,1,-1,2,True,True,False])
+
+    def test_entr_v3(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat, Example.mistake = False,1,'12',1,1,-1,1,False,False,True
+        Example.change_time(but_num='entr')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat,Example.mistake]
+        self.assertListEqual(result, [True,0,'12',1,1,-1,1,False,False,False])
+
+    def test_number_v1(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat, Example.mistake,Example.tim = False,5,'61',1,1,0,1,False,False,False,'12:12:10'
+        Example.change_time(but_num='0')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat,Example.mistake]
+        self.assertListEqual(result, [False,0,'61',0,1,0,2,False,False,False])
+
+    def test_number_v2(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat, Example.mistake,Example.tim = False,5,'61',1,1,-1,1,False,False,False,'12:12:10'
+        Example.change_time(but_num='0')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat,Example.mistake]
+        self.assertListEqual(result, [True,0,'6',1,1,-1,2,True,True,False])
+
+    def test_number_v3(self):
+        Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,\
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat, Example.mistake,Example.tim = False,5,'61',1,1,-1,1,False,False,True,'12:12:10'
+        Example.change_time(but_num='0')
+        result = [Example.time_capture, Example.local_pos, Example.user_input, Example.level, Example.global_pos,
+        Example.temp_val, Example.time_date_stat, Example.passw_stat, Example.main_menu_stat,Example.mistake]
+        self.assertListEqual(result, [True,0,'61',1,1,-1,1,False,False,False])
+
+class correct_time_test(unittest.TestCase):
+
     def test_x(self):
-        pass
+        Example.level, Example.local_pos, Example.global_pos ,Example.corrector_time,Example.aspt_or_corrett_time = 2,0,1,'0.00',0
+        Example.correct_time(but_num='x')
+        result = [ Example.level, Example.local_pos, Example.global_pos ,Example.corrector_time,Example.aspt_or_corrett_time]
+        self.assertListEqual(result, [2,0,1,'0.00',0])
+
+    def test_entr(self):
+        Example.level, Example.local_pos, Example.global_pos ,Example.corrector_time,Example.aspt_or_corrett_time = 2,0,1,'0.00',1
+        Example.correct_time(but_num='entr')
+        result = [ Example.level, Example.local_pos, Example.global_pos ,Example.corrector_time,Example.aspt_or_corrett_time]
+        self.assertListEqual(result, [2,0,1,'0.00',1])
+
+    def test_right(self):
+        Example.level, Example.local_pos, Example.global_pos ,Example.corrector_time,Example.aspt_or_corrett_time = 2,0,1,'0.00',1
+        Example.correct_time(but_num='right')
+        result = [ Example.level, Example.local_pos, Example.global_pos ,Example.corrector_time,Example.aspt_or_corrett_time]
+        self.assertListEqual(result, [2,0,1,0.18,0])
+
+    def test_left(self):
+        Example.level, Example.local_pos, Example.global_pos ,Example.corrector_time,Example.aspt_or_corrett_time = 2,0,1,0.00,1
+        Example.correct_time(but_num='left')
+        result = [ Example.level, Example.local_pos, Example.global_pos ,Example.corrector_time,Example.aspt_or_corrett_time]
+        self.assertListEqual(result, [2,0,1,-0.17,0])
+
+class import_data_test(unittest.TestCase):
+
+    def test_x_unfill_l0(self):
+        Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat = 0,0,1,'','22',True
+        Example.import_data(but_num='x')
+        result = [  Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat ]
+        self.assertListEqual(result, [0,0,1,'','2',False])
+
+    def test_x_unfill_l1(self):
+        Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat = 1,0,1,'','21',True
+        Example.import_data(but_num='x')
+        result = [  Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat ]
+        self.assertListEqual(result, [0,0,1,'','21',True])
+
+    def test_x_fill(self):
+        Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat = 1,0,1,'22','21',True
+        Example.import_data(but_num='x')
+        result = [  Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat ]
+        self.assertListEqual(result, [1,0,1,'','21',True])
+
+    def test_number(self):
+        Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat = 1,0,1,'22','21',True
+        Example.import_data(but_num='1')
+        result = [  Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat ]
+        self.assertListEqual(result, [1,0,1,'221','21',True])
+
+    def test_entr_unfill(self):
+        Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat = 1,0,1,'','21',True
+        Example.import_data(but_num='entr')
+        result = [  Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat ]
+        self.assertListEqual(result, [1,0,1,'','21',True])
+
+    def test_entr_fill_l0(self):
+        Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat = 0,0,1,'22','21',True
+        Example.import_data(but_num='entr')
+        result = [  Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat ]
+        self.assertListEqual(result, [1,0,1,'','21',True])
+
+    def test_entr_fill_l1(self):
+        Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat = 1,0,1,'21','41',True
+        Example.import_data(but_num='entr')
+        result = [  Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat ]
+        self.assertListEqual(result, [2,0,1,'','41',True])
+
+class choose_type_events_test(unittest.TestCase):
+
+    def test_x(self):
+        Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat = 0,0,1,'','31',True
+        Example.choose_type_events(but_num='x')
+        result = [Example.level, Example.local_pos, Example.global_pos, Example.user_number,Example.user_input, Example.import_data_stat]
+        self.assertListEqual(result, [0,0,0,'','',False])
