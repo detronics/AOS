@@ -94,11 +94,11 @@ class Main(tk.Frame):
                       "5": ['⬍51 ЗАПРОС ШС', '⬍52 ЗАПРОС АЦП'],
                       "6": ['⬍61 ВРЕМЯ', '⬍62 ДАТА', '⬍63  ТЕСТ ИЗВЕЩ.', '⬍64  ТЕСТ  ИНДИКАЦ', '⬍65 ПЕЧАТЬ БУФЕР',
                             '⬍66 СБРОС БУФ.ИТ']}
-        self.menu2 = {'11': ['ПРИБОР:', 'НОМЕР ШС'], '12': ['ПРИБОР:'], '13': ['ПРИБОР:'],
-                      '21': ['ПРИБОР:', 'НОМЕР ШС'], '22': ['ПРИБОР:'], '23': ['ПРИБОР:'],
+        self.menu2 = {'11': ['ПРИБОР:', 'НОМЕР ШС:'], '12': ['ПРИБОР:'], '13': ['ПРИБОР:'],
+                      '21': ['ПРИБОР:', 'НОМЕР ШС:'], '22': ['ПРИБОР:'], '23': ['ПРИБОР:'],
                       '3': ['ПРИБОР:'],
                       '41': ['ПРИБОР:', 'УСТРОЙСТВО:', 'ПРОГРАММА:'], '42': ['⬍УПР. АВТОМАТИКОЙ', '⬍УПРАВЛЕНИЕ ПУСКОМ'],
-                      '51': ['ПРИБОР:', 'НОМЕР ШС'], '52': ['ПРИБОР:', 'НОМЕР ШС'],
+                      '51': ['ПРИБОР:', 'НОМЕР ШС:'], '52': ['ПРИБОР:', 'НОМЕР ШС:'],
                       '61': [], '62': [], '63': ['⬍ ВКЛ.ТЕСТ', '⬍ ВЫКЛ.ТЕСТ'], '64': ['ПРИБОР:'], '65': [],
                       '66': ['ПРИБОР:']}
         self.menu3 = {'421': ['АВТОМАТИКА: ВЫКЛ', 'АВТОМАТИКА: ВКЛ', '⬍ВКЛЮЧИТЬ', '⬍ВЫКЛЮЧИТЬ'],
@@ -746,7 +746,7 @@ class Main(tk.Frame):
                     self.local_pos = 0
                     self.display_label.config(text=self.menu2[self.user_input][0])
         else:
-            self.import_data(but_num=but_num, )
+            self.import_data(but_num)
 
     def main_2(self, but_num=None):
         if self.level == 0:
@@ -1309,8 +1309,6 @@ class Main(tk.Frame):
             self.display_label.config(text=self.menu_home[self.local_pos])
 
     def test_detector(self, but_num=None):
-        print(self.user_input, self.local_pos, self.passw_stat, self.main_menu_stat, self.test)
-        # TODO уточнить работу данной функции куда возращается функция при включении/выключениии темта
         if len(self.user_input) < 3:
             playsound('sounds/pick.wav')
             if but_num == 'x':
@@ -1361,7 +1359,6 @@ class Main(tk.Frame):
                 self.after(10, self.display_label.config(text='НЕТ ПРИБОРА'))
                 self.after(500, self.test_detector)
             elif but_num == 'entr' and len(self.user_number) != 0:
-                # self.data_base.insert(self.level, self.user_number)
                 if self.level < len(self.menu3[self.user_input]) - 1:
                     self.user_number = ''
                     self.level += 1
@@ -1789,12 +1786,12 @@ class Main(tk.Frame):
         self.display_label.config(text=f'С/СУТКИ: {self.singh}{self.corrector_time}')
 
     def import_data(self, but_num=None):
-        param = self.menu2[self.user_input][self.level]
-        self.display_label.config(text=f'{param} {self.user_number}')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            param = self.menu2[self.user_input][self.level]
             self.user_number += but_num
             self.display_label.config(text=f'{param} {self.user_number}')
         elif but_num == 'x' and len(self.user_number) != 0:
+            param = self.menu2[self.user_input][self.level]
             self.user_number = ''
             self.display_label.config(text=f'{param} {self.user_number}')
         elif but_num == 'x' and len(self.user_number) == 0 and self.level == 0:
@@ -1833,10 +1830,11 @@ class Main(tk.Frame):
         if self.user_input == '41':
             self.after(1500, self.import_data)
         elif self.user_input == '51':
+            self.level+=1
             self.display_label.config(
                 text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:\n {random.choice(["ВЗЯТ", "СНЯТ"])}')
-        #     TODO узнать куда возвращается пульт из запроса состояния
         elif self.user_input == '52':
+            self.level += 1
             self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:                          '
                                            f'47\n Rшс = 4,7 кОм')
         elif mode == 3:
@@ -1865,8 +1863,10 @@ class Main(tk.Frame):
                                              '5': 'ИДЕНТИФИКАЦИЯ  ХО \nП000 С1 ХО                   2',
                                              '9': 'НОМЕР 2'})
                 self.local_pos += 1
-                self.after(500, self.show)
+                self.after(1500, self.show)
             else:
+                param = self.menu2[self.user_input][self.level]
+                self.display_label.config(text=f'{param} {self.user_number}')
                 self.local_pos = 0
                 self.after(1500, self.import_data)
 

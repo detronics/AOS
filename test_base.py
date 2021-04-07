@@ -1261,7 +1261,7 @@ class ChooseTypeEventsTest(unittest.TestCase):
         Example.level, Example.type_event_val = 1, 0
         Example.choose_type_events(but_num='left')
         result = [Example.level, Example.type_event_val]
-        self.assertListEqual(result, [1, 7])
+        self.assertListEqual(result, [1, 8])
 
 
 class SetDataRangeTest(unittest.TestCase):
@@ -1390,7 +1390,7 @@ class ChooseAreaTest(unittest.TestCase):
         self.assertListEqual(result, [2, 2, ''])
 
     def test_entr_lv1_l1(self):
-        Example.level, Example.local_pos, Example.user_number = 1, 3, ''
+        Example.level, Example.local_pos, Example.user_number = 1, 1, ''
         Example.choose_area(but_num='entr')
         result = [Example.level, Example.local_pos, Example.user_number]
         self.assertListEqual(result, [3, 1, ''])
@@ -1443,8 +1443,98 @@ class ChooseElement(unittest.TestCase):
 
 class ChooseDevice(unittest.TestCase):
 
-    def test_x_lv2(self):
+    def test_x_unfill_lv2(self):
         Example.level, Example.local_pos,Example.user_number = 2, 1,''
         Example.choose_device(but_num='x')
         result = [Example.level, Example.local_pos,Example.user_number]
         self.assertListEqual(result, [0, 1,''])
+
+    def test_x_fill_lv2(self):
+        Example.level, Example.local_pos,Example.user_number = 2, 1,'2'
+        Example.choose_device(but_num='x')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [2, 1,''])
+
+    def test_number_lv2(self):
+        Example.level, Example.local_pos,Example.user_number = 2, 1,'2'
+        Example.choose_device(but_num='1')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [2, 1,'21'])
+
+    def test_entr_unfill_lv2(self):
+        Example.level, Example.local_pos,Example.user_number = 2, 1,''
+        Example.choose_device(but_num='entr')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [0, 1,''])
+
+    def test_entr_fill_lv2(self):
+        Example.level, Example.local_pos,Example.user_number = 2, 1,'22'
+        Example.choose_device(but_num='entr')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [0, 1,''])
+
+    def test_x_unfill_lv3(self):
+        Example.level, Example.local_pos,Example.user_number = 3, 1,''
+        Example.choose_device(but_num='x')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [0, 1,''])
+
+    def test_x_fill_lv3(self):
+        Example.level, Example.local_pos,Example.user_number = 3, 1,'2'
+        Example.choose_device(but_num='x')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [3, 1,''])
+
+    def test_number_lv3(self):
+        Example.level, Example.local_pos,Example.user_number = 3, 1,'2'
+        Example.choose_device(but_num='1')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [3, 1,'21'])
+
+    def test_entr_unfill_lv3(self):
+        Example.level, Example.local_pos,Example.user_number = 3, 1,''
+        Example.choose_device(but_num='entr')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [0, 1,''])
+
+    def test_entr_fill_lv3(self):
+        Example.level, Example.local_pos,Example.user_number = 3, 1,'22'
+        Example.choose_device(but_num='entr')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [0, 1,''])
+
+    def test_x_lv1(self):
+        Example.level, Example.local_pos,Example.user_number = 1, 1,''
+        Example.choose_device(but_num='x')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [0, 1,''])
+
+    def test_right_lv1(self):
+        Example.level, Example.local_pos,Example.user_number = 1, 1,''
+        Example.choose_device(but_num='right')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [1, 2,''])
+
+    def test_left_lv1(self):
+        Example.level, Example.local_pos,Example.user_number = 1, 1,''
+        Example.choose_device(but_num='left')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [1, 0,''])
+
+    def test_entr_lv1_l0(self):
+        Example.level, Example.local_pos,Example.user_number = 1, 0,''
+        Example.choose_device(but_num='entr')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [0, 0,''])
+
+    def test_entr_lv1_l1(self):
+        Example.level, Example.local_pos,Example.user_number = 1, 1,''
+        Example.choose_device(but_num='entr')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [2, 1,''])
+
+    def test_entr_lv1_l2(self):
+        Example.level, Example.local_pos,Example.user_number = 1, 2,''
+        Example.choose_device(but_num='entr')
+        result = [Example.level, Example.local_pos,Example.user_number]
+        self.assertListEqual(result, [3, 2,''])
