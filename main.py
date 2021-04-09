@@ -1880,3 +1880,50 @@ if __name__ == '__main__':
     root.resizable(False, False)
     app.timer()
     root.mainloop()
+
+
+
+# class ApplicationLeft(tk.Frame):
+#     def __init__(self, main):
+#         super().__init__()
+#         self.main = main
+#         self.set_widgets_left()
+#
+#     def set_widgets_left(self):
+#         # Create widget
+#         self.image = tk.PhotoImage(file='images/b_left.png')
+#         self.photo_left = tk.Label(self.main, image=self.image)
+#         self.group_left = tk.Label(self.main, text="группа левый", fg="#333", font='Arial')
+#
+#         self.photo_left.pack()
+#         self.group_left.pack()
+#
+#
+# class ApplicationRight(tk.Frame):
+#     def __init__(self, main):
+#         super().__init__()
+#         self.main = main
+#         self.set_widgets_right()
+#
+#     def set_widgets_right(self):
+#         # Create widget
+#         self.img = tk.PhotoImage(file='images/b_left.png')
+#         self.photo_right = tk.Label(self.main, image=self.img)
+#         self.group_right = tk.Label(self.main, text="группа правый", fg="#333", font='Arial 26')
+#
+#         self.photo_right.pack()
+#         self.group_right.pack()
+#
+#
+# if __name__ == '__main__':
+#     root_left = tk.Tk()
+#     root_left.title("Левый")
+#     root_left.geometry("300x350")
+#
+#     root_right = tk.Toplevel()
+#     root_right.title("Правый")
+#     root_right.geometry("300x350")
+#
+#     app_left = ApplicationLeft(root_left)
+#     app_right = ApplicationRight(root_right)
+#     app_left.mainloop()
