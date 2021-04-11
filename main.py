@@ -2,7 +2,7 @@ import random
 import tkinter as tk
 import time
 from playsound import playsound
-
+from  tasks_window import Tasks
 
 class Main(tk.Frame):
     def __init__(self, root):
@@ -1091,7 +1091,6 @@ class Main(tk.Frame):
                     self.change_rs_set(param=self.rs_485_mod[self.level])
 
     def rs_232(self, but_num=None):
-        print(self.level, self.local_pos, self.global_pos)
         if self.global_pos == 2:
             if but_num == 'x':
                 playsound('sounds/pick.wav')
@@ -1879,51 +1878,13 @@ if __name__ == '__main__':
     root.geometry('443x540+300+100')
     root.resizable(False, False)
     app.timer()
+
+    root_tasks = tk.Toplevel()
+    root_tasks.title('Окно заданий')
+    # root_tasks.geometry('443x540+745+100')
+    root_tasks.resizable(False, False)
+    app_right = Tasks(root_tasks)
     root.mainloop()
 
 
 
-# class ApplicationLeft(tk.Frame):
-#     def __init__(self, main):
-#         super().__init__()
-#         self.main = main
-#         self.set_widgets_left()
-#
-#     def set_widgets_left(self):
-#         # Create widget
-#         self.image = tk.PhotoImage(file='images/b_left.png')
-#         self.photo_left = tk.Label(self.main, image=self.image)
-#         self.group_left = tk.Label(self.main, text="группа левый", fg="#333", font='Arial')
-#
-#         self.photo_left.pack()
-#         self.group_left.pack()
-#
-#
-# class ApplicationRight(tk.Frame):
-#     def __init__(self, main):
-#         super().__init__()
-#         self.main = main
-#         self.set_widgets_right()
-#
-#     def set_widgets_right(self):
-#         # Create widget
-#         self.img = tk.PhotoImage(file='images/b_left.png')
-#         self.photo_right = tk.Label(self.main, image=self.img)
-#         self.group_right = tk.Label(self.main, text="группа правый", fg="#333", font='Arial 26')
-#
-#         self.photo_right.pack()
-#         self.group_right.pack()
-#
-#
-# if __name__ == '__main__':
-#     root_left = tk.Tk()
-#     root_left.title("Левый")
-#     root_left.geometry("300x350")
-#
-#     root_right = tk.Toplevel()
-#     root_right.title("Правый")
-#     root_right.geometry("300x350")
-#
-#     app_left = ApplicationLeft(root_left)
-#     app_right = ApplicationRight(root_right)
-#     app_left.mainloop()
