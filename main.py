@@ -1881,7 +1881,7 @@ if __name__ == '__main__':
 
     root_tasks = tk.Toplevel()
     root_tasks.title('Окно заданий')
-    # root_tasks.geometry('443x540+745+100')
+    root_tasks.geometry('443x590+750+100')
     root_tasks.resizable(False, False)
     app_right = Tasks(root_tasks)
     root.mainloop()
