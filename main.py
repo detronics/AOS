@@ -812,6 +812,8 @@ class Main(tk.Frame):
                 self.display_label.config(
                     text=self.menu3[self.user_input][self.data_base_aspt[self.user_number][self.aspt_or_corrett_time]])
                 self.local_pos = 2
+                if self.data_base_aspt == {'4': [1, 0]}:
+                    app_right.tasks_stat[3] = True
             elif but_num == 'x':
                 self.local_pos = 0
                 self.import_data_stat = False
@@ -859,12 +861,13 @@ class Main(tk.Frame):
                         self.display_label.config(
                             text=self.menu3[self.user_input][
                                 self.data_base_aspt[self.user_number][self.aspt_or_corrett_time]])
-
                     else:
                         if self.local_pos == 2:
                             self.local_pos = 0
                             self.data_base_aspt[self.user_number][self.aspt_or_corrett_time] = 0
                             self.display_label.config(text=self.menu3[self.user_input][0])
+                            if self.data_base_aspt == {'4': [0, 0]}:
+                                app_right.tasks_stat[4] = True
                         else:
                             self.display_label.config(text=f'ПОДТВЕРДИТЕ ПУСК\n ПРИБОР: {self.user_number} ')
                             self.aspt_or_corrett_time = 2
@@ -1111,6 +1114,8 @@ class Main(tk.Frame):
             elif but_num == 'entr':
                 playsound('sounds/pick.wav')
                 playsound('sounds/pick.wav')
+                if self.level == 2:
+                    app_right.tasks_stat[13] = True
                 self.global_pos = 1
                 self.menu_prog_1[5][0] = f'РЕЖИМ: \n {self.rs_232_mode[self.level][1:]}'
                 self.display_label.config(text=self.menu_prog_1[5][0])
@@ -1142,6 +1147,7 @@ class Main(tk.Frame):
     def prog_mode(self, but_num=None):
         self.programm_mode = True
         self.display_label.config(text='РЕЖИМ   ПРОГРАММИР')
+        app_right.tasks_stat[14]=True
         if but_num == 'x':
             self.programm_mode = False
             self.passw_prog_stat = False
@@ -1150,7 +1156,7 @@ class Main(tk.Frame):
             self.user_input = ''
             self.start_time()
 
-    def change_rs_set(self, param, but_num=None, ):
+    def change_rs_set(self, param, but_num=None):
         self.display_label.config(text=f'{param} {self.user_number}')
         if but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
             playsound('sounds/pick.wav')
@@ -1169,6 +1175,8 @@ class Main(tk.Frame):
         elif but_num == 'entr' and len(self.user_number) != 0:
             playsound('sounds/pick.wav')
             playsound('sounds/pick.wav')
+            if self.user_number == '1' and self.level == 0:
+                app_right.tasks_stat[11] = True
             self.rs_485_set[self.level] = self.user_number
             self.menu_prog_1[4][self.level] = self.rs_485_mod[self.level] + self.rs_485_set[self.level]
             self.user_number = ''
@@ -1359,11 +1367,15 @@ class Main(tk.Frame):
                 self.after(500, self.test_detector)
             elif but_num == 'entr' and len(self.user_number) != 0:
                 if self.level < len(self.menu3[self.user_input]) - 1:
+                    self.data_base.insert(self.level+1, self.user_number)
                     self.user_number = ''
                     self.level += 1
                     param = self.menu3[self.user_input][self.level]
                     self.display_label.config(text=f'{param} {self.user_number}')
                 else:
+                    if self.data_base == [1,'5','4']:
+                        app_right.tasks_stat[10]=True
+                    self.data_base = [1]
                     self.user_number = ''
                     self.level = 1
                     param = self.menu3[self.user_input][self.level]
@@ -1391,7 +1403,6 @@ class Main(tk.Frame):
                     self.level = 0
                     self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 elif but_num == 'right':
-
                     if self.local_pos == 1:
                         self.local_pos = 0
                     else:
@@ -1456,6 +1467,7 @@ class Main(tk.Frame):
         if self.choose_pass_abilities == 0:
             param = ['НОВ. ПАРОЛЬ:', 'ПОДТВЕРДИТЕ:']
             if but_num == 'x' and len(self.user_number) == 0:
+                playsound('sounds/pick.wav')
                 self.crossout = False
                 self.local_pos = 0
                 self.level = 0
@@ -1464,17 +1476,22 @@ class Main(tk.Frame):
                 playsound('sounds/pick.wav')
                 self.display_label.config(text=f'{param[self.local_pos]}{self.user_number}')
             elif but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                playsound('sounds/pick.wav')
                 self.user_number += but_num
                 p = '*' * len(self.user_number)
                 self.display_label.config(text=f'{param[self.local_pos]}{p}')
             elif but_num == 'entr' and len(self.user_number) != 0:
                 if self.local_pos == 0:
+                    playsound('sounds/pick.wav')
                     self.local_pos += 1
                     self.user_input = self.user_number
                     self.user_number = ''
                     self.display_label.config(text=f'{param[self.local_pos]}{self.user_number}')
                 else:
                     if self.user_input == self.user_number:
+                        playsound('sounds/pick.wav')
+                        if self.user_input == '4321' and self.level == 2:
+                            app_right.tasks_stat[12] = True
                         self.user_input = ''
                         self.user_number = ''
                         self.local_pos = 0
@@ -1540,10 +1557,12 @@ class Main(tk.Frame):
                 self.choose_pass_abilities = 0
         elif self.choose_pass_abilities == 3:
             if but_num == 'x' and len(self.user_number) == 0:
+                playsound('sounds/pick.wav')
                 self.level = 0
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 self.choose_pass_abilities = 0
             elif but_num in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                playsound('sounds/pick.wav')
                 self.user_number += but_num
                 self.display_label.config(text=f'№ УРОВНЯ: {self.user_number}')
             elif but_num == 'entr' and len(self.user_number) != 0:
@@ -1583,6 +1602,10 @@ class Main(tk.Frame):
 
         elif but_num == 'entr':
             if not self.mistake:
+                if self.tim == '12:00:00':
+                    app_right.tasks_stat[8] = True
+                playsound('sounds/pick.wav')
+                playsound('sounds/pick.wav')
                 if self.temp_val >= 0:
                     self.global_pos = 1
                     self.level = 0
@@ -1590,8 +1613,6 @@ class Main(tk.Frame):
                     self.time_date_stat = 2
                     self.display_label.config(text=self.menu_prog_1[1][self.level])
                 else:
-                    playsound('sounds/pick.wav')
-                    playsound('sounds/pick.wav')
                     self.passw_stat = True
                     self.main_menu_stat = True
                     self.user_input = self.user_input[:1]
@@ -1615,7 +1636,10 @@ class Main(tk.Frame):
             self.display_label.config(text=f'ВРЕМЯ: {self.tim}')
             self.local_pos += 1
             if self.local_pos == 6 and not self.mistake:
+                if self.tim == '12:00:00':
+                    app_right.tasks_stat[8] = True
                 if self.temp_val >= 0:
+                    playsound('sounds/pick.wav')
                     self.global_pos = 1
                     self.level = 0
                     self.local_pos = 0
@@ -1658,6 +1682,7 @@ class Main(tk.Frame):
                 self.local_pos = 0
                 self.time_capture = True
             elif self.temp_val >= 0:
+                playsound('sounds/pick.wav')
                 self.global_pos = 1
                 self.level = 1
                 self.local_pos = 0
@@ -1673,6 +1698,10 @@ class Main(tk.Frame):
 
         elif but_num == 'entr':
             if not self.mistake:
+                playsound('sounds/pick.wav')
+                playsound('sounds/pick.wav')
+                if self.dat == '11:08:99':
+                    app_right.tasks_stat[9] = True
                 if self.temp_val >= 0:
                     self.global_pos = 1
                     self.level = 1
@@ -1680,8 +1709,6 @@ class Main(tk.Frame):
                     self.time_date_stat = 2
                     self.display_label.config(text=self.menu_prog_1[1][self.level])
                 else:
-                    playsound('sounds/pick.wav')
-                    playsound('sounds/pick.wav')
                     self.passw_stat = True
                     self.main_menu_stat = True
                     self.user_input = self.user_input[:1]
@@ -1707,6 +1734,8 @@ class Main(tk.Frame):
             self.display_label.config(text=f'ДАТА: {self.dat}')
             self.local_pos += 1
             if self.local_pos == 6 and not self.mistake:
+                if self.dat == '11:08:99':
+                    app_right.tasks_stat[9] = True
                 if self.temp_val >= 0:
                     self.global_pos = 1
                     self.level = 1
@@ -1822,33 +1851,49 @@ class Main(tk.Frame):
 
     def show(self):
         keyword = [
-            ['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1                               00{self.data_base[0]}/00{self.data_base[1]}'],
-            ['СНЯТИЕ...', f'СНЯТ ШС\n   1                               00{self.data_base[1]}/00{self.data_base[0]}'],
+            ['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1{31*" "}00{self.data_base[0]}/00{self.data_base[1]}'],
+            ['СНЯТИЕ...', f'СНЯТ ШС\n   1{31*" "}00{self.data_base[1]}/00{self.data_base[0]}'],
         ]
         mode = int(self.user_input[:1])
         if self.user_input == '41':
-            self.after(1500, self.import_data)
+            if self.data_base == ['44', '1','1', 1]:
+                app_right.tasks_stat[5] = True
+            playsound('sounds/pick.wav')
+            self.data_base = [1]
+            self.user_number = ''
+            param = self.menu2[self.user_input][self.level]
+            self.display_label.config(text=f'{param} {self.user_number}')
         elif self.user_input == '51':
+            if self.data_base == ['4', '4', 1]:
+                app_right.tasks_stat[6] = True
             self.level+=1
             self.display_label.config(
                 text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:\n {random.choice(["ВЗЯТ", "СНЯТ"])}')
         elif self.user_input == '52':
+            if self.data_base == ['1','4', 1]:
+                app_right.tasks_stat[7] = True
             self.level += 1
             self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:                          '
                                            f'47\n Rшс = 4,7 кОм')
         elif mode == 3:
+            if self.data_base == ['11', 1]:
+                app_right.tasks_stat[2] = True
+            self.data_base = [1]
             self.import_data_stat = False
             self.user_input = ''
             self.local_pos = 0
             self.global_pos = 0
             self.after(250, self.display_label.config(text='⬍1 ВЗЯТИЕ'))
-        #     TODO Узнать куда возвращается пульт
         elif mode == 6:
             self.import_data_stat = False
             self.local_pos = int(self.user_input[1:]) - 1
             self.user_input = self.user_input[:1]
             self.after(250, self.display_label.config(text=self.menu1[self.user_input][self.local_pos]))
         else:
+            if self.data_base == ['2', '15', 1] and self.user_input == '11':
+                app_right.tasks_stat[0] = True
+            elif self.data_base == ['10', 1] and self.user_input == '23':
+                app_right.tasks_stat[1] = True
             if self.local_pos == 0:
                 self.display_label.config(text=keyword[mode - 1][0])
                 self.local_pos += 1
@@ -1885,6 +1930,7 @@ if __name__ == '__main__':
     root_tasks.resizable(False, False)
     app_right = Tasks(root_tasks)
     root.mainloop()
+
 
 
 
