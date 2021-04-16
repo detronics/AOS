@@ -2,7 +2,8 @@ import random
 import tkinter as tk
 import time
 from playsound import playsound
-from  tasks_window import Tasks
+from tasks_window import Tasks
+
 
 class Main(tk.Frame):
 
@@ -52,7 +53,7 @@ class Main(tk.Frame):
                              '5': 'С2000М v3.02 \n№ ЗОНЫ: НЕ ЗАДАН',
                              '9': 'НОМЕР 1'}, '-КОНЕЦ БУФЕРА-']
         self.type_events = ['⬍ ВСЕ', '⬍ ПОЖАРЫ', '⬍ ТРЕВОГИ', '⬍ ПУСКИ', '⬍ ОСТАНОВЫ', '⬍ НЕИСПРАВНОСТИ',
-                            '⬍ ОТКЛЮЧЕНИЯ','⬍ ВЫКЛ. АВТОМАТИК', '⬍ НОРМЫ']
+                            '⬍ ОТКЛЮЧЕНИЯ', '⬍ ВЫКЛ. АВТОМАТИК', '⬍ НОРМЫ']
         self.buff_settings = ['⬍ПОКАЗЫВАТЬ ВСЕ\n СОБЫТИЯ',
                               f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}',
                               f'⬍ДАТА:с {self.data_range[1]}\n           по {self.data_range[0]}',
@@ -68,8 +69,8 @@ class Main(tk.Frame):
                               '⬍5 RS-232', '⬍6 РЕЖИМ \nПРОГРАММИРОВАНИЯ']
         self.rs_485_set = [127, '-', 126, 240, 2]
         self.rs_232_mode = ['⬍ПРИНТЕР', '⬍КОМПЬЮТЕР', '⬍ПИ/РЕЗЕРВ', '⬍RS-202TD', '⬍ATS100 (LARS)', '⬍TRX-150 (CID)']
-        self.rs_485_mod = ['АДРЕС С2000=', f'КОЛЬЦЕВОЙ{24*" "}: ', f'АДРЕС{21*""}=',f'ПЕРИОД 1{21*" "}=',
-                           f'ПЕРИОД 2{21*" "}=']
+        self.rs_485_mod = ['АДРЕС С2000=', f'КОЛЬЦЕВОЙ{24 * " "}: ', f'АДРЕС{21 * ""}=', f'ПЕРИОД 1{21 * " "}=',
+                           f'ПЕРИОД 2{21 * " "}=']
         self.menu_prog_1 = {1: ['УСТАНОВКА ЧАСОВ', 'УСТАНОВКА ДАТЫ', 'КОРРЕКЦИЯ ХОДА'],
                             2: ['ПРИБОР:'],
                             3: ['⬍ЗВУКОВОЙ \nСИГНАЛИЗАТОР', '⬍ДОСТУП \nК ФУНКЦИЯМ', '⬍КОНТРОЛЬ \nПИТАНИЯ',
@@ -81,7 +82,7 @@ class Main(tk.Frame):
                                 f'{self.rs_485_mod[3]}{self.rs_485_set[3]}',
                                 f'{self.rs_485_mod[4]}{self.rs_485_set[4]}', ],
                             5: [f'РЕЖИМ: \n {self.rs_232_mode[0][1:]}', f'АДРЕС С2000=127', 'ТАЙМ.СВЯЗИ =20',
-                                f'ЦЕНТР.УПРАВЛ.{18*" "}:−', 'СКОРОСТЬ: \n9600 бит/с', 'ACCOUNT: \n1234',
+                                f'ЦЕНТР.УПРАВЛ.{18 * " "}:−', 'СКОРОСТЬ: \n9600 бит/с', 'ACCOUNT: \n1234',
                                 '⬍СОБЫТИЯ LАRS'],
                             6: ['РЕЖИМ \nПРОГРАММИРОВАНИЯ']}
         self.menu_menu_list = ['⬍УПРАВЛЕНИЕ', '⬍ПРОСМОТР \nПО СОСТОЯНИЯМ']
@@ -251,7 +252,7 @@ class Main(tk.Frame):
             self.display_label.config(text=f'⬍ТИП СОБЫТИЯ:\n {self.type_events[self.type_event_val][1:]}')
         elif but_num == 'left' or but_num == 'right':
             playsound('sounds/pick.wav')
-            self.type_event_val = self.right_left(but_num=but_num, roster=self.type_events,pos=self.type_event_val)
+            self.type_event_val = self.right_left(but_num=but_num, roster=self.type_events, pos=self.type_event_val)
             self.display_label.config(text=f'⬍ТИП СОБЫТИЯ:\n{self.type_events[self.type_event_val]}')
 
     def set_data_range(self, but_num=None):
@@ -363,7 +364,7 @@ class Main(tk.Frame):
                 self.display_label.config(text=self.buff_settings[self.local_pos])
             elif but_num == 'left' or but_num == 'right':
                 playsound('sounds/pick.wav')
-                self.local_pos = self.right_left(but_num=but_num, roster=self.area_settings, pos=self.local_pos)+1
+                self.local_pos = self.right_left(but_num=but_num, roster=self.area_settings, pos=self.local_pos) + 1
                 self.display_label.config(text=self.area_settings[self.local_pos])
             elif but_num == 'entr':
                 playsound('sounds/pick.wav')
@@ -400,21 +401,7 @@ class Main(tk.Frame):
             elif but_num == 'left' or but_num == 'right':
                 playsound('sounds/pick.wav')
                 self.local_pos = self.right_left(but_num=but_num, roster=self.element_settings, pos=self.local_pos)
-                self.display_label.config(text=self.element_settings[self.local_pos-1])
-            # elif but_num == 'right':
-            #     playsound('sounds/pick.wav')
-            #     if self.local_pos == 1:
-            #         self.local_pos = 0
-            #     else:
-            #         self.local_pos += 1
-            #     self.display_label.config(text=self.element_settings[self.local_pos - 1])
-            # elif but_num == 'left':
-            #     playsound('sounds/pick.wav')
-            #     if self.local_pos == 0:
-            #         self.local_pos = 1
-            #     else:
-            #         self.local_pos -= 1
-            #     self.display_label.config(text=self.element_settings[self.local_pos - 1])
+                self.display_label.config(text=self.element_settings[self.local_pos - 1])
             elif but_num == 'entr':
                 playsound('sounds/pick.wav')
                 if self.local_pos == 0:
@@ -422,6 +409,7 @@ class Main(tk.Frame):
                     self.level = 0
                     self.display_label.config(text=self.buff_settings[self.global_pos])
                 if self.local_pos == 1:
+                    # TODO razobratsya
                     self.level += 1
                     self.display_label.config(text=f'Выбор: ⬍ВСЕ')
 
@@ -474,19 +462,9 @@ class Main(tk.Frame):
                 self.level = 0
                 self.local_pos = 1
                 self.display_label.config(text=self.buff_settings[self.local_pos])
-            elif but_num == 'right':
+            elif but_num == 'left' or but_num == 'right':
                 playsound('sounds/pick.wav')
-                if self.local_pos == 2:
-                    self.local_pos = 0
-                else:
-                    self.local_pos += 1
-                self.display_label.config(text=self.device_settings[self.local_pos - 1])
-            elif but_num == 'left':
-                playsound('sounds/pick.wav')
-                if self.local_pos == 0:
-                    self.local_pos = 2
-                else:
-                    self.local_pos -= 1
+                self.local_pos = self.right_left(but_num=but_num, roster=self.device_settings, pos=self.local_pos)
                 self.display_label.config(text=self.device_settings[self.local_pos - 1])
             elif but_num == 'entr':
                 playsound('sounds/pick.wav')
@@ -609,16 +587,8 @@ class Main(tk.Frame):
             self.import_data_stat = True
             self.display_label.config(text=self.menu2[self.user_input][0])
 
-        elif but_num == 'right':
-            if self.local_pos == 5:
-                self.local_pos = -1
-            self.local_pos += 1
-            self.display_label.config(text=self.menu0[self.local_pos])
-
-        elif but_num == 'left':
-            if self.local_pos == 0:
-                self.local_pos = 6
-            self.local_pos -= 1
+        elif but_num == 'left' or but_num == 'right':
+            self.local_pos = self.right_left(but_num=but_num, roster=self.menu0, pos=self.local_pos)
             self.display_label.config(text=self.menu0[self.local_pos])
 
         elif but_num == 'x':
@@ -674,18 +644,10 @@ class Main(tk.Frame):
                 else:
                     self.import_data_stat = True
                     self.display_label.config(text=self.menu2[self.user_input][0])
-            elif but_num == 'right':
-                if self.local_pos == len(self.menu1[self.user_input]) - 1:
-                    self.local_pos = -1
-                self.local_pos += 1
+            elif but_num == 'left' or but_num == 'right':
+                self.local_pos = self.right_left(but_num=but_num, roster=self.menu1[self.user_input],
+                                                 pos=self.local_pos)
                 self.display_label.config(text=self.menu1[self.user_input][self.local_pos])
-
-            elif but_num == 'left':
-                if self.local_pos == 0:
-                    self.local_pos = len(self.menu1[self.user_input])
-                self.local_pos -= 1
-                self.display_label.config(text=self.menu1[self.user_input][self.local_pos])
-
             elif but_num == 'x':
                 self.local_pos = int(self.user_input) - 1
                 self.user_input = ''
@@ -733,16 +695,9 @@ class Main(tk.Frame):
     def main_2(self, but_num=None):
         if self.level == 0:
             if not self.import_data_stat:
-                if but_num == 'right':
-                    if self.local_pos == len(self.menu2[self.user_input]) - 1:
-                        self.local_pos = -1
-                    self.local_pos += 1
-                    self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
-
-                elif but_num == 'left':
-                    if self.local_pos == 0:
-                        self.local_pos = len(self.menu2[self.user_input])
-                    self.local_pos -= 1
+                if but_num == 'left' or but_num == 'right':
+                    self.local_pos = self.right_left(but_num=but_num, roster=self.menu2[self.user_input],
+                                                     pos=self.local_pos)
                     self.display_label.config(text=self.menu2[self.user_input][self.local_pos])
 
                 elif but_num == 'x':
@@ -863,7 +818,7 @@ class Main(tk.Frame):
     def menu_menu_1(self, but_num):
         playsound('sounds/pick.wav')
         if but_num == 'left' or but_num == 'right':
-            self.local_pos = self.right_left(but_num=but_num, roster=self.menu_menu_list,pos=self.local_pos)
+            self.local_pos = self.right_left(but_num=but_num, roster=self.menu_menu_list, pos=self.local_pos)
             self.display_label.config(text=self.menu_menu_list[self.local_pos])
         elif but_num == 'x':
             self.menu_menu_stat = False
@@ -879,7 +834,7 @@ class Main(tk.Frame):
     def menu_menu_2(self, but_num):
         playsound('sounds/pick.wav')
         if but_num == 'left' or but_num == 'right':
-            self.local_pos = self.right_left(but_num=but_num, roster=self.menu_state,pos=self.local_pos)
+            self.local_pos = self.right_left(but_num=but_num, roster=self.menu_state, pos=self.local_pos)
             self.display_label.config(text=self.menu_state[self.local_pos])
         elif but_num == 'x':
             self.local_pos = 0
@@ -892,7 +847,7 @@ class Main(tk.Frame):
         self.user_number = ''
         playsound('sounds/pick.wav')
         if but_num == 'left' or but_num == 'right':
-            self.local_pos = self.right_left(but_num=but_num, roster=self.menu_home,pos=self.local_pos)
+            self.local_pos = self.right_left(but_num=but_num, roster=self.menu_home, pos=self.local_pos)
             self.display_label.config(text=self.menu_home[self.local_pos])
         elif but_num == 'x':
             self.home_menu_stat = False
@@ -995,17 +950,9 @@ class Main(tk.Frame):
             self.global_pos = 0
             self.level = 0
             self.display_label.config(text=self.menu_settings[self.local_pos])
-        elif but_num == 'right':
+        elif but_num == 'left' or but_num == 'right':
             playsound('sounds/pick.wav')
-            if self.level == 5:
-                self.level = -1
-            self.level += 1
-            self.display_label.config(text=self.menu_prog_1[3][self.level])
-        elif but_num == 'left':
-            playsound('sounds/pick.wav')
-            if self.level == 0:
-                self.level = 6
-            self.level -= 1
+            self.level = self.right_left(but_num=but_num, roster=self.menu_prog_1[3], pos=self.level)
             self.display_label.config(text=self.menu_prog_1[3][self.level])
         elif but_num == 'entr':
             playsound('sounds/pick.wav')
@@ -1020,18 +967,12 @@ class Main(tk.Frame):
                 self.global_pos = 0
                 self.level = 0
                 self.display_label.config(text=self.menu_settings[self.local_pos])
-            elif but_num == 'right':
+
+            elif but_num == 'left' or but_num == 'right':
                 playsound('sounds/pick.wav')
-                if self.level == len(self.menu_prog_1[4]) - 1:
-                    self.level = -1
-                self.level += 1
+                self.level = self.right_left(but_num=but_num, roster=self.menu_prog_1[4], pos=self.level)
                 self.display_label.config(text=self.menu_prog_1[4][self.level])
-            elif but_num == 'left':
-                playsound('sounds/pick.wav')
-                if self.level == 0:
-                    self.level = len(self.menu_prog_1[4])
-                self.level -= 1
-                self.display_label.config(text=self.menu_prog_1[4][self.level])
+
             elif but_num == 'entr':
                 if self.level == 1:
                     playsound('sounds/pick.wav')
@@ -1053,18 +994,12 @@ class Main(tk.Frame):
                 playsound('sounds/pick.wav')
                 self.global_pos = 1
                 self.display_label.config(text=self.menu_prog_1[5][self.level])
-            elif but_num == 'right':
+
+            elif but_num == 'left' or but_num == 'right':
                 playsound('sounds/pick.wav')
-                if self.level == len(self.rs_232_mode) - 1:
-                    self.level = -1
-                self.level += 1
+                self.level = self.right_left(but_num=but_num, roster=self.rs_232_mode, pos=self.level)
                 self.display_label.config(text=f'РЕЖИМ: \n {self.rs_232_mode[self.level]}')
-            elif but_num == 'left':
-                playsound('sounds/pick.wav')
-                if self.level == 0:
-                    self.level = len(self.rs_232_mode)
-                self.level -= 1
-                self.display_label.config(text=f'РЕЖИМ: \n {self.rs_232_mode[self.level]}')
+
             elif but_num == 'entr':
                 playsound('sounds/pick.wav')
                 playsound('sounds/pick.wav')
@@ -1081,18 +1016,12 @@ class Main(tk.Frame):
                 self.global_pos = 0
                 self.level = 0
                 self.display_label.config(text=self.menu_settings[self.local_pos])
-            elif but_num == 'right':
+
+            elif but_num == 'left' or but_num == 'right':
                 playsound('sounds/pick.wav')
-                if self.level == len(self.menu_prog_1[5]) - 1:
-                    self.level = -1
-                self.level += 1
+                self.level = self.right_left(but_num=but_num, roster=self.menu_prog_1[5], pos=self.level)
                 self.display_label.config(text=self.menu_prog_1[5][self.level])
-            elif but_num == 'left':
-                playsound('sounds/pick.wav')
-                if self.level == 0:
-                    self.level = len(self.menu_prog_1[5])
-                self.level -= 1
-                self.display_label.config(text=self.menu_prog_1[5][self.level])
+
             elif but_num == 'entr' and self.level == 0:
                 playsound('sounds/pick.wav')
                 self.global_pos = 2
@@ -1101,7 +1030,7 @@ class Main(tk.Frame):
     def prog_mode(self, but_num=None):
         self.programm_mode = True
         self.display_label.config(text='РЕЖИМ   ПРОГРАММИР')
-        app_right.tasks_stat[14]=True
+        app_right.tasks_stat[14] = True
         if but_num == 'x':
             self.programm_mode = False
             self.passw_prog_stat = False
@@ -1139,15 +1068,8 @@ class Main(tk.Frame):
     def prog_menu_func(self, but_num=None):
         if self.global_pos == 0:
             playsound('sounds/pick.wav')
-            if but_num == 'right':
-                if self.local_pos == 5:
-                    self.local_pos = -1
-                self.local_pos += 1
-                self.display_label.config(text=self.menu_settings[self.local_pos])
-            elif but_num == 'left':
-                if self.local_pos == 0:
-                    self.local_pos = 6
-                self.local_pos -= 1
+            if but_num == 'left' or but_num == 'right':
+                self.local_pos = self.right_left(but_num=but_num, roster=self.menu_settings, pos=self.local_pos)
                 self.display_label.config(text=self.menu_settings[self.local_pos])
             elif but_num == 'x':
                 self.passw_prog_stat = False
@@ -1248,20 +1170,9 @@ class Main(tk.Frame):
             self.home_menu_stat = True
             self.testing_ind = False
             self.display_label.config(text=self.menu_home[self.local_pos])
-        elif but_num == 'right':
-            if self.local_pos == 1:
-                self.local_pos = 0
-                self.display_label.config(text=self.test_indik[self.local_pos])
-            else:
-                self.local_pos = 1
-                self.display_label.config(text=self.test_indik[self.local_pos])
-        elif but_num == 'left':
-            if self.local_pos == 0:
-                self.local_pos = 1
-                self.display_label.config(text=self.test_indik[self.local_pos])
-            else:
-                self.local_pos = 0
-                self.display_label.config(text=self.test_indik[self.local_pos])
+        elif but_num == 'left' or but_num == 'right':
+            self.local_pos = self.right_left(but_num=but_num, roster=self.test_indik, pos=self.local_pos)
+            self.display_label.config(text=self.test_indik[self.local_pos])
         elif but_num == 'entr':
             playsound('sounds/pick.wav')
             self.local_pos = 2
@@ -1278,25 +1189,13 @@ class Main(tk.Frame):
                 self.test = False
                 self.user_input = self.user_input[:1]
                 self.display_label.config(text=self.menu1[str(self.user_input)][0])
-
-            elif but_num == 'right':
-                if self.local_pos == 1:
-                    self.local_pos = 0
-                else:
-                    self.local_pos += 1
+            elif but_num == 'left' or but_num == 'right':
+                self.local_pos = self.right_left(but_num=but_num, roster=self.menu2[str(self.user_input)],
+                                                 pos=self.local_pos)
                 self.display_label.config(text=self.menu2[str(self.user_input)][self.local_pos])
-
-            elif but_num == 'left':
-                if self.local_pos == 0:
-                    self.local_pos = 1
-                else:
-                    self.local_pos -= 1
-                self.display_label.config(text=self.menu2[str(self.user_input)][self.local_pos])
-
             elif but_num == 'entr':
                 self.user_input += str(self.local_pos + 1)
                 self.display_label.config(text=self.menu3[str(self.user_input)][0])
-
         else:
             playsound('sounds/pick.wav')
             param = self.menu3[self.user_input][self.level]
@@ -1321,14 +1220,14 @@ class Main(tk.Frame):
                 self.after(500, self.test_detector)
             elif but_num == 'entr' and len(self.user_number) != 0:
                 if self.level < len(self.menu3[self.user_input]) - 1:
-                    self.data_base.insert(self.level+1, self.user_number)
+                    self.data_base.insert(self.level + 1, self.user_number)
                     self.user_number = ''
                     self.level += 1
                     param = self.menu3[self.user_input][self.level]
                     self.display_label.config(text=f'{param} {self.user_number}')
                 else:
-                    if self.data_base == [1,'5','4']:
-                        app_right.tasks_stat[10]=True
+                    if self.data_base == [1, '5', '4']:
+                        app_right.tasks_stat[10] = True
                     self.data_base = [1]
                     self.user_number = ''
                     self.level = 1
@@ -1461,19 +1360,9 @@ class Main(tk.Frame):
                 self.level = 0
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 self.choose_pass_abilities = 0
-            elif but_num == 'right':
+            elif but_num == 'left' or but_num == 'right':
                 playsound('sounds/pick.wav')
-                if self.local_pos == 1:
-                    self.local_pos = 0
-                else:
-                    self.local_pos = 1
-                self.display_label.config(text=pass_param[self.local_pos])
-            elif but_num == 'left':
-                playsound('sounds/pick.wav')
-                if self.local_pos == 0:
-                    self.local_pos = 1
-                else:
-                    self.local_pos = 0
+                self.local_pos = self.right_left(but_num=but_num, roster=pass_param, pos=self.local_pos)
                 self.display_label.config(text=pass_param[self.local_pos])
             elif but_num == 'entr' and self.local_pos == 0:
                 playsound('sounds/pick.wav')
@@ -1489,19 +1378,9 @@ class Main(tk.Frame):
                 self.level = 0
                 self.display_label.config(text=f'№ ПАРОЛЯ: {self.user_number}')
                 self.choose_pass_abilities = 0
-            elif but_num == 'right':
+            elif but_num == 'left' or but_num == 'right':
                 playsound('sounds/pick.wav')
-                if self.local_pos == 2:
-                    self.local_pos = 0
-                else:
-                    self.local_pos += 1
-                self.display_label.config(text=self.password_abilities[self.local_pos])
-            elif but_num == 'left':
-                playsound('sounds/pick.wav')
-                if self.local_pos == 0:
-                    self.local_pos = 2
-                else:
-                    self.local_pos -= 1
+                self.local_pos = self.right_left(but_num=but_num, roster=self.password_abilities, pos=self.local_pos)
                 self.display_label.config(text=self.password_abilities[self.local_pos])
             elif but_num == 'entr':
                 playsound('sounds/pick.wav')
@@ -1805,12 +1684,12 @@ class Main(tk.Frame):
 
     def show(self):
         keyword = [
-            ['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1{31*" "}00{self.data_base[0]}/00{self.data_base[1]}'],
-            ['СНЯТИЕ...', f'СНЯТ ШС\n   1{31*" "}00{self.data_base[1]}/00{self.data_base[0]}'],
+            ['ВЗЯТИЕ...', f'ВЗЯТ ШС\n   1{31 * " "}00{self.data_base[0]}/00{self.data_base[1]}'],
+            ['СНЯТИЕ...', f'СНЯТ ШС\n   1{31 * " "}00{self.data_base[1]}/00{self.data_base[0]}'],
         ]
         mode = int(self.user_input[:1])
         if self.user_input == '41':
-            if self.data_base == ['44', '1','1', 1]:
+            if self.data_base == ['44', '1', '1', 1]:
                 app_right.tasks_stat[5] = True
             playsound('sounds/pick.wav')
             self.data_base = [1]
@@ -1820,11 +1699,11 @@ class Main(tk.Frame):
         elif self.user_input == '51':
             if self.data_base == ['4', '4', 1]:
                 app_right.tasks_stat[6] = True
-            self.level+=1
+            self.level += 1
             self.display_label.config(
                 text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:\n {random.choice(["ВЗЯТ", "СНЯТ"])}')
         elif self.user_input == '52':
-            if self.data_base == ['1','4', 1]:
+            if self.data_base == ['1', '4', 1]:
                 app_right.tasks_stat[7] = True
             self.level += 1
             self.display_label.config(text=f'⬍ 00{self.data_base[0]}/00{self.data_base[1]}:                          '
@@ -1868,18 +1747,17 @@ class Main(tk.Frame):
                 self.local_pos = 0
                 self.after(1500, self.import_data)
 
-    def right_left(self, but_num, roster,pos):
+    def right_left(self, but_num, roster, pos):
         if but_num == 'right':
-            if pos == len(roster)-1:
+            if pos == len(roster) - 1:
                 pos = -1
-            pos +=1
+            pos += 1
         else:
             if pos == 0:
                 pos = len(roster)
             pos -= 1
-        self.local_pos=pos
+        self.local_pos = pos
         return pos
-
 
 
 if __name__ == '__main__':
@@ -1897,7 +1775,3 @@ if __name__ == '__main__':
     root_tasks.resizable(False, False)
     app_right = Tasks(root_tasks)
     root.mainloop()
-
-
-
-
